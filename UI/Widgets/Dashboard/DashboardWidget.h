@@ -13,6 +13,12 @@ public:
     explicit DashboardWidget(QWidget *parent = nullptr);
     ~DashboardWidget();
 
+private slots:
+    void onBasicScanClicked();
+    void onAdvancedScanClicked();
+    void onCdrScanClicked();
+    void onSandboxScanClicked();
+
 private:
     Ui::DashboardWidget *ui;
 };
