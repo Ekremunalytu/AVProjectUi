@@ -3,7 +3,7 @@ project(AvProjectUi LANGUAGES CXX)
 
 set (CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 
-find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets )
+find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets Sql )
 set (CMAKE_AUTOUIC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
@@ -16,13 +16,19 @@ qt_standard_project_setup()
 qt_add_executable(AvProjectUi
     WIN32 MACOSX_BUNDLE
         main.cpp
+
         UI/Mainwindow/mainwindow.cpp
         UI/Mainwindow/mainwindow.h
         UI/Mainwindow/mainwindow.ui
+
         UI/Widgets/Dashboard/DashboardWidget.cpp
         UI/Widgets/Dashboard/DashboardWidget.h
         UI/Widgets/Dashboard/DashboardWidget.ui
+
         ${PROJECT_RESOURCES}
+
+        Database/DbManager/DbManager.cpp
+        Database/DbManager/DbManager.h
 )
 
 # Tüm proje dizinlerinin include yollarını ekleyin
@@ -37,6 +43,7 @@ target_link_libraries(AvProjectUi
     PRIVATE
         Qt::Core
         Qt::Widgets
+        Qt::Sql
 )
 
 include(GNUInstallDirs)
