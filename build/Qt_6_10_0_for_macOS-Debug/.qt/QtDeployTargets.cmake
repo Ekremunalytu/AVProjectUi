@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_AvProjectUi_FILE /Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/AvProjectUi.app/Contents/MacOS/AvProjectUi)
+set(__QT_DEPLOY_TARGET_AvProjectUi_TYPE EXECUTABLE)

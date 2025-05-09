@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    
+    // Pencereyi tam ekran olarak ayarla
+    showFullScreen();
 }
 
 MainWindow::~MainWindow()

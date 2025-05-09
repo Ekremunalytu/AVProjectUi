@@ -1,0 +1,4 @@
+QMainWindow {
+    border-image: url(:/images/background.png) 0 0 0 0 stretch stretch;
+}
+

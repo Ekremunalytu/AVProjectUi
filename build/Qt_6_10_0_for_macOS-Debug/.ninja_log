@@ -1,0 +1,9 @@
+# ninja log v6
+1	236	1746784214034435415	AvProjectUi_autogen/timestamp	63fc6800db780246
+1	236	1746784214034435415	/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/AvProjectUi_autogen/timestamp	63fc6800db780246
+1	236	1746784214034435415	/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/AvProjectUi_autogen/mocs_compilation.cpp	63fc6800db780246
+238	837	1746784214045040566	CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o	c2468b329597298a
+1	236	1746784214034435415	AvProjectUi_autogen/mocs_compilation.cpp	63fc6800db780246
+238	851	1746784214045164149	CMakeFiles/AvProjectUi.dir/main.cpp.o	5233ea865e210757
+894	977	1746784214701192471	AvProjectUi.app/Contents/MacOS/AvProjectUi	7e4caebb6cb4fc69
+238	894	1746784214045252565	CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o	96f616996484f074

@@ -5,7 +5,12 @@ set (CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 
 find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets )
 set (CMAKE_AUTOUIC ON)
+set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
+
+# Resource dosyasını doğru şekilde ekleyin
+set(PROJECT_RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
+
 qt_standard_project_setup()
 
 qt_add_executable(AvProjectUi
@@ -14,15 +19,19 @@ qt_add_executable(AvProjectUi
         UI/Mainwindow/mainwindow.cpp
         UI/Mainwindow/mainwindow.h
         UI/Mainwindow/mainwindow.ui
+        UI/Widgets/Dashboard/DashboardWidget.cpp
+        UI/Widgets/Dashboard/DashboardWidget.h
+        UI/Widgets/Dashboard/DashboardWidget.ui
+        ${PROJECT_RESOURCES}
 )
 
 # Tüm proje dizinlerinin include yollarını ekleyin
 target_include_directories(AvProjectUi PRIVATE
+    ${CMAKE_SOURCE_DIR}            # Tüm projeyi include edebilmek için
     ${CMAKE_SOURCE_DIR}/UI/Mainwindow
     ${CMAKE_SOURCE_DIR}/Core         # Core dizini (varsa)
     ${CMAKE_BINARY_DIR}              # Build dizini (ui_*.h dosyaları için)
 )
-
 
 target_link_libraries(AvProjectUi
     PRIVATE

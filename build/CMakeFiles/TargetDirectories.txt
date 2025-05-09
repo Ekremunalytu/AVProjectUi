@@ -1,0 +1,9 @@
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/edit_cache.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/rebuild_cache.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/list_install_components.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/install.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/install/local.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/install/strip.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir
+/Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir
