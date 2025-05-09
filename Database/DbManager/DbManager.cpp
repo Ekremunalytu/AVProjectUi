@@ -1,6 +1,9 @@
-//
-// Created by Ekrem Ünal on 9.05.2025.
-//
+/**
+ * @file DbManager.cpp
+ * @brief Implementation of the DbManager class with database operations.
+ * @author Ekrem Ünal
+ * @date 9.05.2025
+ */
 
 #include "DbManager.h"      // Definition of the DbManager class
 #include <QSqlDatabase>     // Qt's class for database connections
@@ -80,7 +83,7 @@ std::error_code DbManager::connectDatabase(QStringView dbPath) noexcept {
     // If a connection with the default name already exists, it will be used.
     // Consider using a unique connection name:
     // db = QSqlDatabase::addDatabase("QSQLITE", pImpl->connectionName);
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase(u"QSQLITE"_qs);
     if (!db.isValid()) { // Check if the driver was loaded correctly
         // qWarning() << "Failed to add QSQLITE database driver:" << db.lastError().text();
         return std::make_error_code(std::errc::operation_not_supported); // Or a more specific error
@@ -130,8 +133,8 @@ bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
     // Prepare the SQL query with a placeholder for the hash to prevent SQL injection.
     // "SELECT 1" is an optimization to just check for existence without retrieving data.
     // "LIMIT 1" stops the search after the first match is found.
-    query.prepare("SELECT 1 FROM signatures WHERE sha256 = :h LIMIT 1");
-    query.bindValue(":h", QString(sha256Hash)); // Bind the actual hash value.
+    query.prepare(u"SELECT 1 FROM sha256_hashes WHERE sha256 = :h LIMIT 1"_qs);
+    query.bindValue(u":h"_qs, QString(sha256Hash)); // Bind the actual hash value.
 
     // Execute the query.
     if (!query.exec()) {
@@ -163,7 +166,7 @@ long DbManager::getSignatureCount(std::error_code& ec) {
     }
 
     QSqlQuery query(pImpl->db);
-    query.prepare("SELECT COUNT(*) FROM signatures");
+    query.prepare(u"SELECT COUNT(*) FROM sha256_hashes"_qs);
 
     // Execute the query.
     if (!query.exec()) {

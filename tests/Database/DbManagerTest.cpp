@@ -6,94 +6,94 @@
 #include <QStandardPaths>
 #include "TestDataFactory.h"
 
-// Test veritabanı dosya yolu
+// Test database file path
 const QString TEST_DB_PATH = ":memory:"; // SQLite memory database
 
-// Test case başlangıcında çalışacak
+// Function to run at the beginning of test case
 void DbManagerTest::initTestCase()
 {
-    qDebug() << "DbManagerTest başlatılıyor...";
+    qDebug() << "Starting DbManagerTest...";
 }
 
-// Test case bitiminde çalışacak
+// Function to run at the end of test case
 void DbManagerTest::cleanupTestCase()
 {
-    qDebug() << "DbManagerTest temizleniyor...";
+    qDebug() << "Cleaning up DbManagerTest...";
 }
 
-// Her test başlangıcında çalışacak
+// Function to run before each test
 void DbManagerTest::init()
 {
-    // Test için memory-based SQLite veritabanı kullanıyoruz
-    dbManager = new DbManager(); // Parametresiz constructor kullanıyoruz
+    // Using memory-based SQLite database for testing
+    dbManager = new DbManager(); // Using parameterless constructor
 }
 
-// Her test bitiminde çalışacak
+// Function to run after each test
 void DbManagerTest::cleanup()
 {
     delete dbManager;
     dbManager = nullptr;
 }
 
-// Veritabanı bağlantısını test et
+// Test database connection
 void DbManagerTest::testConnection()
 {
-    // Test için geçici SQLite dosyası oluştur
+    // Create temporary SQLite file for testing
     QTemporaryFile tempFile;
     if (tempFile.open()) {
         QString dbPath = tempFile.fileName();
-        tempFile.close(); // Veritabanı için dosyayı kapatmalıyız
+        tempFile.close(); // We need to close the file for database use
         
-        // Veritabanına bağlan
+        // Connect to the database
         std::error_code ec;
         ec = dbManager->connectDatabase(dbPath);
         
-        // Bağlantının başarılı olduğunu doğrula
+        // Verify connection was successful
         QVERIFY(!ec);
         QVERIFY(dbManager->isDatabaseConnected());
     } else {
-        QFAIL("Geçici veritabanı dosyası oluşturulamadı");
+        QFAIL("Failed to create temporary database file");
     }
 }
 
-// Parametre bazlı test için test verileri
+// Test data for parameter-based testing
 void DbManagerTest::testConnectionWithDifferentPaths_data()
 {
     QTest::addColumn<QString>("path");
     QTest::addColumn<bool>("expectedSuccess");
 
-    // Geçici dizin yolunu al
+    // Get temporary directory path
     QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     
-    // Test verilerini ekle
+    // Add test data
     QTest::newRow("memory-db") << ":memory:" << true;
     QTest::newRow("temp-file") << tempDir + "/test_db.sqlite" << true;
     QTest::newRow("invalid-path") << "/invalid/path/db.sqlite" << false;
     QTest::newRow("empty-path") << "" << false;
 }
 
-// Farklı veritabanı yollarıyla bağlantı testini gerçekleştir
+// Test connection with different database paths
 void DbManagerTest::testConnectionWithDifferentPaths()
 {
-    // Test verilerini al
+    // Get test data
     QFETCH(QString, path);
     QFETCH(bool, expectedSuccess);
     
-    // Veritabanına bağlanmayı dene
+    // Try to connect to the database
     std::error_code ec;
     ec = dbManager->connectDatabase(path);
     
-    // Eğer başarılı olması bekleniyorsa
+    // If success is expected
     if (expectedSuccess) {
-        // Hata olmamalı ve bağlantı başarılı olmalı
+        // There should be no error and connection should be successful
         QVERIFY(!ec);
         QVERIFY(dbManager->isDatabaseConnected());
     } else {
-        // Hata olmalı veya bağlantı başarısız olmalı
-        // Not: DbManager implementasyonuna bağlı olarak bazı durumlarda
-        // geçersiz path bir hata üretmediği için bu testi atlıyoruz
+        // There should be an error or connection should fail
+        // Note: Depending on the DbManager implementation, some cases
+        // may not produce an error for invalid paths, so we skip this test
         if (path.isEmpty()) {
-            QSKIP("Boş yol durumu mevcut DbManager implementasyonuyla test edilemiyor");
+            QSKIP("Empty path case cannot be tested with current DbManager implementation");
         } else if (!ec) {
             QVERIFY(!dbManager->isDatabaseConnected());
         } else {
@@ -102,26 +102,26 @@ void DbManagerTest::testConnectionWithDifferentPaths()
     }
 }
 
-// Tablo oluşturma işlemini test et
+// Test table creation
 void DbManagerTest::testCreateTable()
 {
-    // Bu metod DbManager sınıfında henüz uygulanmadığı için atlıyoruz
-    // Gerçekte, DbManager'a bir createTable metodu eklenmelidir
-    QSKIP("createTable metodu henüz uygulanmadı");
+    // Skip this test as the createTable method is not yet implemented in DbManager
+    // In reality, a createTable method should be added to DbManager
+    QSKIP("createTable method not yet implemented");
 }
 
-// Veri ekleme işlemini test et
+// Test data insertion
 void DbManagerTest::testInsert()
 {
-    // Bu metod DbManager sınıfında henüz uygulanmadığı için atlıyoruz
-    // Gerçekte, DbManager'a bir insert metodu eklenmelidir
-    QSKIP("insert metodu henüz uygulanmadı");
+    // Skip this test as the insert method is not yet implemented in DbManager
+    // In reality, an insert method should be added to DbManager
+    QSKIP("insert method not yet implemented");
 }
 
-// Veri sorgulama işlemini test et
+// Test data selection
 void DbManagerTest::testSelect()
 {
-    // Önce veritabanına bağlan
+    // First connect to the database
     QTemporaryFile tempFile;
     if (tempFile.open()) {
         QString dbPath = tempFile.fileName();
@@ -131,50 +131,50 @@ void DbManagerTest::testSelect()
         ec = dbManager->connectDatabase(dbPath);
         QVERIFY(!ec);
         
-        // İmza sayısını kontrol et (henüz tablo yoksa 0 olmalı veya hata vermeli)
+        // Check signature count (should be 0 if table exists, or error if table doesn't exist)
         long count = dbManager->getSignatureCount(ec);
         
-        // Bu işlem tablo olmaması nedeniyle hata verebilir, bu durumda
-        // hata kodunun ayarlandığını kontrol etmek yeterli
+        // This operation may produce an error if the table doesn't exist,
+        // in which case we verify that the error code is set
         if (ec) {
-            QVERIFY(count == -1); // Hata durumunda -1 dönmeli
+            QVERIFY(count == -1); // Should return -1 on error
         } else {
-            // Tablo varsa, sayaç 0 olmalı
+            // If table exists, count should be 0
             QCOMPARE(count, 0L);
         }
     } else {
-        QFAIL("Geçici veritabanı dosyası oluşturulamadı");
+        QFAIL("Failed to create temporary database file");
     }
 }
 
-// Veri güncelleme işlemini test et
+// Test data update
 void DbManagerTest::testUpdate()
 {
-    // Bu metod DbManager sınıfında henüz uygulanmadığı için atlıyoruz
-    // Gerçekte, DbManager'a bir update metodu eklenmelidir
-    QSKIP("update metodu henüz uygulanmadı");
+    // Skip this test as the update method is not yet implemented in DbManager
+    // In reality, an update method should be added to DbManager
+    QSKIP("update method not yet implemented");
 }
 
-// Veri silme işlemini test et
+// Test data deletion
 void DbManagerTest::testDelete()
 {
-    // Bu metod DbManager sınıfında henüz uygulanmadığı için atlıyoruz
-    // Gerçekte, DbManager'a bir delete metodu eklenmelidir
-    QSKIP("delete metodu henüz uygulanmadı");
+    // Skip this test as the delete method is not yet implemented in DbManager
+    // In reality, a delete method should be added to DbManager
+    QSKIP("delete method not yet implemented");
 }
 
-// Transaction işlemlerini test et
+// Test transaction operations
 void DbManagerTest::testTransaction()
 {
-    // Bu metod DbManager sınıfında henüz uygulanmadığı için atlıyoruz
-    // Gerçekte, DbManager'a transaction metodları eklenmelidir
-    QSKIP("transaction metodları henüz uygulanmadı");
+    // Skip this test as transaction methods are not yet implemented in DbManager
+    // In reality, transaction methods should be added to DbManager
+    QSKIP("transaction methods not yet implemented");
 }
 
-// SHA256 hash kontrolünü test et
+// Test SHA256 hash existence check
 void DbManagerTest::testSha256Exists()
 {
-    // Önce veritabanına bağlan
+    // First connect to the database
     QTemporaryFile tempFile;
     if (tempFile.open()) {
         QString dbPath = tempFile.fileName();
@@ -184,23 +184,23 @@ void DbManagerTest::testSha256Exists()
         ec = dbManager->connectDatabase(dbPath);
         QVERIFY(!ec);
         
-        // TestDataFactory kullanarak rastgele test hash'i oluştur
+        // Use TestDataFactory to generate random test hash
         QString testHash = TestDataFactory::generateSha256Hash();
         
-        // Hash'i kontrol et (tablo yoksa false dönmeli veya hata vermeli)
+        // Check if hash exists (should return false if table doesn't exist, or error)
         bool exists = dbManager->isSha256Exists(testHash, ec);
         
-        // Bu işlem tablo olmaması nedeniyle hata verebilir
+        // This operation may produce an error if table doesn't exist
         if (ec) {
-            QVERIFY(!exists); // Hata varsa hash mevcut olmamalı
+            QVERIFY(!exists); // Hash should not exist if there's an error
         } else {
-            // Tablonun var olma ihtimali de var
-            QVERIFY(!exists); // Hash veritabanında olmamalı
+            // Table might exist
+            QVERIFY(!exists); // Hash should not exist in database
         }
     } else {
-        QFAIL("Geçici veritabanı dosyası oluşturulamadı");
+        QFAIL("Failed to create temporary database file");
     }
 }
 
-// Test sınıfını Qt test framework'üne kaydet
+// Register test class with Qt test framework
 QTEST_MAIN(DbManagerTest) 

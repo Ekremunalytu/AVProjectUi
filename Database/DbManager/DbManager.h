@@ -1,6 +1,9 @@
-//
-// Created by Ekrem Ünal on 9.05.2025.
-//
+/**
+ * @file DbManager.h
+ * @brief Provides database management functionality for the application.
+ * @author Ekrem Ünal
+ * @date 9.05.2025
+ */
 
 #ifndef DBMANAGER_H
 #define DBMANAGER_H

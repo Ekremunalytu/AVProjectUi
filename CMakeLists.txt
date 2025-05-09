@@ -1,18 +1,23 @@
 cmake_minimum_required(VERSION 3.19)
 project(AvProjectUi LANGUAGES CXX)
 
-# CTest desteğini etkinleştir
+# Enable CTest support
 include(CTest)
 enable_testing()
 
-set (CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
+# Qt path configuration - adjust this according to your Qt installation
+set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 
-find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets Sql Test)
-set (CMAKE_AUTOUIC ON)
-set (CMAKE_AUTORCC ON)
-set (CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
+# Find required Qt packages with proper version
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Test)
 
-# Resource dosyasını doğru şekilde ekleyin
+# Enable automatic handling of Qt-specific files
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
+
+# Add resource file properly
 set(PROJECT_RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
 
 qt_standard_project_setup()
@@ -33,14 +38,28 @@ qt_add_executable(AvProjectUi
 
         Database/DbManager/DbManager.cpp
         Database/DbManager/DbManager.h
+        Database/DatabaseService/DatabaseService.cpp
+        Database/DatabaseService/DatabaseService.h
+        
+        Scanner/Dashboard/BasicScanner/BasicScanner.cpp
+        Scanner/Dashboard/BasicScanner/BasicScanner.h
+        
+        Core/AppConfig.h
 )
 
-# Tüm proje dizinlerinin include yollarını ekleyin
+# Include directories with proper Qt paths
 target_include_directories(AvProjectUi PRIVATE
-    ${CMAKE_SOURCE_DIR}            # Tüm projeyi include edebilmek için
-    ${CMAKE_SOURCE_DIR}/UI/Mainwindow
-    ${CMAKE_SOURCE_DIR}/Core         # Core dizini (varsa)
-    ${CMAKE_BINARY_DIR}              # Build dizini (ui_*.h dosyaları için)
+    ${CMAKE_SOURCE_DIR}                # Project root for absolute includes
+    ${CMAKE_BINARY_DIR}                # Generated files (ui_*.h, etc.)
+    ${Qt6Core_INCLUDE_DIRS}           # Qt Core includes
+    ${Qt6Widgets_INCLUDE_DIRS}        # Qt Widgets includes
+    ${Qt6Sql_INCLUDE_DIRS}            # Qt SQL includes
+)
+
+# Add compile definitions to ensure proper Qt handling
+target_compile_definitions(AvProjectUi PRIVATE
+    QT_NO_CAST_FROM_ASCII
+    QT_NO_CAST_TO_ASCII
 )
 
 target_link_libraries(AvProjectUi
@@ -65,10 +84,10 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-# Test dizinini ekle
+# Add tests directory
 add_subdirectory(tests)
 
-# Özel bir hedef ekleyelim: build_and_test
+# Add custom target: build_and_test
 add_custom_target(build_and_test
     COMMENT "Build all targets and run tests"
     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all

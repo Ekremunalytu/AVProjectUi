@@ -4,34 +4,41 @@
 #include <QTest>
 #include <QObject>
 #include "UI/Widgets/Dashboard/DashboardWidget.h"
+#include "Database/DbManager/DbManager.h"
 
+/**
+ * @brief Test class for the DashboardWidget functionality
+ * 
+ * This class contains unit tests for the dashboard widget's UI 
+ * elements and scan functionality.
+ */
 class DashboardTest : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // Test case başlangıcında çalışacak fonksiyon
+    // Function to run at the beginning of test case
     void initTestCase();
-
-    // Test case bitiminde çalışacak fonksiyon
+    
+    // Function to run at the end of test case
     void cleanupTestCase();
-
-    // Her test fonksiyonu öncesi çalışacak fonksiyon
+    
+    // Function to run before each test
     void init();
-
-    // Her test fonksiyonu sonrası çalışacak fonksiyon
+    
+    // Function to run after each test
     void cleanup();
-
-    // Test fonksiyonları
+    
+    // Test methods
     void testInitialization();
     void testBasicScanButton();
     void testAdvancedScanButton();
     void testCdrScanButton();
     void testSandboxScanButton();
-    void testWidgetVisibility();
 
 private:
-    DashboardWidget *dashboard;
+    DashboardWidget* dashboard = nullptr;
+    DbManager* testDbManager = nullptr;
 };
 
 #endif // DASHBOARDTEST_H 

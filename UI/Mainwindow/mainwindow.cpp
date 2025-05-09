@@ -2,22 +2,32 @@
 #include "ui_mainwindow.h"
 #include "../Widgets/Dashboard/DashboardWidget.h"
 
+/**
+ * @brief Constructs and initializes the main window.
+ * 
+ * This constructor sets up the UI, configures the window to be fullscreen,
+ * initializes the dashboard and other content pages, and connects navigation
+ * buttons to their respective actions.
+ * 
+ * @param parent Parent widget pointer
+ */
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // Set up the UI from the .ui file
     ui->setupUi(this);
     
-    // Pencereyi tam ekran olarak ayarla
+    // Configure window to be fullscreen
     showFullScreen();
     
-    // Dashboard widget'ını oluştur ve dashboardPage'e ekle
+    // Create the dashboard widget and add it to the dashboard page
     DashboardWidget *dashboardWidget = new DashboardWidget(this);
     QVBoxLayout *dashboardLayout = new QVBoxLayout(ui->dashboardPage);
     dashboardLayout->addWidget(dashboardWidget);
     ui->dashboardPage->setLayout(dashboardLayout);
     
-    // Navigation butonları için bağlantıları kur
+    // Set up navigation button connections
     connect(ui->navDashbardButton, &QPushButton::clicked, this, [this]() {
         ui->contentStackedWidget->setCurrentIndex(0); // Dashboard page
     });
@@ -34,10 +44,15 @@ MainWindow::MainWindow(QWidget *parent)
         ui->contentStackedWidget->setCurrentIndex(2); // Settings page
     });
     
-    // Başlangıçta dashboard sayfasını göster
+    // Show the dashboard page by default
     ui->contentStackedWidget->setCurrentIndex(0);
 }
 
+/**
+ * @brief Destroys the MainWindow object and cleans up resources.
+ * 
+ * This destructor ensures that UI resources are properly released.
+ */
 MainWindow::~MainWindow()
 {
     delete ui;

@@ -6,30 +6,72 @@
 #include <QDateTime>
 #include <random>
 #include <vector>
+#include <QRandomGenerator>
+#include <QCryptographicHash>
 
 /**
- * @class TestDataFactory
- * @brief Test verilerini oluşturmak için yardımcı sınıf.
+ * @brief Utility class for generating test data
+ * 
+ * This class provides factory methods to create various types of test data
+ * for use in unit tests, such as hashes, file paths, and random strings.
  */
 class TestDataFactory {
 public:
     /**
-     * Rastgele SHA256 hash değeri oluşturur.
+     * @brief Generates a random SHA256 hash string
+     * @return A randomly generated SHA256 hash as a hex string
      */
     static QString generateSha256Hash() {
-        static const char hexChars[] = "0123456789abcdef";
-        QString hash;
-        hash.reserve(64); // SHA256 hash 64 hex karakter içerir
-
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, 15); // 0-15 arası hex karakteri
-
-        for (int i = 0; i < 64; ++i) {
-            hash.append(hexChars[dis(gen)]);
+        // Generate 32 random bytes (256 bits for SHA256)
+        QByteArray randomData;
+        for (int i = 0; i < 32; i++) {
+            randomData.append(static_cast<char>(QRandomGenerator::global()->bounded(256)));
         }
+        
+        // Convert to SHA256 hash string
+        QByteArray hash = QCryptographicHash::hash(randomData, QCryptographicHash::Sha256);
+        return QString::fromLatin1(hash.toHex());
+    }
 
-        return hash;
+    /**
+     * @brief Generates a random string of specified length
+     * @param length Length of the string to generate
+     * @return A randomly generated string
+     */
+    static QString generateRandomString(int length = 10) {
+        const QString possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        QString randomString;
+        randomString.reserve(length);
+        
+        for (int i = 0; i < length; i++) {
+            int index = QRandomGenerator::global()->bounded(possibleChars.length());
+            QChar nextChar = possibleChars.at(index);
+            randomString.append(nextChar);
+        }
+        
+        return randomString;
+    }
+
+    /**
+     * @brief Generates example file paths for testing
+     * @return A file path string for testing
+     */
+    static QString generateFilePath() {
+        QString basePath;
+        
+        // Generate a random platform-appropriate path
+        #ifdef _WIN32
+            basePath = "C:/Test";
+        #else
+            basePath = "/tmp/test";
+        #endif
+        
+        // Add random subdirectories and file name
+        return QString("%1/%2/%3.txt").arg(
+            basePath,
+            generateRandomString(5),
+            generateRandomString(8)
+        );
     }
 
     /**

@@ -1,4 +1,6 @@
 #include "UI/Mainwindow/mainwindow.h"
+#include "Database/DatabaseService/DatabaseService.h"
+#include "Core/AppConfig.h"
 
 #include <QApplication>
 #include <QLocale>
@@ -7,23 +9,46 @@
 #include <QDebug>
 #include <QDir>
 
+/**
+ * @brief Application entry point
+ * 
+ * This function initializes the Qt application, loads configuration,
+ * sets up database connection, applies styles and launches the main window.
+ * 
+ * @param argc Command line argument count
+ * @param argv Command line arguments
+ * @return Application exit code
+ */
 int main(int argc, char *argv[])
 {
+    // Initialize Qt application
     QApplication a(argc, argv);
 
+    // Load application configuration using singleton pattern
+    auto& appConfig = AppConfig::getInstance();
+    
+    // Initialize database connection through service layer
+    auto& dbService = DatabaseService::getInstance();
+    if (!dbService.connectDatabase(appConfig.getDatabasePath())) {
+        qWarning() << "Failed to connect to database. Some functionality may be limited.";
+    }
 
-    QFile styleFile(":/styles/main.qss");
-if (!styleFile.open(QFile::ReadOnly)) {
-    qDebug() << "Stil dosyası yüklenemedi: " << styleFile.errorString();
-    // Hata ayıklama için dosya yolunu da yazdır
-    qDebug() << "Aranan dosya: " << styleFile.fileName();
-} else {
-    QString styleSheetContent = styleFile.readAll();
-    a.setStyleSheet(styleSheetContent);
-    styleFile.close();
-}
+    // Load and apply application stylesheet
+    QFile styleFile(u":/styles/main.qss"_qs);
+    if (!styleFile.open(QFile::ReadOnly)) {
+        qDebug() << "Failed to load style file: " << styleFile.errorString();
+        // Print the file path for debugging purposes
+        qDebug() << "Searched file: " << styleFile.fileName();
+    } else {
+        QString styleSheetContent = QString::fromUtf8(styleFile.readAll());
+        a.setStyleSheet(styleSheetContent);
+        styleFile.close();
+    }
 
+    // Create and display the main application window
     MainWindow w;
     w.show();
+    
+    // Start the application event loop
     return a.exec();
 }

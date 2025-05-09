@@ -3,120 +3,125 @@
 #include <QPushButton>
 #include <QTextEdit>
 
-// Test case başlangıcında çalışacak
+// Function to run at the beginning of test case
 void DashboardTest::initTestCase()
 {
-    qDebug() << "DashboardTest başlatılıyor...";
+    qDebug() << "Starting DashboardTest...";
 }
 
-// Test case bitiminde çalışacak
+// Function to run at the end of test case
 void DashboardTest::cleanupTestCase()
 {
-    qDebug() << "DashboardTest temizleniyor...";
+    qDebug() << "Cleaning up DashboardTest...";
 }
 
-// Her test başlangıcında çalışacak
+// Function to run before each test
 void DashboardTest::init()
 {
-    dashboard = new DashboardWidget();
+    // Create test database manager instance
+    testDbManager = new DbManager();
+    
+    // Create dashboard widget with test database manager
+    dashboard = new DashboardWidget(nullptr);
 }
 
-// Her test bitiminde çalışacak
+// Function to run after each test
 void DashboardTest::cleanup()
 {
     delete dashboard;
-    dashboard = nullptr;
+    delete testDbManager;
 }
 
-// Widget'ın doğru şekilde başlatılıp başlatılmadığını test et
+// Test if widget initializes correctly
 void DashboardTest::testInitialization()
 {
+    // Test whether the widget is initialized correctly
     QVERIFY(dashboard != nullptr);
-    QVERIFY(dashboard->isVisible() == false); // Başlangıçta görünmez olmalı
+    QVERIFY(dashboard->isVisible() == false); // Should be invisible initially
 }
 
-// Basic scan butonunun çalışıp çalışmadığını test et
+// Test Basic Scan button functionality
 void DashboardTest::testBasicScanButton()
 {
-    // Buton referansını al
-    QPushButton *basicScanButton = dashboard->findChild<QPushButton*>("basicScanButton_dashboard");
+    // Find the Basic Scan button
+    QPushButton* basicScanButton = dashboard->findChild<QPushButton*>("basicScanButton_dashboard");
     QVERIFY(basicScanButton != nullptr);
     
-    // Sonuç alanının referansını al
-    QTextEdit *resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
+    // Find the results text area
+    QTextEdit* resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
     QVERIFY(resultText != nullptr);
     
-    // Buton tıklanması öncesi içeriğin boş olduğunu kontrol et
-    QVERIFY(resultText->toPlainText().isEmpty());
+    // Clear any existing text
+    resultText->clear();
     
-    // Butona tıkla
+    // Simulate button click
     QTest::mouseClick(basicScanButton, Qt::LeftButton);
     
-    // Beklenen sonuç: "Basic Scan başlatılıyor..." içeriyor mu kontrol et
-    QVERIFY(resultText->toPlainText().contains("Basic Scan başlatılıyor..."));
+    // Expected result: Check if it contains "Starting Basic Scan..."
+    QVERIFY(resultText->toPlainText().contains("Starting Basic Scan..."));
 }
 
-// Advanced scan butonunun çalışıp çalışmadığını test et
+// Test Advanced Scan button functionality
 void DashboardTest::testAdvancedScanButton()
 {
-    // Buton referansını al
-    QPushButton *advancedScanButton = dashboard->findChild<QPushButton*>("advancedScanButton_dashboard");
+    // Find the Advanced Scan button
+    QPushButton* advancedScanButton = dashboard->findChild<QPushButton*>("advancedScanButton_dashboard");
     QVERIFY(advancedScanButton != nullptr);
     
-    // Sonuç alanının referansını al
-    QTextEdit *resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
+    // Find the results text area
+    QTextEdit* resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
     QVERIFY(resultText != nullptr);
     
-    // Buton tıklanması öncesi içeriğin boş olduğunu kontrol et
-    QVERIFY(resultText->toPlainText().isEmpty());
+    // Clear any existing text
+    resultText->clear();
     
-    // Butona tıkla
+    // Simulate button click
     QTest::mouseClick(advancedScanButton, Qt::LeftButton);
     
-    // Beklenen sonuç: "Advanced Scan başlatılıyor..." içeriyor mu kontrol et
-    QVERIFY(resultText->toPlainText().contains("Advanced Scan başlatılıyor..."));
+    // Expected result: Check if it contains "Starting Advanced Scan..."
+    QVERIFY(resultText->toPlainText().contains("Starting Advanced Scan..."));
 }
 
-// CDR scan butonunun çalışıp çalışmadığını test et
+// Test CDR Scan button functionality
 void DashboardTest::testCdrScanButton()
 {
-    // Buton referansını al
-    QPushButton *cdrScanButton = dashboard->findChild<QPushButton*>("cdrScanButton_dashboard");
+    // Find the CDR Scan button
+    QPushButton* cdrScanButton = dashboard->findChild<QPushButton*>("cdrScanButton_dashboard");
     QVERIFY(cdrScanButton != nullptr);
     
-    // Sonuç alanının referansını al
-    QTextEdit *resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
+    // Find the results text area
+    QTextEdit* resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
     QVERIFY(resultText != nullptr);
     
-    // Buton tıklanması öncesi içeriğin boş olduğunu kontrol et
-    QVERIFY(resultText->toPlainText().isEmpty());
+    // Clear any existing text
+    resultText->clear();
     
-    // Butona tıkla
+    // Simulate button click
     QTest::mouseClick(cdrScanButton, Qt::LeftButton);
     
-    // Beklenen sonuç: "CDR Scan başlatılıyor..." içeriyor mu kontrol et
-    QVERIFY(resultText->toPlainText().contains("CDR Scan başlatılıyor..."));
+    // Expected result: Check if it contains "Starting CDR Scan..."
+    QVERIFY(resultText->toPlainText().contains("Starting CDR Scan..."));
 }
 
-// Sandbox scan butonunun çalışıp çalışmadığını test et
+// Test Sandbox Scan button functionality
 void DashboardTest::testSandboxScanButton()
 {
-    // Buton referansını al
-    QPushButton *sandboxScanButton = dashboard->findChild<QPushButton*>("sandboxScanButton_dashboard");
+    // Find the Sandbox Scan button
+    QPushButton* sandboxScanButton = dashboard->findChild<QPushButton*>("sandboxScanButton_dashboard");
     QVERIFY(sandboxScanButton != nullptr);
     
-    // Sonuç alanının referansını al
-    QTextEdit *resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
+    // Find the results text area
+    QTextEdit* resultText = dashboard->findChild<QTextEdit*>("scanResultsTextEdit_dashboard");
     QVERIFY(resultText != nullptr);
     
-    // Buton tıklanması öncesi içeriğin boş olduğunu kontrol et
-    QVERIFY(resultText->toPlainText().isEmpty());
+    // Clear any existing text
+    resultText->clear();
     
-    // Butona tıkla
+    // Simulate button click
     QTest::mouseClick(sandboxScanButton, Qt::LeftButton);
     
-    // Beklenen sonuç: "Sandbox Scan başlatılıyor..." içeriyor mu kontrol et
-    QVERIFY(resultText->toPlainText().contains("Sandbox Scan başlatılıyor..."));
+    // Expected result: Check if it contains "Starting Sandbox Scan..."
+    QVERIFY(resultText->toPlainText().contains("Starting Sandbox Scan..."));
 }
 
 // Widget görünürlüğünü test et
@@ -129,5 +134,5 @@ void DashboardTest::testWidgetVisibility()
     QVERIFY(dashboard->isVisible() == false);
 }
 
-// Test sınıfını Qt test framework'üne kaydet
+// Register test class with Qt test framework
 QTEST_MAIN(DashboardTest) 

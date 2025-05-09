@@ -5,25 +5,33 @@
 #include <QObject>
 #include "Database/DbManager/DbManager.h"
 
+/**
+ * @brief Test class for the DbManager functionality
+ * 
+ * This class contains unit tests for various database operations
+ * provided by the DbManager class.
+ */
 class DbManagerTest : public QObject
 {
     Q_OBJECT
 
 private slots:
-    // Test case başlangıcında çalışacak fonksiyon
+    // Function to run at the beginning of test case
     void initTestCase();
-
-    // Test case bitiminde çalışacak fonksiyon
+    
+    // Function to run at the end of test case
     void cleanupTestCase();
-
-    // Her test fonksiyonu öncesi çalışacak fonksiyon
+    
+    // Function to run before each test
     void init();
-
-    // Her test fonksiyonu sonrası çalışacak fonksiyon
+    
+    // Function to run after each test
     void cleanup();
-
-    // Test fonksiyonları
+    
+    // Test methods
     void testConnection();
+    void testConnectionWithDifferentPaths_data();
+    void testConnectionWithDifferentPaths();
     void testCreateTable();
     void testInsert();
     void testSelect();
@@ -31,13 +39,9 @@ private slots:
     void testDelete();
     void testTransaction();
     void testSha256Exists();
-    
-    // Parametre bazlı test
-    void testConnectionWithDifferentPaths_data();
-    void testConnectionWithDifferentPaths();
 
 private:
-    DbManager *dbManager;
+    DbManager* dbManager = nullptr;
 };
 
 #endif // DBMANAGERTEST_H 
