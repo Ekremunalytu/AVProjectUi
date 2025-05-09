@@ -969,6 +969,11 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcursor.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbitmap.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtabwidget.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qgridlayout.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmochelpers.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmocconstants.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20algorithm.h \

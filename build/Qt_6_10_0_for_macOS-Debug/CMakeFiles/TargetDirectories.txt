@@ -1,9 +1,0 @@
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/AvProjectUi.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/edit_cache.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/list_install_components.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/install.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/install/local.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/install/strip.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir
-/Volumes/Crucial/AVProjectUi/build/Qt_6_10_0_for_macOS-Debug/CMakeFiles/AvProjectUi_autogen.dir

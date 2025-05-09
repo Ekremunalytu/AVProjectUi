@@ -1,9 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-    <qresource prefix="/">
-        <file alias="images/background.png">UI/Resources/Images/background.png</file>
-        <file alias="images/settings.png">UI/Resources/Images/settings.png</file>
-        <file alias="images/applogo.png">UI/Resources/Images/applogo.png</file>
-        <file alias="images/shield.png">UI/Resources/Images/shield.png</file>
-        <file alias="styles/main.qss">UI/Styles/stylesheet.qss</file>
-    </qresource>
-</RCC> 

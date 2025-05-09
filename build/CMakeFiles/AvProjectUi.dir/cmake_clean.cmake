@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o.d"
   "CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o"
   "CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o.d"
+  "CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o"
+  "CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o.d"
   "CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o"
   "CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o.d"
   "CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o"

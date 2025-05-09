@@ -968,6 +968,11 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcursor.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbitmap.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtabwidget.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qgridlayout.h \
   /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/include/ui_mainwindow.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QVariant \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
@@ -986,10 +991,6 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlocale.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QHBoxLayout \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayout.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qgridlayout.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QLabel \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlabel.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qframe.h \
@@ -1007,5 +1008,5 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qstackedwidget.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QStatusBar \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qstatusbar.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QWidget
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QWidget \
+  /Volumes/Crucial/AVProjectUi/UI/Mainwindow/../Widgets/Dashboard/DashboardWidget.h

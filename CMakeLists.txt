@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.19)
 project(AvProjectUi LANGUAGES CXX)
 
+# CTest desteğini etkinleştir
+include(CTest)
+enable_testing()
+
 set (CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 
-find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets Sql )
+find_package(Qt6 6.10.0 REQUIRED COMPONENTS Core Widgets Sql Test)
 set (CMAKE_AUTOUIC ON)
 set (CMAKE_AUTORCC ON)
 set (CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
@@ -60,3 +64,14 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+# Test dizinini ekle
+add_subdirectory(tests)
+
+# Özel bir hedef ekleyelim: build_and_test
+add_custom_target(build_and_test
+    COMMENT "Build all targets and run tests"
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)

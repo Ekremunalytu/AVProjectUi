@@ -968,6 +968,11 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcursor.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbitmap.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtabwidget.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qboxlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayout.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qgridlayout.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qapplication.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication.h \

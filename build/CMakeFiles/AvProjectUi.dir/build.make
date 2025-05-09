@@ -79,7 +79,7 @@ AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/U
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for resources.qrc"
-	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json 
+	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json Debug
 
 CMakeFiles/AvProjectUi.dir/codegen:
 .PHONY : CMakeFiles/AvProjectUi.dir/codegen
@@ -140,10 +140,24 @@ CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.s: cmake_for
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.cpp -o CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.s
 
+CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o: /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp
+CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o -MF CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o -c /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp
+
+CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp > CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp -o CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s
+
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o -MF CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o.d -o CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o -c /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp
 
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.i: cmake_force
@@ -160,6 +174,7 @@ AvProjectUi_OBJECTS = \
 "CMakeFiles/AvProjectUi.dir/main.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
 
 # External object files for target AvProjectUi
@@ -169,13 +184,15 @@ AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/AvProject
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/main.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/build.make
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/QtWidgets
+AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtSql.framework/Versions/A/QtSql
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/QtGui
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/QtCore
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable AvProjectUi.app/Contents/MacOS/AvProjectUi"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable AvProjectUi.app/Contents/MacOS/AvProjectUi"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AvProjectUi.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

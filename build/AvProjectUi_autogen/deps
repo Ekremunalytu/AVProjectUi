@@ -25,6 +25,9 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeTestCXXCompiler.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeTestCompilerCommon.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeUnixFindMake.cmake \
+	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTest.cmake \
+	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTestTargets.cmake \
+	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTestUseLaunchers.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CheckCXXCompilerFlag.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CheckCXXSourceCompiles.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CheckIncludeFileCXX.cmake \
@@ -72,6 +75,7 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/XL-CXX-DetermineCompiler.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake \
+	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/DartConfiguration.tcl.in \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/FindOpenGL.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/FindPackageHandleStandardArgs.cmake \
 	/Applications/CMake.app/Contents/share/cmake-4.0/Modules/FindPackageMessage.cmake \
@@ -123,7 +127,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/all_of.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/any_of.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/binary_search.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/clamp.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/comp.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/comp_ref_type.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h \
@@ -144,7 +147,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/find_if_not.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/find_segment_if.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/for_each.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/for_each_n.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/for_each_segment.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/generate.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/generate_n.h \
@@ -186,7 +188,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/partition_point.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/pop_heap.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/prev_permutation.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/pstl.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/push_heap.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/ranges_copy.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/ranges_copy_n.h \
@@ -206,7 +207,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/reverse_copy.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/rotate.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/rotate_copy.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/sample.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/search.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/search_n.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/set_difference.h \
@@ -335,8 +335,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/bind.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/binder1st.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/binder2nd.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/boyer_moore_searcher.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/default_searcher.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/function.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/hash.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/identity.h \
@@ -344,9 +342,7 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/is_transparent.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/mem_fn.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/mem_fun_ref.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/not_fn.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/operations.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/perfect_forward.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/pointer_to_binary_function.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/pointer_to_unary_function.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/ranges_operations.h \
@@ -473,17 +469,9 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__node_handle \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/accumulate.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/adjacent_difference.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/exclusive_scan.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/gcd_lcm.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/inclusive_scan.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/inner_product.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/iota.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/partial_sum.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/pstl.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/reduce.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/transform_exclusive_scan.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/transform_inclusive_scan.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/transform_reduce.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/is_valid.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/log2.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__random/uniform_int_distribution.h \
@@ -548,12 +536,10 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/disjunction.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/enable_if.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/extent.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/has_unique_object_representation.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/has_virtual_destructor.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/integral_constant.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/invoke.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_abstract.h \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_aggregate.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_allocator.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_always_bitcastable.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_arithmetic.h \
@@ -642,7 +628,6 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/unwrap_ref.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/void_t.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__undef_macros \
-	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/as_const.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/auto_cast.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/convert_to_integral.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/declval.h \
@@ -825,6 +810,8 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/limits.h \
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h \
 	/Volumes/Crucial/AVProjectUi/CMakeLists.txt \
+	/Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp \
+	/Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h \
 	/Volumes/Crucial/AVProjectUi/UI/Mainwindow/mainwindow.cpp \
 	/Volumes/Crucial/AVProjectUi/UI/Mainwindow/mainwindow.h \
 	/Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.cpp \
@@ -984,7 +971,12 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QVBoxLayout \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qboxlayout.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qgridlayout.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qlayout.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qlayoutitem.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qsizepolicy.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtabwidget.h \
@@ -1212,6 +1204,54 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfigVersion.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfigVersionImpl.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlDependencies.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlPlugins.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersion.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersionImpl.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateDependencies.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateVersionlessAliasTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfigVersion.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfigVersionImpl.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestDependencies.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets-relwithdebinfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestVersionlessAliasTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/QtTestProperties.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateAdditionalTargetInfo.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfig.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersion.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersionImpl.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateVersionlessAliasTargets.cmake \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginAdditionalTargetInfo.cmake \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginConfig.cmake \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginTargets-relwithdebinfo.cmake \

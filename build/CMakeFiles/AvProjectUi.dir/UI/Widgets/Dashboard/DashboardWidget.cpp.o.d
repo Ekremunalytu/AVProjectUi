@@ -1007,4 +1007,5 @@ CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtextcursor.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtextformat.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpen.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QVBoxLayout \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDebug
