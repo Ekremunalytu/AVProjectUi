@@ -1,0 +1,6 @@
+/.qtcreator/
+/build
+/cmake-build-debug
+/MalwareHashes
+/CMakeLists.txt.user
+
