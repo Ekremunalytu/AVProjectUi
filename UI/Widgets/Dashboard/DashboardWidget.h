@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QMenu>
+#include <QString>
 #include <memory>
 #include "Scanner/Dashboard/BasicScanner/BasicScanner.h"
+#include "Network/VirusTotal/VirusTotalManager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
@@ -32,13 +34,10 @@ public:
      */
     ~DashboardWidget();
 
+public slots:
+    void handleVirusTotalResults(const QString& results);
+
 private slots:
-    /**
-     * @brief Handles click on the Basic Scan button.
-     * 
-     * Opens a menu with scan options.
-     */
-    void onBasicScanClicked();
     
     /**
      * @brief Handles click on the Advanced Scan button.
@@ -63,6 +62,13 @@ private slots:
     void onBasicScanSelectFile();
     
     /**
+     * @brief Handles the file selection for Advanced Scan.
+     * 
+     * Opens a file dialog and processes the selected file for advanced scanning.
+     */
+    void onAdvancedScanSelectFile();
+    
+    /**
      * @brief Processes and displays scan results.
      * @param results String containing the scan results.
      */
@@ -78,7 +84,7 @@ private slots:
 private:
     Ui::DashboardWidget *ui; ///< Pointer to the UI form
     std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
-    QMenu* m_basicScanMenu; ///< Menu for basic scan options
+    std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
 };
 
 #endif // DASHBOARDWIDGET_H

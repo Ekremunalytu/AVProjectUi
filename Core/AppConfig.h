@@ -9,7 +9,6 @@
 #include <QApplication>
 #include <QtCore/QtGlobal>
 
-
 /**
  * @brief The AppConfig class provides application-wide configuration settings.
  *
@@ -31,20 +30,17 @@ public:
      * @brief Get the database file path.
      * @return Database file path as a QString.
      */
-    static QString getDatabasePath() {
-        QSettings configIni(QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini")),
-                            QSettings::IniFormat);
-        return configIni.value(QStringLiteral("Database/Path"), QStringLiteral("./MalwareHashes/identifier.sqlite")).toString();
+    QString getDatabasePath() const {
+        return m_databasePath;
     }
 
     /**
      * @brief Set the database file path.
      * @param path The new database file path.
      */
-    static void setDatabasePath(const QString &path) {
-        QSettings configIni(QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini")),
-                            QSettings::IniFormat);
-        configIni.setValue(QStringLiteral("Database/Path"), path);
+    void setDatabasePath(const QString &path) {
+        m_databasePath = path;
+        m_settings.setValue(QStringLiteral("Database/Path"), path);
     }
     
     /**
@@ -62,10 +58,8 @@ public:
     void setVirusTotalApiKey(const QString& apiKey) {
         m_virusTotalApiKey = apiKey;
         
-        // Write to config.ini file
-        QSettings configIni(QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini")), 
-                            QSettings::IniFormat);
-        configIni.setValue(QStringLiteral("VirusTotal/ApiKey"), apiKey);
+        // Write to config.ini file using m_settings
+        m_settings.setValue(QStringLiteral("VirusTotal/ApiKey"), apiKey);
     }
     
     /**
@@ -88,23 +82,19 @@ public:
      * @brief Load configuration from settings file.
      */
     void loadConfig() {
-        m_databasePath = m_settings.value(QStringLiteral("Database/Path"), QStringLiteral("./MalwareHashes/identifier.sqlite")).toString();
+        // Load Database Path from m_settings (which points to config.ini)
+        m_databasePath = m_settings.value(QStringLiteral("Database/Path"), getDefaultDatabasePath()).toString();
         
-        // Load VirusTotal API key from config.ini
-        QSettings configIni(QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini")), 
-                            QSettings::IniFormat);
-        m_virusTotalApiKey = configIni.value(QStringLiteral("VirusTotal/ApiKey"), QString()).toString();
+        // Load VirusTotal API key from m_settings (which points to config.ini)
+        m_virusTotalApiKey = m_settings.value(QStringLiteral("VirusTotal/ApiKey"), QString()).toString();
     }
 
     /**
      * @brief Check and create database path if it does not exist.
      */
     void checkAndCreateDbPath() {
-        QSettings configIni(QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini")),
-                            QSettings::IniFormat);
-        QString dbPath = configIni.value(QStringLiteral("Database/Path"), QStringLiteral("./MalwareHashes/identifier.sqlite")).toString();
-
-        QFileInfo dbFileInfo(dbPath);
+        // Use the loaded m_databasePath
+        QFileInfo dbFileInfo(m_databasePath);
         QDir dbDir = dbFileInfo.absoluteDir();
 
         if (!dbDir.exists()) {
@@ -117,7 +107,7 @@ public:
 private:
     // Private constructor for singleton pattern
     AppConfig()
-        : m_settings(QStringLiteral("AVProject"), QStringLiteral("AvProjectUi"))
+        : m_settings(getActualConfigIniPath(), QSettings::IniFormat) // Initialize m_settings to point to config.ini
     {
         loadConfig();
         checkAndCreateDbPath();
@@ -129,12 +119,21 @@ private:
     AppConfig(AppConfig&&) = delete;
     AppConfig& operator=(AppConfig&&) = delete;
     
-public: // Making m_settings public for simplicity in your code
+private: // m_settings is now private
     QSettings m_settings;
-    
-private:
     QString m_databasePath;
     QString m_virusTotalApiKey;
+
+    // Helper function to get the actual path to config.ini
+    QString getActualConfigIniPath() const {
+        return QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../../../../Core/config.ini"));
+    }
+
+    // Helper function to get the default database path relative to config.ini's directory
+    QString getDefaultDatabasePath() const {
+        QDir configDir = QFileInfo(getActualConfigIniPath()).absoluteDir();
+        return configDir.filePath(QStringLiteral("../MalwareHashes/identifier.sqlite"));
+    }
 };
 
 #endif // APPCONFIG_H

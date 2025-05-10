@@ -130,7 +130,7 @@ bool DbManager::isDatabaseConnected() const noexcept {
  * @return True if the SHA256 hash exists and no error occurred, false otherwise.
  * If an error occurs (ec is set), the return value should be considered unreliable.
  */
-bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
+bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) const {
     // Ensure the database is connected before proceeding.
     if (!isDatabaseConnected()) {
         qWarning() << "Database not connected";
@@ -196,7 +196,7 @@ bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
  * It is cleared if the operation is successful.
  * @return The total count of signatures if successful, or -1 if an error occurs.
  */
-long DbManager::getSignatureCount(std::error_code& ec) {
+long DbManager::getSignatureCount(std::error_code& ec) const {
     // Ensure the database is connected.
     if (!isDatabaseConnected()) {
         ec = std::make_error_code(std::errc::not_connected);

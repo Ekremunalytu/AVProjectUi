@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 
     // Load application configuration using singleton pattern
     auto& appConfig = AppConfig::getInstance();
+    appConfig.loadConfig(); // Ensure configuration is loaded
     
     // Initialize database connection through service layer
     auto& dbService = DatabaseService::getInstance();

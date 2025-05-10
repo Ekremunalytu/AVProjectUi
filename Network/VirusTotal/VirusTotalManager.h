@@ -36,8 +36,16 @@ public:
 
     // Original methods
     QString getAnalysisReport(const QString& analysisId);
+    void startPollingForResults(const QString& analysisId);
+
+signals:
+    // Signal emitted when analysis results are ready
+    void analysisResultsReady(const QString& results);
 
 private:
+    // Helper function to validate API key format
+    bool isValidApiKeyFormat(const QString& apiKey) const;
+    
     QString m_apiKey;
     QString m_lastAnalysisId;
     QString m_lastSubmissionStatus;

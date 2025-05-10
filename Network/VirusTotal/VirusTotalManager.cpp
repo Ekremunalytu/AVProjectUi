@@ -17,6 +17,8 @@
 #include <QApplication>
 #include <QTimer>
 #include <QPointer>
+#include <QString>
+#include <QRegularExpression>
 
 // Define error code namespace for better error handling
 namespace VTErrorCodes {
@@ -39,6 +41,25 @@ namespace VTErrorCodes {
 }
 
 /**
+ * @brief Validates if the provided API key has a valid format
+ * @param apiKey The API key to validate
+ * @return True if the API key format appears valid, false otherwise
+ */
+bool VirusTotalManager::isValidApiKeyFormat(const QString& apiKey) const {
+    // VirusTotal API keys are typically 64 characters long
+    // and contain only hexadecimal characters
+    const QRegularExpression hexRegex(QStringLiteral("^[a-fA-F0-9]+$"));
+    
+    // Basic validation - length and character check
+    if (apiKey.length() < 32) {
+        return false;
+    }
+    
+    // Check if API key contains only valid characters
+    return hexRegex.match(apiKey).hasMatch();
+}
+
+/**
  * @brief Constructor for VirusTotalManager
  * @param apiKey Optional API key override. If empty, will be loaded from configuration
  * 
@@ -54,6 +75,13 @@ VirusTotalManager::VirusTotalManager(const QString& apiKey)
     // If no API key provided, load it from AppConfig
     if (m_apiKey.isEmpty()) {
         m_apiKey = AppConfig::getInstance().getVirusTotalApiKey();
+    }
+    
+    // Log warning if API key looks invalid
+    if (m_apiKey.isEmpty()) {
+        qWarning() << "VirusTotal API anahtarı ayarlanmamış! config.ini dosyasında [VirusTotal] bölümüne ApiKey ekleyin.";
+    } else if (m_apiKey.length() < 32) {
+        qWarning() << "VirusTotal API anahtarı geçersiz görünüyor! VirusTotal API anahtarları genellikle 64 karakter uzunluğundadır.";
     }
 }
 
@@ -169,6 +197,14 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
         return false;
     }
     
+    // Additional API key validation (basic format check)
+    // VirusTotal API keys are typically 64 hexadecimal characters
+    if (effectiveApiKey.length() < 32 || !isValidApiKeyFormat(effectiveApiKey)) {
+        qWarning() << "Error: VirusTotal API key has invalid format. Check configuration.";
+        m_lastSubmissionStatus = VTErrorCodes::ERROR_INVALID_API_KEY;
+        return false;
+    }
+    
     // Validate file selection
     if (!m_selectedFile.exists()) {
         qWarning() << "Error: No file selected for scanning. Use selectFile() first.";
@@ -242,12 +278,9 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
                         m_lastAnalysisId = analysisId;
                         m_lastSubmissionStatus = VTErrorCodes::SUBMITTED_SUCCESSFULLY;
                         
-                        // Start fetching results after a short delay to allow processing
-                        QTimer::singleShot(5000, this, [this, analysisId]() {
-                            if (this) { // Check if the object still exists
-                                m_lastResults = getAnalysisReport(analysisId);
-                            }
-                        });
+                        // Start polling for results - first attempt after 5 seconds
+                        m_isScanning = true; // Keep scanning flag on during polling
+                        startPollingForResults(analysisId);
                     } else {
                         qWarning() << "Error: Expected 'data.id' or 'data.type' not found in response.";
                         m_lastSubmissionStatus = VTErrorCodes::ERROR_UNEXPECTED_RESPONSE;
@@ -428,6 +461,88 @@ QString VirusTotalManager::getAnalysisReport(const QString& analysisId) {
     }
     
     return *resultPtr;
+}
+
+/**
+ * @brief Starts polling for VirusTotal analysis results.
+ * @param analysisId The ID of the analysis to poll for.
+ * 
+ * Initiates a polling mechanism that periodically checks if the analysis is complete.
+ * Will attempt up to 5 times with increasing delay between attempts.
+ */
+void VirusTotalManager::startPollingForResults(const QString& analysisId) {
+    // Store the analysis ID and attempt count in static variables
+    static int pollingAttempt = 0;
+    static QString currentAnalysisId;
+    
+    // Reset attempt count if this is a new analysis
+    if (currentAnalysisId != analysisId) {
+        currentAnalysisId = analysisId;
+        pollingAttempt = 0;
+    }
+    
+    // Increment attempt counter
+    pollingAttempt++;
+    
+    // Calculate delay with increasing backoff (5s, 10s, 20s, 30s, 60s)
+    int delay = 5000;
+    if (pollingAttempt == 2) delay = 10000;
+    else if (pollingAttempt == 3) delay = 20000;
+    else if (pollingAttempt == 4) delay = 30000;
+    else if (pollingAttempt >= 5) delay = 60000;
+    
+    // Maximum 5 polling attempts
+    if (pollingAttempt <= 5) {
+        qDebug() << "Polling for VirusTotal results: attempt" << pollingAttempt 
+                 << "for analysis" << analysisId << "with delay" << delay/1000 << "seconds";
+        
+        QTimer::singleShot(delay, this, [this, analysisId]() {
+            if (!this) return; // Check if the object still exists
+            
+            // Fetch the analysis report
+            QString results = getAnalysisReport(analysisId);
+            qDebug() << "Analysis results obtained in polling. Emitting signal.";
+            m_lastResults = results;
+            
+            // Check if analysis is completed
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(results.toUtf8());
+            bool isCompleted = false;
+            
+            if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+                QJsonObject rootObj = jsonDoc.object();
+                if (rootObj.contains(QLatin1String("data")) && rootObj[QLatin1String("data")].isObject()) {
+                    QJsonObject dataObj = rootObj[QLatin1String("data")].toObject();
+                    if (dataObj.contains(QLatin1String("attributes")) && dataObj[QLatin1String("attributes")].isObject()) {
+                        QJsonObject attrsObj = dataObj[QLatin1String("attributes")].toObject();
+                        if (attrsObj.contains(QLatin1String("status"))) {
+                            QString status = attrsObj[QLatin1String("status")].toString();
+                            isCompleted = (status == QLatin1String("completed"));
+                        }
+                    }
+                }
+            }
+            
+            // Emit results regardless of completion status to update UI
+            emit analysisResultsReady(m_lastResults);
+            
+            // If not completed, continue polling unless we reached max attempts
+            if (!isCompleted) {
+                startPollingForResults(analysisId);
+            } else {
+                // Reset scanning flag when completed
+                m_isScanning = false;
+                pollingAttempt = 0;
+            }
+        });
+    } else {
+        // Max attempts reached, stop polling
+        qDebug() << "Max polling attempts reached for analysis" << analysisId;
+        m_isScanning = false;
+        pollingAttempt = 0;
+        
+        // Emit one final signal with the last results we have
+        emit analysisResultsReady(m_lastResults + QStringLiteral("\n\nAnaliz zaman aşımına uğradı. Sonuç tam olmayabilir."));
+    }
 }
 
 /**

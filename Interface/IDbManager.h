@@ -67,7 +67,7 @@ public:
    * @note This function is marked noexcept, implying all database query errors
    * are reported via std::error_code and no C++ exceptions are propagated.
    */
-  virtual  bool isSha256Exists(QStringView sha256Hash, std::error_code& ec) = 0;
+  virtual  bool isSha256Exists(QStringView sha256Hash, std::error_code& ec) const = 0;
 
   /**
    * @brief Retrieves the total count of signatures (or a relevant metric) from the database.
@@ -80,7 +80,7 @@ public:
    * @note This function is marked noexcept, implying all database query errors
    * are reported via std::error_code and no C++ exceptions are propagated.
    */
-  virtual  long getSignatureCount(std::error_code& ec) = 0;
+  virtual  long getSignatureCount(std::error_code& ec) const = 0;
 };
 
 // Pure virtual Destructor definition

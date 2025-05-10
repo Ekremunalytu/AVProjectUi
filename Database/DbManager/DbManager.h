@@ -60,13 +60,13 @@ public:
       * @brief Checks if a SHA256 hash exists in the database.
       * @copydoc IDbManager::isSha256Exists
       */
-      bool isSha256Exists(QStringView sha256Hash, std::error_code& ec) override;
+      bool isSha256Exists(QStringView sha256Hash, std::error_code& ec) const override;
 
      /**
       * @brief Gets the count of signatures from the database.
       * @copydoc IDbManager::getSignatureCount
       */
-      long getSignatureCount(std::error_code& ec) override;
+      long getSignatureCount(std::error_code& ec) const override;
 
 private:
      /**
