@@ -4,6 +4,10 @@
 #include <QDebug>
 #include <QAction>
 #include <QMessageBox>
+#include <QString>
+#include <QStringView>
+
+using namespace Qt::Literals::StringLiterals;
 
 /**
  * @brief Constructs the DashboardWidget with UI setup and connection initialization.
@@ -132,6 +136,14 @@ void DashboardWidget::onBasicScanSelectFile() {
  */
 void DashboardWidget::onBasicScanResultsReady(const QString& results) {
     ui->scanResultsTextEdit_dashboard->clear();
+    
+    // Set text color based on scan result
+    if (results.contains(u"MALICIOUS"_s)) {
+        ui->scanResultsTextEdit_dashboard->setTextColor(Qt::red);
+    } else {
+        ui->scanResultsTextEdit_dashboard->setTextColor(Qt::green);
+    }
+    
     ui->scanResultsTextEdit_dashboard->append(results);
     
     // Update total scans count
@@ -156,20 +168,24 @@ void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString
     switch (errorCode) {
         case ScannerErrorCode::DatabaseNotConnected:
             errorTitle = tr("Database Error");
-            errorIcon = u":/UI/Resources/Images/applogo.png"_qs;  // Using Unicode string literal with _qs suffix
+            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         case ScannerErrorCode::FileNotFound:
         case ScannerErrorCode::FileNotReadable:
             errorTitle = tr("File Error");
-            errorIcon = u":/UI/Resources/Images/applogo.png"_qs;
+            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         case ScannerErrorCode::HashCalculationFailed:
             errorTitle = tr("Scanning Error");
-            errorIcon = u":/UI/Resources/Images/applogo.png"_qs;
+            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
+            break;
+        case ScannerErrorCode::MaliciousFileDetected:
+            errorTitle = tr("Malicious File Detected");
+            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         default:
             errorTitle = tr("Error");
-            errorIcon = u":/UI/Resources/Images/applogo.png"_qs;
+            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
     }
     
@@ -186,7 +202,8 @@ void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString
     
     // For critical errors, show a message box
     if (errorCode == ScannerErrorCode::DatabaseNotConnected || 
-        errorCode == ScannerErrorCode::DatabaseQueryFailed) {
+        errorCode == ScannerErrorCode::DatabaseQueryFailed ||
+        errorCode == ScannerErrorCode::MaliciousFileDetected) {
         QMessageBox::critical(this, errorTitle, errorMessage);
     }
 }

@@ -132,6 +132,8 @@ bool BasicScanner::scanFile(const QString& filePath)
     ScannerErrorCode hashError = ScannerErrorCode::NoError;
     QString fileHash = calculateSha256(m_selectedFile.filePath(), &hashError);
     
+    qDebug() << "Calculated hash:" << fileHash;
+    
     if (fileHash.isEmpty()) {
         m_isScanning = false;
         // Error is already set by calculateSha256
@@ -144,6 +146,9 @@ bool BasicScanner::scanFile(const QString& filePath)
     // Check if hash exists in database
     ScannerErrorCode dbError = ScannerErrorCode::NoError;
     bool hashFound = checkHashInDatabase(fileHash, &dbError);
+    
+    qDebug() << "Hash found in database:" << hashFound;
+    qDebug() << "Database error:" << (dbError != ScannerErrorCode::NoError ? "Yes" : "No");
     
     if (dbError != ScannerErrorCode::NoError) {
         m_isScanning = false;
@@ -160,6 +165,7 @@ bool BasicScanner::scanFile(const QString& filePath)
     
     if (hashFound) {
         m_results += tr("Status: MALICIOUS - Found in database");
+        emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected!"));
     } else {
         m_results += tr("Status: CLEAN - Not found in database");
     }

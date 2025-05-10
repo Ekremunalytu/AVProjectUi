@@ -1,7 +1,3 @@
-//
-// Created by Ekrem Ünal on 9.05.2025.
-//
-
 #ifndef BASICSCANNER_H
 #define BASICSCANNER_H
 
@@ -29,6 +25,7 @@ enum class ScannerErrorCode {
     HashCalculationFailed,
     DatabaseQueryFailed,
     InvalidInput,
+    MaliciousFileDetected,
     Unknown
 };
 
