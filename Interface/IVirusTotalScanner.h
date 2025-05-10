@@ -2,14 +2,15 @@
 #define IREMOTE_SCANNER_H
 
 #include "IScanner.h"
+#include <QString>
 
 /**
  * @brief The IRemoteScanner interface extends IScanner for scanners that interact
  *        with remote analysis services (e.g., VirusTotal, Hybrid Analysis).
  */
-class IRemoteScanner : public IScanner {
+class IVirusTotalScanner : public IScanner {
 public:
-    virtual ~IRemoteScanner() = default;
+    virtual ~IVirusTotalScanner() = default;
     
     /**
      * @brief Submits the selected file to a remote analysis service.

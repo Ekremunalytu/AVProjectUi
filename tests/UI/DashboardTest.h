@@ -35,6 +35,7 @@ private slots:
     void testAdvancedScanButton();
     void testCdrScanButton();
     void testSandboxScanButton();
+    void testWidgetVisibility();
 
 private:
     DashboardWidget* dashboard = nullptr;

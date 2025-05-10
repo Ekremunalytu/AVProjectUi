@@ -10,6 +10,9 @@
 #include <system_error>
 #include "Interface/IScanner.h"
 
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
 // Forward declaration
 class DbManager;
 

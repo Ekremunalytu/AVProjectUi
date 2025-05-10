@@ -1,3 +1,10 @@
+/**
+ * @file mainwindow.h
+ * @brief Main window header for the application
+ * @author Ekrem Ünal
+ * @date 9.05.2025
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

@@ -7,7 +7,32 @@
 #include <QString>
 #include <QStringView>
 
-using namespace Qt::Literals::StringLiterals;
+using namespace Qt::StringLiterals;
+
+/**
+ * @brief Standard text constants for UI display
+ */
+namespace DashboardText {
+    // Scan types
+    constexpr auto BASIC_SCAN = "Basic Scan";
+    constexpr auto ADVANCED_SCAN = "Starting Advanced Scan...";
+    constexpr auto CDR_SCAN = "Starting CDR Scan...";
+    constexpr auto SANDBOX_SCAN = "Starting Sandbox Scan...";
+    
+    // Status messages
+    constexpr auto SELECTING_FILE = "Selecting file...";
+    constexpr auto FILE_SELECTED = "File selected: %1";
+    constexpr auto SCANNING_FILE = "Scanning file...";
+    constexpr auto SELECTION_CANCELED = "File selection canceled.";
+    constexpr auto ERROR_PREFIX = "Error: %1";
+    
+    // Dialog titles
+    constexpr auto DB_ERROR = "Database Error";
+    constexpr auto FILE_ERROR = "File Error";
+    constexpr auto SCAN_ERROR = "Scanning Error";
+    constexpr auto MALICIOUS_DETECTED = "Malicious File Detected";
+    constexpr auto GENERIC_ERROR = "Error";
+}
 
 /**
  * @brief Constructs the DashboardWidget with UI setup and connection initialization.
@@ -66,8 +91,8 @@ void DashboardWidget::onBasicScanClicked() {
  * Currently displays a debug message and updates the UI.
  */
 void DashboardWidget::onAdvancedScanClicked() {
-    qDebug() << "Starting Advanced Scan...";
-    ui->scanResultsTextEdit_dashboard->append(tr("Starting Advanced Scan..."));
+    qDebug() << DashboardText::ADVANCED_SCAN;
+    ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::ADVANCED_SCAN));
 }
 
 /**
@@ -76,8 +101,8 @@ void DashboardWidget::onAdvancedScanClicked() {
  * Currently displays a debug message and updates the UI.
  */
 void DashboardWidget::onCdrScanClicked() {
-    qDebug() << "Starting CDR Scan...";
-    ui->scanResultsTextEdit_dashboard->append(tr("Starting CDR Scan..."));
+    qDebug() << DashboardText::CDR_SCAN;
+    ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::CDR_SCAN));
 }
 
 /**
@@ -86,8 +111,8 @@ void DashboardWidget::onCdrScanClicked() {
  * Currently displays a debug message and updates the UI.
  */
 void DashboardWidget::onSandboxScanClicked() {
-    qDebug() << "Starting Sandbox Scan...";
-    ui->scanResultsTextEdit_dashboard->append(tr("Starting Sandbox Scan..."));
+    qDebug() << DashboardText::SANDBOX_SCAN;
+    ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::SANDBOX_SCAN));
 }
 
 /**
@@ -98,29 +123,29 @@ void DashboardWidget::onSandboxScanClicked() {
  */
 void DashboardWidget::onBasicScanSelectFile() {
     ui->scanResultsTextEdit_dashboard->clear();
-    ui->scanResultsTextEdit_dashboard->append(tr("Selecting file..."));
+    ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::SELECTING_FILE));
     
     if (m_basicScanner->selectFile()) {
-        ui->scanResultsTextEdit_dashboard->append(tr("File selected: %1").arg(
+        ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::FILE_SELECTED).arg(
             m_basicScanner->getSelectedFile().fileName()));
-        ui->scanResultsTextEdit_dashboard->append(tr("Scanning file..."));
+        ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::SCANNING_FILE));
         
         // Initiate scan with selected file
         if (!m_basicScanner->scanFile(m_basicScanner->getSelectedFile().filePath())) {
             // Handle scan initiation error - already handled by error signal, 
             // but we can add additional UI updates if needed
             if (m_basicScanner->getLastError() != ScannerErrorCode::NoError) {
-                ui->scanResultsTextEdit_dashboard->append(tr("Error: %1").arg(
+                ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::ERROR_PREFIX).arg(
                     m_basicScanner->getLastErrorMessage()));
             }
         }
     } else {
         if (m_basicScanner->getLastError() == ScannerErrorCode::NoError) {
             // User canceled file selection, not an error
-            ui->scanResultsTextEdit_dashboard->append(tr("File selection canceled."));
+            ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::SELECTION_CANCELED));
         } else {
             // Handle file selection error
-            ui->scanResultsTextEdit_dashboard->append(tr("Error: %1").arg(
+            ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::ERROR_PREFIX).arg(
                 m_basicScanner->getLastErrorMessage()));
         }
     }
@@ -167,24 +192,24 @@ void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString
     
     switch (errorCode) {
         case ScannerErrorCode::DatabaseNotConnected:
-            errorTitle = tr("Database Error");
+            errorTitle = tr(DashboardText::DB_ERROR);
             errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         case ScannerErrorCode::FileNotFound:
         case ScannerErrorCode::FileNotReadable:
-            errorTitle = tr("File Error");
+            errorTitle = tr(DashboardText::FILE_ERROR);
             errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         case ScannerErrorCode::HashCalculationFailed:
-            errorTitle = tr("Scanning Error");
+            errorTitle = tr(DashboardText::SCAN_ERROR);
             errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         case ScannerErrorCode::MaliciousFileDetected:
-            errorTitle = tr("Malicious File Detected");
+            errorTitle = tr(DashboardText::MALICIOUS_DETECTED);
             errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
         default:
-            errorTitle = tr("Error");
+            errorTitle = tr(DashboardText::GENERIC_ERROR);
             errorIcon = u":/UI/Resources/Images/applogo.png"_s;
             break;
     }
@@ -194,10 +219,10 @@ void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString
     
     // Add error message to the scan results text edit
     if (ui->scanResultsTextEdit_dashboard->toPlainText().isEmpty()) {
-        ui->scanResultsTextEdit_dashboard->setText(tr("Error: %1").arg(errorMessage));
+        ui->scanResultsTextEdit_dashboard->setText(tr(DashboardText::ERROR_PREFIX).arg(errorMessage));
     } else if (!ui->scanResultsTextEdit_dashboard->toPlainText().contains(errorMessage)) {
         // Only append if the error message isn't already there
-        ui->scanResultsTextEdit_dashboard->append(tr("Error: %1").arg(errorMessage));
+        ui->scanResultsTextEdit_dashboard->append(tr(DashboardText::ERROR_PREFIX).arg(errorMessage));
     }
     
     // For critical errors, show a message box

@@ -1,3 +1,10 @@
+/**
+ * @file mainwindow.cpp
+ * @brief Implementation of the MainWindow class for the application
+ * @author Ekrem Ünal
+ * @date 9.05.2025
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "../Widgets/Dashboard/DashboardWidget.h"

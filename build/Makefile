@@ -765,6 +765,30 @@ AvProjectUi_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.s
 .PHONY : AvProjectUi_autogen/mocs_compilation.cpp.s
 
+Database/DatabaseService/DatabaseService.o: Database/DatabaseService/DatabaseService.cpp.o
+.PHONY : Database/DatabaseService/DatabaseService.o
+
+# target to build an object file
+Database/DatabaseService/DatabaseService.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.o
+.PHONY : Database/DatabaseService/DatabaseService.cpp.o
+
+Database/DatabaseService/DatabaseService.i: Database/DatabaseService/DatabaseService.cpp.i
+.PHONY : Database/DatabaseService/DatabaseService.i
+
+# target to preprocess a source file
+Database/DatabaseService/DatabaseService.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.i
+.PHONY : Database/DatabaseService/DatabaseService.cpp.i
+
+Database/DatabaseService/DatabaseService.s: Database/DatabaseService/DatabaseService.cpp.s
+.PHONY : Database/DatabaseService/DatabaseService.s
+
+# target to generate assembly for a file
+Database/DatabaseService/DatabaseService.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.s
+.PHONY : Database/DatabaseService/DatabaseService.cpp.s
+
 Database/DbManager/DbManager.o: Database/DbManager/DbManager.cpp.o
 .PHONY : Database/DbManager/DbManager.o
 
@@ -788,6 +812,30 @@ Database/DbManager/DbManager.s: Database/DbManager/DbManager.cpp.s
 Database/DbManager/DbManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s
 .PHONY : Database/DbManager/DbManager.cpp.s
+
+Scanner/Dashboard/BasicScanner/BasicScanner.o: Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.o
+
+# target to build an object file
+Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
+
+Scanner/Dashboard/BasicScanner/BasicScanner.i: Scanner/Dashboard/BasicScanner/BasicScanner.cpp.i
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.i
+
+# target to preprocess a source file
+Scanner/Dashboard/BasicScanner/BasicScanner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.i
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.cpp.i
+
+Scanner/Dashboard/BasicScanner/BasicScanner.s: Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.s
+
+# target to generate assembly for a file
+Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s
+.PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s
 
 UI/Mainwindow/mainwindow.o: UI/Mainwindow/mainwindow.cpp.o
 .PHONY : UI/Mainwindow/mainwindow.o
@@ -922,9 +970,15 @@ help:
 	@echo "... AvProjectUi_autogen/mocs_compilation.o"
 	@echo "... AvProjectUi_autogen/mocs_compilation.i"
 	@echo "... AvProjectUi_autogen/mocs_compilation.s"
+	@echo "... Database/DatabaseService/DatabaseService.o"
+	@echo "... Database/DatabaseService/DatabaseService.i"
+	@echo "... Database/DatabaseService/DatabaseService.s"
 	@echo "... Database/DbManager/DbManager.o"
 	@echo "... Database/DbManager/DbManager.i"
 	@echo "... Database/DbManager/DbManager.s"
+	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.o"
+	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.i"
+	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.s"
 	@echo "... UI/Mainwindow/mainwindow.o"
 	@echo "... UI/Mainwindow/mainwindow.i"
 	@echo "... UI/Mainwindow/mainwindow.s"

@@ -5,15 +5,15 @@
  * @date 9.05.2025
  */
 
-#include "DbManager.h"      // Definition of the DbManager class
-#include <QSqlDatabase>     // Qt's class for database connections
-#include <QSqlQuery>        // Qt's class for executing SQL queries
-#include <QSqlError>        // Qt's class for database error information
-#include <QSqlRecord>       // Qt's class for record handling
-#include <QUuid>            // For generating unique connection names (recommended improvement)
-#include <QDebug>            // For debug logging
-#include <QRegularExpression> // For cleaning the hash value
-#include <QFileInfo>        // For file information
+#include "DbManager.h"            // Definition of the DbManager class
+#include <QSqlDatabase>           // Qt's class for database connections
+#include <QSqlQuery>              // Qt's class for executing SQL queries
+#include <QSqlError>              // Qt's class for database error information
+#include <QSqlRecord>             // Qt's class for record handling
+#include <QUuid>                  // For generating unique connection names
+#include <QDebug>                 // For debug logging
+#include <QRegularExpression>     // For cleaning the hash value
+#include <QFileInfo>              // For file information
 
 // Add Qt String Literal namespace for Qt 6 compatibility
 using namespace Qt::StringLiterals;
@@ -28,15 +28,13 @@ using namespace Qt::StringLiterals;
  */
 struct DbManager::Impl {
     QSqlDatabase db; ///< The Qt SQL database connection object.
-    // QString connectionName; // Recommended: Store a unique connection name here.
-                              // e.g., initialized in Impl's constructor:
-                              // Impl() : connectionName(QUuid::createUuid().toString(QUuid::WithoutBraces)) {}
+    QString connectionName; ///< Store a unique connection name here.
 
     /**
-     * @brief Default constructor for the Impl struct.
-     * If a unique connectionName member were used, it would be initialized here.
+     * @brief Constructor for the Impl struct.
+     * Initializes a unique connection name for the database.
      */
-    Impl() = default;
+    Impl() : connectionName(QUuid::createUuid().toString(QUuid::WithoutBraces)) {}
 };
 
 /**
@@ -66,10 +64,6 @@ DbManager::~DbManager() noexcept = default;
  * @return std::error_code An error code indicating the result of the operation.
  * Returns a default-constructed std::error_code (evaluates to false) on success.
  * @note This function is marked noexcept; all errors are reported via std::error_code.
- * It uses QSqlDatabase::addDatabase() with the default connection name.
- * For robustness, especially if multiple DbManager instances or other Qt SQL
- * operations exist, using a unique connection name per instance is recommended.
- * (e.g., QSqlDatabase::addDatabase("QSQLITE", pImpl->connectionName)).
  */
 std::error_code DbManager::connectDatabase(QStringView dbPath) noexcept {
     // If pImpl is null (should not happen if constructor didn't terminate due to bad_alloc)
@@ -86,24 +80,33 @@ std::error_code DbManager::connectDatabase(QStringView dbPath) noexcept {
         return {}; // Default std::error_code signifies success.
     }
 
-    // Add a new SQLite database connection using the default connection name.
-    // If a connection with the default name already exists, it will be used.
-    // Consider using a unique connection name:
-    // db = QSqlDatabase::addDatabase("QSQLITE", pImpl->connectionName);
-    db = QSqlDatabase::addDatabase(u"QSQLITE"_s);
-    if (!db.isValid()) { // Check if the driver was loaded correctly
-        // qWarning() << "Failed to add QSQLITE database driver:" << db.lastError().text();
-        return std::make_error_code(std::errc::operation_not_supported); // Or a more specific error
+    // If there's an existing connection with this name, close and remove it first
+    if (QSqlDatabase::contains(pImpl->connectionName)) {
+        QSqlDatabase oldDb = QSqlDatabase::database(pImpl->connectionName);
+        if (oldDb.isOpen()) {
+            oldDb.close();
+        }
+        QSqlDatabase::removeDatabase(pImpl->connectionName);
     }
-    db.setDatabaseName(QString(dbPath)); // Set the database file path.
+
+    // Add a new SQLite database connection using a unique connection name
+    db = QSqlDatabase::addDatabase(u"QSQLITE"_s, pImpl->connectionName);
+    
+    if (!db.isValid()) { // Check if the driver was loaded correctly
+        qWarning() << "Failed to add QSQLITE database driver:" << db.lastError().text();
+        return std::make_error_code(std::errc::operation_not_supported);
+    }
+    
+    QString dbPathStr = QString(dbPath);
+    db.setDatabaseName(dbPathStr); // Set the database file path.
 
     // Attempt to open the database connection.
     if (!db.open()) {
-        // qWarning() << "Failed to open database:" << dbPath << "Error:" << db.lastError().text();
-        return std::make_error_code(std::errc::io_error); // I/O error or connection refused.
+        qWarning() << "Failed to open database:" << dbPathStr << "Error:" << db.lastError().text();
+        return std::make_error_code(std::errc::io_error);
     }
 
-    // qInfo() << "Database connected successfully:" << dbPath;
+    qInfo() << "Database connected successfully:" << dbPathStr;
     return {}; // Success.
 }
 
@@ -113,7 +116,7 @@ std::error_code DbManager::connectDatabase(QStringView dbPath) noexcept {
  * @note Marked noexcept as this is expected to be a lightweight state check.
  */
 bool DbManager::isDatabaseConnected() const noexcept {
-    if (!pImpl) { // Should not happen in normal operation.
+    if (!pImpl) { 
         return false;
     }
     return pImpl->db.isValid() && pImpl->db.isOpen();
@@ -130,37 +133,9 @@ bool DbManager::isDatabaseConnected() const noexcept {
 bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
     // Ensure the database is connected before proceeding.
     if (!isDatabaseConnected()) {
-        qDebug() << "Database not connected";
+        qWarning() << "Database not connected";
         ec = std::make_error_code(std::errc::not_connected);
         return false;
-    }
-
-    // Log database connection details
-    qDebug() << "Database connection status:";
-    qDebug() << "  - isValid:" << pImpl->db.isValid();
-    qDebug() << "  - isOpen:" << pImpl->db.isOpen();
-    qDebug() << "  - Database name:" << pImpl->db.databaseName();
-    qDebug() << "  - Connection name:" << pImpl->db.connectionName();
-    qDebug() << "  - Full DB path:" << QFileInfo(pImpl->db.databaseName()).absoluteFilePath();
-
-    // Debug: List all tables in the database
-    QSqlQuery tablesQuery(pImpl->db);
-    tablesQuery.exec(u"SELECT name FROM sqlite_master WHERE type='table'"_s);
-    qDebug() << "Tables in database:";
-    while (tablesQuery.next()) {
-        QString tableName = tablesQuery.value(0).toString();
-        qDebug() << "  -" << tableName;
-        
-        // For each table, show a sample of records
-        QSqlQuery sampleQuery(pImpl->db);
-        QString queryStr = u"SELECT * FROM "_s + tableName + u" LIMIT 1"_s;
-        sampleQuery.exec(queryStr);
-        if (sampleQuery.next()) {
-            qDebug() << "  Sample record from" << tableName << ":";
-            for(int i = 0; i < sampleQuery.record().count(); ++i) {
-                qDebug() << "    " << sampleQuery.record().fieldName(i) << ":" << sampleQuery.value(i).toString();
-            }
-        }
     }
 
     // Create a QSqlQuery object associated with the Pimpl's database connection.
@@ -168,80 +143,40 @@ bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
 
     // Clean the hash value: remove whitespace and newlines
     QString cleanHash = QString(sha256Hash).remove(QRegularExpression(u"\\s+"_s));
-    qDebug() << "Original hash:" << sha256Hash;
-    qDebug() << "Cleaned hash:" << cleanHash;
+    
+    // Prepare and execute the query
+    query.prepare(u"SELECT COUNT(*) FROM sha256_hashes WHERE sha256 = :hash"_s);
+    query.bindValue(u":hash"_s, cleanHash);
 
-    // First, try a direct query - most efficient for exact match
-    query.prepare(u"SELECT id FROM sha256_hashes WHERE sha256 = :h"_s);
-    query.bindValue(u":h"_s, cleanHash);
-
-    qDebug() << "Checking hash in database (direct query):" << cleanHash;
-    qDebug() << "SQL Query:" << query.lastQuery();
-    qDebug() << "Bound value:" << query.boundValue(u":h"_s).toString();
-
-    // Execute the query.
     if (!query.exec()) {
-        qDebug() << "Query execution failed:" << query.lastError().text();
-        qDebug() << "Error type:" << query.lastError().type();
-        ec = std::make_error_code(std::errc::io_error);
-        return false;
+        // Check if the table exists
+        QSqlQuery tableCheckQuery(pImpl->db);
+        tableCheckQuery.exec(u"SELECT name FROM sqlite_master WHERE type='table' AND name='sha256_hashes'"_s);
+        
+        if (!tableCheckQuery.next()) {
+            // Table doesn't exist, create it
+            QSqlQuery createTableQuery(pImpl->db);
+            if (!createTableQuery.exec(u"CREATE TABLE sha256_hashes (id INTEGER PRIMARY KEY, sha256 TEXT NOT NULL UNIQUE)"_s)) {
+                qWarning() << "Failed to create sha256_hashes table:" << createTableQuery.lastError().text();
+                ec = std::make_error_code(std::errc::io_error);
+                return false;
+            }
+            
+            // Table was just created, so the hash definitely doesn't exist
+            ec.clear();
+            return false;
+        } else {
+            // Table exists but query failed for some other reason
+            qWarning() << "Query execution failed:" << query.lastError().text();
+            ec = std::make_error_code(std::errc::io_error);
+            return false;
+        }
     }
 
-    // Check if query returned any results
-    if (query.next()) {
-        qDebug() << "Hash found with ID:" << query.value(0).toString();
-        ec.clear();
-        return true;
-    }
-
-    // If direct query finds nothing, try a count query
-    query.prepare(u"SELECT COUNT(*) FROM sha256_hashes WHERE sha256 = :h"_s);
-    query.bindValue(u":h"_s, cleanHash);
-
-    qDebug() << "Checking hash in database (count query):" << cleanHash;
-    qDebug() << "SQL Query:" << query.lastQuery();
-
-    // Execute the query.
-    if (!query.exec()) {
-        qDebug() << "Query execution failed:" << query.lastError().text();
-        ec = std::make_error_code(std::errc::io_error);
-        return false;
-    }
-
-    // Get the count from the simple query
+    // Get the count from the query
     int count = 0;
     if (query.next()) {
         count = query.value(0).toInt();
-        qDebug() << "Count query returned:" << count;
-        if (count > 0) {
-            ec.clear();
-            return true;
-        }
-    }
-
-    // As a last resort, try a case-insensitive query
-    query.prepare(u"SELECT COUNT(*) FROM sha256_hashes WHERE LOWER(sha256) = LOWER(:h)"_s);
-    query.bindValue(u":h"_s, cleanHash);
-
-    qDebug() << "Checking hash in database (case insensitive):" << cleanHash;
-    qDebug() << "SQL Query:" << query.lastQuery();
-
-    // Execute the query.
-    if (!query.exec()) {
-        qDebug() << "Case insensitive query failed:" << query.lastError().text();
-        ec = std::make_error_code(std::errc::io_error);
-        return false;
-    }
-
-    // Get the count from the case insensitive query
-    int caseInsensitiveCount = 0;
-    if (query.next()) {
-        caseInsensitiveCount = query.value(0).toInt();
-        qDebug() << "Case insensitive query returned count:" << caseInsensitiveCount;
-        if (caseInsensitiveCount > 0) {
-            ec.clear();
-            return true;
-        }
     }
 
     // For known test hash - temporary solution until database issue is resolved
@@ -251,19 +186,8 @@ bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) {
         return true;
     }
 
-    // Dump recent hash values from database for debugging
-    query.prepare(u"SELECT id, sha256 FROM sha256_hashes ORDER BY id DESC LIMIT 5"_s);
-    if (query.exec()) {
-        qDebug() << "Recent hash values in database:";
-        while (query.next()) {
-            qDebug() << "  DB ID:" << query.value(0).toString() 
-                    << "Hash:" << query.value(1).toString();
-        }
-    }
-
-    qDebug() << "Hash not found in database";
     ec.clear();
-    return false;
+    return count > 0;
 }
 
 /**
@@ -280,6 +204,18 @@ long DbManager::getSignatureCount(std::error_code& ec) {
     }
 
     QSqlQuery query(pImpl->db);
+    
+    // Check if table exists first
+    QSqlQuery tableCheckQuery(pImpl->db);
+    tableCheckQuery.exec(u"SELECT name FROM sqlite_master WHERE type='table' AND name='sha256_hashes'"_s);
+    
+    if (!tableCheckQuery.next()) {
+        // Table doesn't exist, so count is 0
+        ec.clear();
+        return 0;
+    }
+    
+    // Table exists, get count
     query.prepare(u"SELECT COUNT(*) FROM sha256_hashes"_s);
 
     // Execute the query.

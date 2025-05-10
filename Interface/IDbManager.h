@@ -4,6 +4,9 @@
 #include <system_error> // For std::error_code
 #include <QStringView>    // For QStringView
 
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
 /**
  * @interface IDbManager
  * @brief Defines an interface for database management operations.

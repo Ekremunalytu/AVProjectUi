@@ -1,6 +1,9 @@
 #include "DatabaseService.h"
 #include <QDebug>
 
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
 /**
  * @brief Gets the singleton instance of the DatabaseService.
  * 

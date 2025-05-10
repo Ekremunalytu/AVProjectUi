@@ -9,6 +9,9 @@
 #include <QDebug>
 #include <QDir>
 
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
 /**
  * @brief Application entry point
  * 
@@ -34,7 +37,7 @@ int main(int argc, char *argv[])
     }
 
     // Load and apply application stylesheet
-    QFile styleFile(u":/styles/main.qss"_qs);
+    QFile styleFile(u":/styles/main.qss"_s);
     if (!styleFile.open(QFile::ReadOnly)) {
         qDebug() << "Failed to load style file: " << styleFile.errorString();
         // Print the file path for debugging purposes

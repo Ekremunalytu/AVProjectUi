@@ -1,12 +1,20 @@
 # Tests CMakeLists.txt
 cmake_minimum_required(VERSION 3.19)
 
+# C++ standard settings (same as main project)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Disable internationalization, forcing English - remove tr() function effects
+add_definitions(-DQT_NO_TRANSLATION)
+
 # CTest desteğini etkinleştir
 include(CTest)
 enable_testing()
 
 # Qt Test paketini bulma
-find_package(Qt6 REQUIRED COMPONENTS Test)
+find_package(Qt6 REQUIRED COMPONENTS Test Sql Core Widgets)
 
 # Test kaynağı dizinleri
 set(TEST_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -16,6 +24,11 @@ set(COMMON_TEST_HEADERS
     ${TEST_SOURCES_DIR}/Database/MockDbManager.h
     ${TEST_SOURCES_DIR}/TestDataFactory.h
 )
+
+# Qt MOC, UIC, ve RCC için otomatik işleme
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 # Dashboard widget test projesi
 set(DASHBOARD_TEST
@@ -32,11 +45,16 @@ target_include_directories(DashboardTest PRIVATE
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${TEST_SOURCES_DIR}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Widgets_INCLUDE_DIRS}
+    ${Qt6Test_INCLUDE_DIRS}
+    ${Qt6Sql_INCLUDE_DIRS}
 )
 target_link_libraries(DashboardTest PRIVATE
     Qt::Core
     Qt::Widgets
     Qt::Test
+    Qt::Sql
 )
 
 # MainWindow test projesi
@@ -56,11 +74,16 @@ target_include_directories(MainWindowTest PRIVATE
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${TEST_SOURCES_DIR}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Widgets_INCLUDE_DIRS}
+    ${Qt6Test_INCLUDE_DIRS}
+    ${Qt6Sql_INCLUDE_DIRS}
 )
 target_link_libraries(MainWindowTest PRIVATE
     Qt::Core
     Qt::Widgets
     Qt::Test
+    Qt::Sql
 )
 
 # Database test projesi
@@ -78,6 +101,10 @@ target_include_directories(DbManagerTest PRIVATE
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${TEST_SOURCES_DIR}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Widgets_INCLUDE_DIRS}
+    ${Qt6Test_INCLUDE_DIRS}
+    ${Qt6Sql_INCLUDE_DIRS}
 )
 target_link_libraries(DbManagerTest PRIVATE
     Qt::Core

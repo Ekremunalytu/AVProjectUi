@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.19)
 project(AvProjectUi LANGUAGES CXX)
 
+# C++ standard settings
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Disable internationalization, forcing English - remove tr() function effects
+add_definitions(-DQT_NO_TRANSLATION)
+
 # Enable CTest support
 include(CTest)
 enable_testing()
@@ -9,13 +17,19 @@ enable_testing()
 set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 
 # Find required Qt packages with proper version
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Test)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Network Test)
 
 # Enable automatic handling of Qt-specific files
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
+
+# Global include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}          # Root directory for absolute includes
+    ${CMAKE_BINARY_DIR}          # Generated files directory (ui_*.h, etc.)
+)
 
 # Add resource file properly
 set(PROJECT_RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
@@ -45,6 +59,8 @@ qt_add_executable(AvProjectUi
         Scanner/Dashboard/BasicScanner/BasicScanner.h
         
         Core/AppConfig.h
+        Network/VirusTotal/VirusTotalManager.cpp
+        Network/VirusTotal/VirusTotalManager.h
 )
 
 # Include directories with proper Qt paths
@@ -67,6 +83,7 @@ target_link_libraries(AvProjectUi
         Qt::Core
         Qt::Widgets
         Qt::Sql
+        Qt::Network
 )
 
 include(GNUInstallDirs)

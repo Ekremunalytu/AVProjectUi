@@ -141,7 +141,6 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/negation.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/version \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstddef \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/__stddef_rsize_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__cstddef/byte.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/byte.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__cstddef/max_align_t.h \
@@ -471,8 +470,6 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/string.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_string.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_strings.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__atomic/aliases.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__atomic/atomic.h \
@@ -832,6 +829,8 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_nlink_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_useconds_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_suseconds_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_rsize_t.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_errno_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_def.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_setsize.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_set.h \
@@ -973,28 +972,24 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayout.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qlayoutitem.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qgridlayout.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qapplication.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreevent.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbasictimer.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstracteventdispatcher.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qeventloop.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdeadlinetimer.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qelapsedtimer.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnativeinterface.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication_platform.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qinputmethod.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlocale.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QLocale \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTranslator \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtranslator.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFile \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfile.h \
+  /Volumes/Crucial/AVProjectUi/Database/DatabaseService/DatabaseService.h \
+  /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QStringView \
+  /Volumes/Crucial/AVProjectUi/Interface/IDbManager.h \
+  /Volumes/Crucial/AVProjectUi/Core/AppConfig.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QString \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QSettings \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsettings.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDebug \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDir \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdir.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdirlisting.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfiledevice.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qiodevice.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatetime.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcalendar.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlocale.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfile.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/filesystem \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/copy_options.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/directory_entry.h \
@@ -1027,11 +1022,23 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/path_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/recursive_directory_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/u8path.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDebug \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDir \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdir.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdirlisting.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatetime.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcalendar.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfileinfo.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimezone.h
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimezone.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreevent.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbasictimer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstracteventdispatcher.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qeventloop.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdeadlinetimer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qelapsedtimer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnativeinterface.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qinputmethod.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QLocale \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTranslator \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtranslator.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFile

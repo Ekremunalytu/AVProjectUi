@@ -7,61 +7,9 @@
 	"CMAKE_LIST_FILES" : 
 	[
 		"/Volumes/Crucial/AVProjectUi/CMakeLists.txt",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineSystem.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeSystem.cmake.in",
 		"/Volumes/Crucial/AVProjectUi/build/CMakeFiles/4.0.0/CMakeSystem.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeUnixFindMake.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeSystemSpecificInitialize.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Darwin-Initialize.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineCXXCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Darwin-Determine-CXX.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineCompilerId.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCompilerIdDetection.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/ADSP-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/ARMCC-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/ARMClang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/AppleClang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Borland-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Clang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Clang-DetermineCompilerInternal.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Cray-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/CrayClang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Embarcadero-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Fujitsu-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/GHS-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/HP-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IAR-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Intel-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/MSVC-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/NVHPC-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/NVIDIA-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/OrangeC-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/PGI-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/PathScale-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/SCO-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/TI-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/TIClang-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Tasking-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Watcom-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/XL-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindBinUtils.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCXXCompiler.cmake.in",
 		"/Volumes/Crucial/AVProjectUi/build/CMakeFiles/4.0.0/CMakeCXXCompiler.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeSystemSpecificInformation.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeGenericSystem.cmake",
@@ -79,27 +27,12 @@
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Apple-Clang-CXX.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Apple-Clang.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCommonLanguageInclude.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeTestCXXCompiler.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeTestCompilerCommon.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineCompilerABI.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CMakeDetermineLinkerId.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeParseImplicitIncludeInfo.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeParseImplicitLinkInfo.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeParseLibraryArchitecture.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeTestCompilerCommon.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCXXCompilerABI.cpp",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeDetermineCompilerSupport.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/FeatureTesting.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCXXCompiler.cmake.in",
-		"/Volumes/Crucial/AVProjectUi/build/CMakeFiles/4.0.0/CMakeCXXCompiler.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CMakeCXXLinkerInformation.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CMakeCommonLinkerInformation.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Linker/AppleClang-CXX.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Linker/AppleClang.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Linker/Apple-AppleClang-CXX.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Platform/Linker/Apple-AppleClang.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CMakeInspectCXXLinker.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCXXCompiler.cmake.in",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTest.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTestUseLaunchers.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CTestTargets.cmake",
@@ -524,9 +457,27 @@
 	"HEADERS" : 
 	[
 		[
+			"/Volumes/Crucial/AVProjectUi/Core/AppConfig.h",
+			"MU",
+			"4VKJKCZPXG/moc_AppConfig.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Database/DatabaseService/DatabaseService.h",
+			"MU",
+			"OLHUI4EA66/moc_DatabaseService.cpp",
+			null
+		],
+		[
 			"/Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h",
 			"MU",
 			"KLLTRHSZ34/moc_DbManager.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h",
+			"MU",
+			"LZCMINFI5T/moc_BasicScanner.cpp",
 			null
 		],
 		[
@@ -545,7 +496,16 @@
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "/Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/include",
 	"MOC_COMPILATION_FILE" : "/Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/mocs_compilation.cpp",
-	"MOC_DEFINITIONS" : [ "QT_CORE_LIB", "QT_GUI_LIB", "QT_SQL_LIB", "QT_WIDGETS_LIB" ],
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CORE_LIB",
+		"QT_GUI_LIB",
+		"QT_NO_CAST_FROM_ASCII",
+		"QT_NO_CAST_TO_ASCII",
+		"QT_NO_TRANSLATION",
+		"QT_SQL_LIB",
+		"QT_WIDGETS_LIB"
+	],
 	"MOC_DEPEND_FILTERS" : 
 	[
 		[
@@ -556,19 +516,19 @@
 	"MOC_INCLUDES" : 
 	[
 		"/Volumes/Crucial/AVProjectUi",
-		"/Volumes/Crucial/AVProjectUi/UI/Mainwindow",
-		"/Volumes/Crucial/AVProjectUi/Core",
 		"/Volumes/Crucial/AVProjectUi/build",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtDBus.framework/Headers",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtDBus.framework",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework",
-		"/Volumes/Crucial/QT/6.10.0/macos/mkspecs/macx-clang",
-		"/Volumes/Crucial/QT/6.10.0/macos/include",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtSql.framework/Headers",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtSql.framework",
+		"/Volumes/Crucial/QT/6.10.0/macos/mkspecs/macx-clang",
+		"/Volumes/Crucial/QT/6.10.0/macos/include",
 		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
 		"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include",
 		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
@@ -588,6 +548,7 @@
 	"MOC_PREDEFS_CMD" : 
 	[
 		"/usr/bin/c++",
+		"-std=c++17",
 		"-dM",
 		"-E",
 		"-c",
@@ -607,7 +568,17 @@
 	"SOURCES" : 
 	[
 		[
+			"/Volumes/Crucial/AVProjectUi/Database/DatabaseService/DatabaseService.cpp",
+			"MU",
+			null
+		],
+		[
 			"/Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp",
 			"MU",
 			null
 		],

@@ -7,10 +7,32 @@
 
 #include "BasicScanner.h"
 #include "Database/DbManager/DbManager.h"
-#include "../../../Database/DatabaseService/DatabaseService.h"
+#include "Database/DatabaseService/DatabaseService.h"
 #include <QFile>
 #include <QDebug>
 #include <system_error>
+
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
+/**
+ * @brief Standard text constants for UI display
+ */
+namespace StandardText {
+    // File statuses
+    constexpr auto MALICIOUS = "MALICIOUS";
+    constexpr auto CLEAN = "CLEAN";
+    
+    // Result templates
+    constexpr auto FILE_LABEL = "File: %1\n";
+    constexpr auto HASH_LABEL = "SHA256: %1\n";
+    constexpr auto STATUS_MALICIOUS = "Status: MALICIOUS - Found in database";
+    constexpr auto STATUS_CLEAN = "Status: CLEAN - Not found in database";
+    
+    // Error messages
+    constexpr auto DB_NOT_AVAILABLE = "Database connection is not available.";
+    constexpr auto SCAN_CANCELED = "Scan canceled.";
+}
 
 /**
  * @brief Constructs a BasicScanner with database access
@@ -119,8 +141,8 @@ bool BasicScanner::scanFile(const QString& filePath)
     
     if (!m_dbManager) {
         setLastError(ScannerErrorCode::DatabaseNotConnected,
-                    tr("Database connection is not available."));
-        m_results = tr("Error: Database connection is not available.");
+                    tr(StandardText::DB_NOT_AVAILABLE));
+        m_results = tr("Error: %1").arg(StandardText::DB_NOT_AVAILABLE);
         emit scanResultsReady(m_results);
         emit scanError(getLastError(), getLastErrorMessage());
         return false;
@@ -160,14 +182,14 @@ bool BasicScanner::scanFile(const QString& filePath)
     }
     
     // Prepare results
-    m_results = tr("File: %1\n").arg(m_selectedFile.fileName());
-    m_results += tr("SHA256: %1\n").arg(fileHash);
+    m_results = tr(StandardText::FILE_LABEL).arg(m_selectedFile.fileName());
+    m_results += tr(StandardText::HASH_LABEL).arg(fileHash);
     
     if (hashFound) {
-        m_results += tr("Status: MALICIOUS - Found in database");
+        m_results += tr(StandardText::STATUS_MALICIOUS);
         emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected!"));
     } else {
-        m_results += tr("Status: CLEAN - Not found in database");
+        m_results += tr(StandardText::STATUS_CLEAN);
     }
     
     m_isScanning = false;
@@ -213,7 +235,7 @@ bool BasicScanner::cancelScan()
     }
     
     m_isScanning = false;
-    m_results = tr("Scan canceled.");
+    m_results = tr(StandardText::SCAN_CANCELED);
     emit scanResultsReady(m_results);
     return true;
 }

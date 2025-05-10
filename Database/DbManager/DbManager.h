@@ -12,6 +12,9 @@
 #include <QStringView>    // For QStringView
 #include "Interface/IDbManager.h" // For the IDbManager interface
 
+// Add Qt String Literal namespace for Qt 6 compatibility
+using namespace Qt::StringLiterals;
+
 // Forward declaration for the Pimpl idiom
 struct Impl;
 

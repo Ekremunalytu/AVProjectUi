@@ -43,7 +43,14 @@ template <> constexpr inline auto DashboardWidget::qt_create_metaobjectdata<qt_m
         "",
         "onAdvancedScanClicked",
         "onCdrScanClicked",
-        "onSandboxScanClicked"
+        "onSandboxScanClicked",
+        "onBasicScanSelectFile",
+        "onBasicScanResultsReady",
+        "results",
+        "onBasicScanError",
+        "ScannerErrorCode",
+        "errorCode",
+        "errorMessage"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -55,6 +62,16 @@ template <> constexpr inline auto DashboardWidget::qt_create_metaobjectdata<qt_m
         QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSandboxScanClicked'
         QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onBasicScanSelectFile'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onBasicScanResultsReady'
+        QtMocHelpers::SlotData<void(const QString &)>(7, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QString, 8 },
+        }}),
+        // Slot 'onBasicScanError'
+        QtMocHelpers::SlotData<void(ScannerErrorCode, const QString &)>(9, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 10, 11 }, { QMetaType::QString, 12 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -82,10 +99,12 @@ void DashboardWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 1: _t->onAdvancedScanClicked(); break;
         case 2: _t->onCdrScanClicked(); break;
         case 3: _t->onSandboxScanClicked(); break;
+        case 4: _t->onBasicScanSelectFile(); break;
+        case 5: _t->onBasicScanResultsReady((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 6: _t->onBasicScanError((*reinterpret_cast< std::add_pointer_t<ScannerErrorCode>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *DashboardWidget::metaObject() const
@@ -107,14 +126,14 @@ int DashboardWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 7;
     }
     return _id;
 }

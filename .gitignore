@@ -4,3 +4,7 @@
 /MalwareHashes
 /CMakeLists.txt.user
 
+Core/config.ini
+
+identifier.sqlite
+
