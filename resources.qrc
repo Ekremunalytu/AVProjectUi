@@ -8,5 +8,9 @@
         <file alias="images/dashboardLogo.png">UI/Resources/Images/dashboardLogo.png</file>
         <file alias="images/history.png">UI/Resources/Images/history.png</file>
         <file alias="images/ServiceStatus.png">UI/Resources/Images/ServiceStatus.png</file>
+        <file alias="images/basicScan.png">UI/Resources/Images/basicScan.png</file>
+        <file alias="images/advancedScan.png">UI/Resources/Images/advancedScan.png</file>
+        <file alias="images/cdrScan.png">UI/Resources/Images/cdrScan.png</file>
+        <file alias="images/sandboxScan.png">UI/Resources/Images/sandboxScan.png</file>
     </qresource>
 </RCC>
