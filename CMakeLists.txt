@@ -61,6 +61,8 @@ qt_add_executable(AvProjectUi
         Core/AppConfig.h
         Network/VirusTotal/VirusTotalManager.cpp
         Network/VirusTotal/VirusTotalManager.h
+        Network/Monitor/NetworkMonitor.cpp
+        Network/Monitor/NetworkMonitor.h
 )
 
 # Include directories with proper Qt paths

@@ -7,6 +7,7 @@
 #include <memory>
 #include "Scanner/Dashboard/BasicScanner/BasicScanner.h"
 #include "Network/VirusTotal/VirusTotalManager.h"
+#include "Network/Monitor/NetworkMonitor.h" // Added include
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
@@ -36,6 +37,7 @@ public:
 
 public slots:
     void handleVirusTotalResults(const QString& results);
+    void appendNetworkLog(const QString& logMessage); // New slot for network logs
 
 private slots:
     
@@ -85,6 +87,7 @@ private:
     Ui::DashboardWidget *ui; ///< Pointer to the UI form
     std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
     std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
+    NetworkMonitor *m_networkMonitor; ///< Network monitor instance
 };
 
 #endif // DASHBOARDWIDGET_H
