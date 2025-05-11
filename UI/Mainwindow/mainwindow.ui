@@ -14,39 +14,235 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,6">
+   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,4">
     <property name="leftMargin">
-     <number>16</number>
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
     </property>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>12</number>
+      </property>
       <item>
        <widget class="QPushButton" name="navDashbardButton">
         <property name="text">
-         <string>Dashboard</string>
+         <string></string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/images/dashboardLogo.png</normaloff>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>52</width>
+          <height>52</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string>
+QPushButton {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+QPushButton:pressed, QPushButton:checked {
+    background-color: rgba(74, 144, 226, 0.2);
+    border: 2px solid #4A90E2;
+    padding: 2px; /* Adjust padding to account for border */
+}
+QPushButton:focus {
+    outline: none;
+}
+         </string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="navHistoryButton">
         <property name="text">
-         <string>History</string>
+         <string></string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/images/history.png</normaloff>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>52</width>
+          <height>52</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string>
+QPushButton {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+QPushButton:pressed, QPushButton:checked {
+    background-color: rgba(74, 144, 226, 0.2);
+    border: 2px solid #4A90E2;
+    padding: 2px; /* Adjust padding to account for border */
+}
+QPushButton:focus {
+    outline: none;
+}
+         </string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="navServiceStatusButton">
         <property name="text">
-         <string>Service Status</string>
+         <string></string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/images/ServiceStatus.png</normaloff>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>52</width>
+          <height>52</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string>
+QPushButton {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+QPushButton:pressed, QPushButton:checked {
+    background-color: rgba(74, 144, 226, 0.2);
+    border: 2px solid #4A90E2;
+    padding: 2px; /* Adjust padding to account for border */
+}
+QPushButton:focus {
+    outline: none;
+}
+         </string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="navSettingsButton">
         <property name="text">
-         <string>Settings</string>
+         <string></string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/images/Settings.png</normaloff>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>52</width>
+          <height>52</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string>
+QPushButton {
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+QPushButton:pressed, QPushButton:checked {
+    background-color: rgba(74, 144, 226, 0.2);
+    border: 2px solid #4A90E2;
+    padding: 2px; /* Adjust padding to account for border */
+}
+QPushButton:focus {
+    outline: none;
+}
+         </string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
