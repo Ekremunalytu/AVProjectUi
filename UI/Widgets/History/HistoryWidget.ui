@@ -36,19 +36,19 @@
      </property>
      <layout class="QVBoxLayout" name="filtersGroupLayout">
       <property name="spacing">
-       <number>8</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="topMargin">
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="rightMargin">
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="bottomMargin">
-       <number>10</number>
+       <number>8</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="FilterRow1Layout">
@@ -235,6 +235,9 @@
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
@@ -252,6 +255,12 @@
         </property>
         <item>
          <widget class="QLineEdit" name="SearchLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -263,6 +272,9 @@
           </property>
           <property name="placeholderText">
            <string>Search history by keyword...</string>
+          </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
           </property>
          </widget>
         </item>
@@ -290,6 +302,9 @@
           <property name="calendarPopup">
            <bool>true</bool>
           </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -315,6 +330,9 @@
           </property>
           <property name="calendarPopup">
            <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
           </property>
          </widget>
         </item>
@@ -375,6 +393,9 @@
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
@@ -388,12 +409,15 @@
       <item>
        <layout class="QHBoxLayout" name="FilterRow3Layout">
         <property name="spacing">
-         <number>6</number>
+         <number>8</number>
         </property>
         <item>
          <spacer name="filterRow3Spacer">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -407,7 +431,7 @@
          <widget class="QPushButton" name="exportButton">
           <property name="minimumSize">
            <size>
-            <width>110</width>
+            <width>100</width>
             <height>30</height>
            </size>
           </property>
@@ -419,7 +443,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>:/icons/export.png</normaloff>:/icons/export.png</iconset>
+           </iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -438,14 +462,14 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Show details of the selected event in an external window</string>
+           <string>View details of the selected event</string>
           </property>
           <property name="text">
            <string>Details Window</string>
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>:/icons/view_details.png</normaloff>:/icons/view_details.png</iconset>
+           </iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -459,19 +483,19 @@
          <widget class="QPushButton" name="deleteEventButton">
           <property name="minimumSize">
            <size>
-            <width>130</width>
+            <width>160</width>
             <height>30</height>
            </size>
           </property>
           <property name="toolTip">
-           <string>Delete selected event from history</string>
+           <string>Delete the selected event</string>
           </property>
           <property name="text">
            <string>Delete Selected Event</string>
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>:/icons/delete.png</normaloff>:/icons/delete.png</iconset>
+           </iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -482,6 +506,22 @@
          </widget>
         </item>
         <item>
+         <spacer name="actionButtonSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="clearAllHistoryButton">
           <property name="minimumSize">
            <size>
@@ -490,20 +530,10 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Permanently delete all scan history</string>
+           <string>Clear all history records</string>
           </property>
           <property name="text">
            <string>Clear All History</string>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>:/icons/clear_all.png</normaloff>:/icons/clear_all.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>16</width>
-            <height>16</height>
-           </size>
           </property>
          </widget>
         </item>
@@ -540,6 +570,12 @@
        <verstretch>3</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>Displays historical event data</string>
+     </property>
+     <property name="styleSheet">
+      <string>QTableView#historyTableView { background-color: rgba(50, 50, 50, 178); border-radius: 8px; color: #F0F0F0; gridline-color: rgba(80, 80, 80, 255); alternate-background-color: rgba(55, 55, 55, 178); } QTableView#historyTableView QHeaderView::section { background-color: rgba(65, 65, 65, 200); color: white; padding: 4px; border: 1px solid rgba(80, 80, 80, 255); font-weight: bold; }</string>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
@@ -565,6 +601,9 @@
    </item>
    <item>
     <widget class="QGroupBox" name="detailsAndActionsGroupBox">
+     <property name="styleSheet">
+      <string>QGroupBox#detailsAndActionsGroupBox { background-color: rgba(50, 50, 50, 178); border: 1px solid rgba(80, 80, 80, 255); border-radius: 8px; margin-top: 1ex; } QGroupBox#detailsAndActionsGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 2px 10px; color: #E0E0E0; font-weight: bold; }</string>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
@@ -574,7 +613,10 @@
      <property name="title">
       <string>Event Details and Actions</string>
      </property>
-     <layout class="QVBoxLayout" name="detailsAndActionsLayout">
+     <layout class="QVBoxLayout" name="detailsLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
       <property name="leftMargin">
        <number>10</number>
       </property>
@@ -601,6 +643,22 @@
           <height>60</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string>QTextBrowser#detailsTextBrowser { background-color: transparent; color: #F0F0F0; border: none; padding: 5px; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="eventDetailsTextEdit">
+        <property name="toolTip">
+         <string>Shows details of the selected event</string>
+        </property>
+        <property name="styleSheet">
+         <string>QTextEdit#eventDetailsTextEdit { background-color: transparent; color: #F0F0F0; border: none; padding: 5px; }</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -622,6 +680,22 @@
          </spacer>
         </item>
        </layout>
+      </item>
+      <item>
+       <spacer name="detailsVerticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
