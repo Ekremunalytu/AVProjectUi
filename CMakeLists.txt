@@ -52,6 +52,7 @@ qt_add_executable(AvProjectUi
 
         Database/DbManager/DbManager.cpp
         Database/DbManager/DbManager.h
+
         Database/DatabaseService/DatabaseService.cpp
         Database/DatabaseService/DatabaseService.h
         
@@ -61,8 +62,17 @@ qt_add_executable(AvProjectUi
         Core/AppConfig.h
         Network/VirusTotal/VirusTotalManager.cpp
         Network/VirusTotal/VirusTotalManager.h
+
         Network/Monitor/NetworkMonitor.cpp
         Network/Monitor/NetworkMonitor.h
+
+        UI/Widgets/History/HistoryWidget.cpp
+        UI/Widgets/History/HistoryWidget.h
+        UI/Widgets/History/HistoryWidget.ui
+
+        UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp
+        UI/Widgets/ServiceStatus/ServiceStatusWidget.h
+        UI/Widgets/ServiceStatus/ServiceStatusWidget.ui
 )
 
 # Include directories with proper Qt paths
