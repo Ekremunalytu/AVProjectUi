@@ -304,8 +304,24 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
                 m_lastSubmissionStatus = VTErrorCodes::ERROR_INVALID_JSON;
             }
         } else {
-            qWarning() << "Network Error:" << reply->errorString();
-            m_lastSubmissionStatus = VTErrorCodes::ERROR_NETWORK;
+            QString errorString = reply->errorString();
+            QByteArray responseData = reply->readAll();
+            qWarning() << "Network Error:" << errorString;
+            if (!responseData.isEmpty()) {
+                qWarning() << "Server response:" << responseData;
+                // Optionally, you can try to parse responseData if it's a JSON error from the server
+                // and append a more specific message to m_lastSubmissionStatus
+                QJsonDocument errorDoc = QJsonDocument::fromJson(responseData);
+                if (!errorDoc.isNull() && errorDoc.isObject()) {
+                    QJsonObject errorObj = errorDoc.object();
+                    if (errorObj.contains(QStringLiteral("error")) && errorObj[QStringLiteral("error")].isObject()) {
+                        QJsonObject apiError = errorObj[QStringLiteral("error")].toObject();
+                        QString apiMessage = apiError.value(QStringLiteral("message")).toString(QStringLiteral("Unknown server error message."));
+                        errorString += QStringLiteral(" - Server: ") + apiMessage;
+                    }
+                }
+            }
+            m_lastSubmissionStatus = VTErrorCodes::ERROR_NETWORK + QStringLiteral(" (") + errorString + QStringLiteral(")");
         }
         
         reply->deleteLater();
@@ -484,12 +500,12 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
     // Increment attempt counter
     pollingAttempt++;
     
-    // Calculate delay with increasing backoff (5s, 10s, 20s, 30s, 60s)
-    int delay = 5000;
-    if (pollingAttempt == 2) delay = 10000;
-    else if (pollingAttempt == 3) delay = 20000;
-    else if (pollingAttempt == 4) delay = 30000;
-    else if (pollingAttempt >= 5) delay = 60000;
+    // Calculate delay with increasing backoff (2s, 4s, 8s, 15s, 30s) - Reduced delays
+    int delay = 2000; // Initial delay 2 seconds
+    if (pollingAttempt == 2) delay = 4000;
+    else if (pollingAttempt == 3) delay = 8000;
+    else if (pollingAttempt == 4) delay = 15000;
+    else if (pollingAttempt >= 5) delay = 30000;
     
     // Maximum 5 polling attempts
     if (pollingAttempt <= 5) {

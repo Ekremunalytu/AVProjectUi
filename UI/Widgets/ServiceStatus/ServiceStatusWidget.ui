@@ -13,6 +13,81 @@
         <property name="windowTitle">
             <string>Service Status</string>
         </property>
+        <property name="autoFillBackground">
+            <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+            <string>
+                #ServiceStatusWidget {
+                    background-color: transparent;
+                    color: #E0E0E0; /* Light gray for general text */
+                }
+                QScrollArea#scrollArea {
+                    background-color: transparent;
+                    border: none;
+                }
+                QWidget#scrollAreaWidgetContents {
+                    background-color: transparent;
+                }
+                QGroupBox {
+                    border: 1px solid #4A4A4A; /* Darker gray border */
+                    margin-top: 1.5ex; /* Space for the title */
+                    padding: 10px;
+                    border-radius: 5px; /* Rounded corners */
+                }
+                QGroupBox::title {
+                    subcontrol-origin: margin;
+                    subcontrol-position: top left; /* position at the top left */
+                    padding: 0 5px;
+                    color: #4DB6AC; /* Teal for titles */
+                    font-weight: bold;
+                }
+                QLabel[objectName*="Title"] { /* Targets labels like labelRealTimeTitle */
+                    color: #BDBDBD; /* Slightly lighter gray for section titles */
+                }
+                QLabel[objectName*="Value"], QLabel[objectName*="Status"] { /* Targets labels like labelRealTimeStatus */
+                    color: #80CBC4; /* Lighter Teal for values/statuses */
+                    font-weight: normal; /* Ensure value labels are not bold by default from parent */
+                }
+                #labelOverallStatusValue {
+                    font-weight: bold; /* Make overall status value bold */
+                    color: #A5D6A7; /* Light Green for overall status, can be adjusted */
+                }
+                QGroupBox#groupBoxCoreProtection QFrame {
+                    border-bottom: 1px solid #3A3A3A; /* Subtle line between frames */
+                    padding-bottom: 8px; /* Space below the line */
+                    margin-bottom: 8px; /* Space before the next frame */
+                }
+                QGroupBox#groupBoxCoreProtection QFrame:last-child {
+                    border-bottom: none; /* No line for the last frame */
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                }
+                QPushButton#buttonRefresh {
+                    background-color: #00796B; /* Darker Teal */
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                }
+                QPushButton#buttonRefresh:hover {
+                    background-color: #004D40; /* Even Darker Teal on hover */
+                }
+                QCheckBox#checkBoxDetailedView {
+                    color: #BDBDBD; /* Match title label color */
+                }
+                QCheckBox#checkBoxDetailedView::indicator {
+                    width: 15px;
+                    height: 15px;
+                    /* Add more indicator styling if needed */
+                }
+            </string>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
         <layout class="QVBoxLayout" name="mainVerticalLayout">
             <item>
                 <widget class="QScrollArea" name="scrollArea">
@@ -112,6 +187,9 @@
                                         <string>Core Protection</string>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayoutCoreProtection">
+                                        <property name="spacing">
+                                            <number>12</number>
+                                        </property>
                                         <item>
                                             <widget class="QFrame" name="frameRealTime">
                                                 <layout class="QGridLayout" name="gridLayoutRealTime">
@@ -119,9 +197,6 @@
                                                     <item row="0" column="1"><widget class="QLabel" name="labelRealTimeStatus"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="Line" name="line_1"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
                                         </item>
                                         <item>
                                             <widget class="QFrame" name="frameVirusDefs">
@@ -136,9 +211,6 @@
                                             </widget>
                                         </item>
                                         <item>
-                                            <widget class="Line" name="line_2"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
-                                        </item>
-                                        <item>
                                             <widget class="QFrame" name="frameEngineVersion">
                                                 <layout class="QGridLayout" name="gridLayoutEngineVersion">
                                                     <item row="0" column="0"><widget class="QLabel" name="labelEngineVersionTitle"><property name="text"><string>Engine Version:</string></property></widget></item>
@@ -149,9 +221,6 @@
                                                     <item row="2" column="1"><widget class="QLabel" name="labelUpdateAvailableValue"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="Line" name="line_3"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
                                         </item>
                                         <item>
                                             <widget class="QFrame" name="frameLicenseStatus">
