@@ -22,6 +22,11 @@ void NetworkMonitor::stopMonitoring()
     emit newLogMessage(QStringLiteral("Network monitoring stopped."));
 }
 
+bool NetworkMonitor::isMonitoring() const
+{
+    return m_simulationTimer->isActive();
+}
+
 void NetworkMonitor::generateSimulatedLog()
 {
     m_logCounter++;

@@ -13,365 +13,498 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="mainHorizontalLayout" stretch="3,1">
+  <layout class="QVBoxLayout" name="mainVerticalLayout">
    <item>
-    <widget class="QWidget" name="leftPanelWidget" native="true">
-     <layout class="QVBoxLayout" name="leftPanelVerticalLayout">
-      <property name="spacing">
-       <number>10</number>
-      </property>
-      <item>
-       <widget class="QStackedWidget" name="scanResultsStackedWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>3</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="basicScanPage">
-         <layout class="QVBoxLayout" name="basicScanPageLayout">
-          <property name="leftMargin"><number>0</number></property>
-          <property name="topMargin"><number>0</number></property>
-          <property name="rightMargin"><number>0</number></property>
-          <property name="bottomMargin"><number>0</number></property>
-          <item>
-           <widget class="QFrame" name="basicScanResultsFrame">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>1</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="styleSheet">
-             <string>
+    <widget class="QTabWidget" name="dashboardTabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
+     </property>
+     <property name="documentMode">
+      <bool>true</bool>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string>
+QTabWidget::pane { 
+  border: 1px solid #4A4A4A;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.02);
+  margin-top: -1px;
+}
+QTabWidget::tab-bar {
+  left: 5px;
+}
+QTabBar::tab {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid #3A3A3A;
+  border-bottom: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 8px 16px;
+  margin-right: 2px;
+  color: #CCCCCC;
+}
+QTabBar::tab:selected {
+  background-color: rgba(30, 30, 30, 0.1);
+  color: #FFFFFF;
+}
+QTabBar::tab:hover:!selected {
+  background-color: rgba(60, 60, 60, 0.2);
+}
+      </string>
+     </property>
+     
+     <!-- Basic Scan Tab -->
+     <widget class="QWidget" name="basicScanTab">
+      <attribute name="title">
+       <string>Basic Scan</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="basicScanTabLayout">
+       <item>
+        <widget class="QFrame" name="basicScanResultsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
 QFrame {
     border: 1px solid #4A4A4A;
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 4px;
 }
-             </string>
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="basicScanResultsFrameLayout">
+          <item>
+           <widget class="QTextEdit" name="basicScanResultsTextEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <layout class="QVBoxLayout" name="basicScanResultsFrameLayout">
-             <property name="leftMargin"><number>0</number></property>
-             <property name="topMargin"><number>0</number></property>
-             <property name="rightMargin"><number>0</number></property>
-             <property name="bottomMargin"><number>0</number></property>
-             <item>
-              <widget class="QTextEdit" name="basicScanResultsTextEdit">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-               <property name="placeholderText">
-                <string>Basic scan results will be shown here...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Basic scan results will be shown here...</string>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="advancedScanPage">
-         <layout class="QVBoxLayout" name="advancedScanPageLayout">
-          <property name="leftMargin"><number>0</number></property>
-          <property name="topMargin"><number>0</number></property>
-          <property name="rightMargin"><number>0</number></property>
-          <property name="bottomMargin"><number>0</number></property>
-          <item>
-           <widget class="QFrame" name="advancedScanResultsFrame">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>1</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="styleSheet">
-             <string>
+       </item>
+       <item>
+        <widget class="QPushButton" name="basicScanButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Run Basic Scan</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources.qrc">
+           <normaloff>:/images/basicScan.png</normaloff>:/images/basicScan.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     
+     <!-- Advanced Scan Tab -->
+     <widget class="QWidget" name="advancedScanTab">
+      <attribute name="title">
+       <string>Advanced Scan</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="advancedScanTabLayout">
+       <item>
+        <widget class="QFrame" name="advancedScanResultsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
 QFrame {
     border: 1px solid #4A4A4A;
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 4px;
 }
-             </string>
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="advancedScanResultsFrameLayout">
+          <item>
+           <widget class="QTableWidget" name="advancedScanResultsTableWidget">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <layout class="QVBoxLayout" name="advancedScanResultsFrameLayout">
-             <property name="leftMargin"><number>0</number></property>
-             <property name="topMargin"><number>0</number></property>
-             <property name="rightMargin"><number>0</number></property>
-             <property name="bottomMargin"><number>0</number></property>
-             <item>
-              <widget class="QTableWidget" name="advancedScanResultsTableWidget">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="editTriggers">
-                <set>QAbstractItemView::NoEditTriggers</set>
-               </property>
-               <property name="selectionBehavior">
-                <enum>QAbstractItemView::SelectRows</enum>
-               </property>
-               <property name="alternatingRowColors">
-                <bool>true</bool>
-               </property>
-               <attribute name="horizontalHeaderStretchLastSection">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="verticalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-              </widget>
-             </item>
-            </layout>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
            </widget>
           </item>
          </layout>
         </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="networkCommunicationLabel">
-        <property name="text">
-         <string>Network Communication:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QTextEdit" name="networkCommunicationTextEdit">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>1</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>Network activity will be shown here...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="advancedScanButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Run Advanced Scan</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources.qrc">
+           <normaloff>:/images/advancedScan.png</normaloff>:/images/advancedScan.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     
+     <!-- CDR Tab -->
+     <widget class="QWidget" name="cdrTab">
+      <attribute name="title">
+       <string>CDR</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="cdrTabLayout">
+       <item>
+        <widget class="QFrame" name="cdrResultsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+QFrame {
+    border: 1px solid #4A4A4A;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="cdrResultsFrameLayout">
+          <item>
+           <widget class="QTextEdit" name="cdrResultsTextEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>CDR (Content Disarm &amp; Reconstruction) results will be shown here...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="cdrScanButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Run CDR Scan</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources.qrc">
+           <normaloff>:/images/cdrScan.png</normaloff>:/images/cdrScan.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     
+     <!-- Sandbox Tab -->
+     <widget class="QWidget" name="sandboxTab">
+      <attribute name="title">
+       <string>Sandbox</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="sandboxTabLayout">
+       <item>
+        <widget class="QFrame" name="sandboxResultsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+QFrame {
+    border: 1px solid #4A4A4A;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="sandboxResultsFrameLayout">
+          <item>
+           <widget class="QTextEdit" name="sandboxResultsTextEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Sandbox analysis results will be shown here...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="sandboxScanButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Run Sandbox Analysis</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources.qrc">
+           <normaloff>:/images/sandboxScan.png</normaloff>:/images/sandboxScan.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     
+     <!-- Network Tab -->
+     <widget class="QWidget" name="networkTab">
+      <attribute name="title">
+       <string>Network</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="networkTabLayout">
+       <item>
+        <widget class="QFrame" name="networkResultsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+QFrame {
+    border: 1px solid #4A4A4A;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+          </string>
+         </property>
+         <layout class="QVBoxLayout" name="networkResultsFrameLayout">
+          <item>
+           <widget class="QTextEdit" name="networkCommunicationTextEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Network activity will be shown here...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="networkMonitorButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Start Network Monitor</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="rightPanelWidget" native="true">
-     <layout class="QVBoxLayout" name="rightPanelVerticalLayout">
-      <item>
-       <widget class="QWidget" name="buttonGridContainerWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QGridLayout" name="buttonsGridLayout">
-         <property name="horizontalSpacing">
-          <number>10</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>10</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="basicScanButton_dashboard">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/images/basicScan.png</normaloff>:/images/basicScan.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>100</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string>
-QPushButton {
-    border: none;
-    padding: 0px;
-    background-color: transparent;
-}
-QPushButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-QPushButton:pressed {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-            </string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="advancedScanButton_dashboard">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/images/advancedScan.png</normaloff>:/images/advancedScan.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>100</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string>
-QPushButton {
-    border: none;
-    padding: 0px;
-    background-color: transparent;
-}
-QPushButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-QPushButton:pressed {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-            </string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="cdrScanButton_dashboard">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/images/cdrScan.png</normaloff>:/images/cdrScan.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>100</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string>
-QPushButton {
-    border: none;
-    padding: 0px;
-    background-color: transparent;
-}
-QPushButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-QPushButton:pressed {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-            </string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="sandboxScanButton_dashboard">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/images/sandboxScan.png</normaloff>:/images/sandboxScan.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>100</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string>
-QPushButton {
-    border: none;
-    padding: 0px;
-    background-color: transparent;
-}
-QPushButton:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-QPushButton:pressed {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-            </string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacerRightPanel">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QHBoxLayout" name="buttonsLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="configButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Configuration</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="refreshButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Refresh</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

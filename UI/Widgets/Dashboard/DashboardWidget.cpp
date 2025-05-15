@@ -9,6 +9,11 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
+#include <QFont>
+#include <QDateTime>
+#include <QColor>
+#include <QHeaderView>
 
 using namespace Qt::StringLiterals;
 
@@ -65,11 +70,137 @@ DashboardWidget::DashboardWidget(QWidget *parent):
 {
     ui->setupUi(this);
     
-    // Connect click events for all buttons
-    connect(ui->basicScanButton_dashboard, &QPushButton::clicked, this, &DashboardWidget::onBasicScanSelectFile);
-    connect(ui->advancedScanButton_dashboard, &QPushButton::clicked, this, &DashboardWidget::onAdvancedScanClicked);
-    connect(ui->cdrScanButton_dashboard, &QPushButton::clicked, this, &DashboardWidget::onCdrScanClicked);
-    connect(ui->sandboxScanButton_dashboard, &QPushButton::clicked, this, &DashboardWidget::onSandboxScanClicked);
+    // Load and apply custom styles
+    QFile styleFile(u":/styles/dashboard.css"_s);
+    if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QString styleSheet = QString::fromUtf8(styleFile.readAll());
+        styleFile.close();
+        
+        // Apply styles to specific elements
+        ui->basicScanResultsFrame->setStyleSheet(styleSheet);
+        ui->advancedScanResultsFrame->setStyleSheet(styleSheet);
+        ui->cdrResultsFrame->setStyleSheet(styleSheet);
+        ui->sandboxResultsFrame->setStyleSheet(styleSheet);
+        ui->networkResultsFrame->setStyleSheet(styleSheet);
+        
+        // Direct styling of text edit widgets for better appearance
+        QString textEditStyle = u"QTextEdit {"
+                               "border-radius: 6px;"
+                               "background-color: rgba(30, 30, 30, 0.8);"
+                               "color: #E0E0E0;"
+                               "padding: 8px;"
+                               "}"_s;
+        
+        ui->basicScanResultsTextEdit->setStyleSheet(textEditStyle);
+        ui->cdrResultsTextEdit->setStyleSheet(textEditStyle);
+        ui->sandboxResultsTextEdit->setStyleSheet(textEditStyle);
+        ui->networkCommunicationTextEdit->setStyleSheet(textEditStyle);
+        
+        // Table widget styling
+        QString tableStyle = u"QTableWidget {"
+                            "border-radius: 6px;"
+                            "background-color: rgba(30, 30, 30, 0.8);"
+                            "color: #E0E0E0;"
+                            "gridline-color: #4A4A4A;"
+                            "}"
+                            "QTableWidget::item {"
+                            "padding: 5px;"
+                            "border-radius: 3px;"
+                            "}"
+                            "QHeaderView::section {"
+                            "background-color: #2A2A2A;"
+                            "color: #FFFFFF;"
+                            "padding: 6px;"
+                            "font-weight: bold;"
+                            "border: 1px solid #4A4A4A;"
+                            "border-radius: 0px;"
+                            "}"_s;
+        
+        ui->advancedScanResultsTableWidget->setStyleSheet(tableStyle);
+        
+        // Set font for better readability
+        QFont monoFont(u"Menlo"_s);
+        monoFont.setStyleHint(QFont::Monospace);
+        ui->basicScanResultsTextEdit->setFont(monoFont);
+        ui->cdrResultsTextEdit->setFont(monoFont);
+        ui->sandboxResultsTextEdit->setFont(monoFont);
+        ui->networkCommunicationTextEdit->setFont(monoFont);
+        ui->advancedScanResultsTableWidget->setFont(monoFont);
+    }
+    
+    // Apply styles to buttons
+    QString buttonStyleBase = u"QPushButton {"
+                             "background-color: #2A2A2A;"
+                             "color: #FFFFFF;"
+                             "border: 1px solid #3A3A3A;"
+                             "border-radius: 4px;"
+                             "padding: 8px 16px;"
+                             "font-weight: bold;"
+                             "min-height: 36px;"
+                             "}"
+                             "QPushButton:hover {"
+                             "background-color: #3A3A3A;"
+                             "border: 1px solid #4A4A4A;"
+                             "}"
+                             "QPushButton:pressed {"
+                             "background-color: #1A1A1A;"
+                             "border: 1px solid #2A2A2A;"
+                             "}"_s;
+
+    // Action buttons with themed colors
+    QString basicScanButtonStyle = buttonStyleBase;
+    basicScanButtonStyle.replace(u"#2A2A2A"_s, u"#1976D2"_s); // Blue
+    ui->basicScanButton->setStyleSheet(basicScanButtonStyle);
+    
+    QString advancedScanButtonStyle = buttonStyleBase;
+    advancedScanButtonStyle.replace(u"#2A2A2A"_s, u"#00796B"_s); // Teal
+    ui->advancedScanButton->setStyleSheet(advancedScanButtonStyle);
+    
+    QString cdrScanButtonStyle = buttonStyleBase;
+    cdrScanButtonStyle.replace(u"#2A2A2A"_s, u"#512DA8"_s); // Deep Purple
+    ui->cdrScanButton->setStyleSheet(cdrScanButtonStyle);
+    
+    QString sandboxScanButtonStyle = buttonStyleBase;
+    sandboxScanButtonStyle.replace(u"#2A2A2A"_s, u"#D32F2F"_s); // Red
+    ui->sandboxScanButton->setStyleSheet(sandboxScanButtonStyle);
+    
+    // Network monitor button starts in active mode
+    QString networkButtonStyle = buttonStyleBase;
+    networkButtonStyle.replace(u"#2A2A2A"_s, u"#F44336"_s); // Red for active state
+    ui->networkMonitorButton->setStyleSheet(networkButtonStyle);
+    ui->networkMonitorButton->setText(u"Ağ İzlemeyi Durdur"_s);
+    
+    // Config and refresh buttons
+    QString configButtonStyle = buttonStyleBase;
+    ui->configButton->setStyleSheet(configButtonStyle);
+    ui->configButton->setText(u"Yapılandırma"_s); // Turkish localization
+    
+    QString refreshButtonStyle = buttonStyleBase;
+    refreshButtonStyle.replace(u"#2A2A2A"_s, u"#607D8B"_s); // Blue Grey
+    ui->refreshButton->setStyleSheet(refreshButtonStyle);
+    ui->refreshButton->setText(u"Yenile"_s); // Turkish localization
+    
+    // Update button text for Turkish users
+    ui->basicScanButton->setText(u"Temel Tarama"_s);
+    ui->advancedScanButton->setText(u"Gelişmiş Tarama"_s);
+    ui->cdrScanButton->setText(u"CDR Taraması"_s);
+    ui->sandboxScanButton->setText(u"Sandbox Taraması"_s);
+    
+    // Update tab names for consistency
+    ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->basicScanTab), u"Temel Tarama"_s);
+    ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->advancedScanTab), u"Gelişmiş Tarama"_s);
+    ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->cdrTab), u"CDR"_s);
+    ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->sandboxTab), u"Sandbox"_s);
+    ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->networkTab), u"Ağ İzleme"_s);
+    
+    // Connect click events for all buttons in the tabbed interface
+    connect(ui->basicScanButton, &QPushButton::clicked, this, &DashboardWidget::onBasicScanButtonClicked);
+    connect(ui->advancedScanButton, &QPushButton::clicked, this, &DashboardWidget::onAdvancedScanButtonClicked);
+    connect(ui->cdrScanButton, &QPushButton::clicked, this, &DashboardWidget::onCdrScanButtonClicked);
+    connect(ui->sandboxScanButton, &QPushButton::clicked, this, &DashboardWidget::onSandboxScanButtonClicked);
+    connect(ui->networkMonitorButton, &QPushButton::clicked, this, &DashboardWidget::onNetworkMonitorButtonClicked);
+    connect(ui->configButton, &QPushButton::clicked, this, &DashboardWidget::onConfigButtonClicked);
+    connect(ui->refreshButton, &QPushButton::clicked, this, &DashboardWidget::onRefreshButtonClicked);
     
     // Basic scan connections
     connect(m_basicScanner.get(), &BasicScanner::scanResultsReady, this, &DashboardWidget::onBasicScanResultsReady);
@@ -96,11 +227,20 @@ DashboardWidget::~DashboardWidget() {
 }
 
 /**
+ * @brief Handles the Basic Scan button click.
+ * 
+ * Initiates the file selection process for a basic scan.
+ */
+void DashboardWidget::onBasicScanButtonClicked() {
+    onBasicScanSelectFile();
+}
+
+/**
  * @brief Handles the Advanced Scan button click.
  * 
  * Opens a file dialog for the user to select a file for advanced scanning.
  */
-void DashboardWidget::onAdvancedScanClicked() {
+void DashboardWidget::onAdvancedScanButtonClicked() {
     onAdvancedScanSelectFile();
 }
 
@@ -109,10 +249,31 @@ void DashboardWidget::onAdvancedScanClicked() {
  * 
  * Currently displays a debug message and updates the UI.
  */
-void DashboardWidget::onCdrScanClicked() {
+void DashboardWidget::onCdrScanButtonClicked() {
     qDebug() << DashboardText::CDR_SCAN;
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
-    ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::CDR_SCAN));
+    ui->dashboardTabWidget->setCurrentWidget(ui->cdrTab);
+    
+    // Clear previous content
+    ui->cdrResultsTextEdit->clear();
+    
+    // Add timestamp header
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
+    
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+    ui->cdrResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
+    ui->cdrResultsTextEdit->append(u""_s);
+    
+    // Add stylized starting message
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+    ui->cdrResultsTextEdit->append(u"🔍 PROCESS:"_s);
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+    ui->cdrResultsTextEdit->append(u"  "_s + QString::fromUtf8(DashboardText::CDR_SCAN));
+    ui->cdrResultsTextEdit->append(u""_s);
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+    ui->cdrResultsTextEdit->append(u"Analyzing file structure..."_s);
+    ui->cdrResultsTextEdit->append(u"Looking for potentially malicious content..."_s);
+    ui->cdrResultsTextEdit->append(u"Preparing to disarm and reconstruct file..."_s);
 }
 
 /**
@@ -120,10 +281,128 @@ void DashboardWidget::onCdrScanClicked() {
  * 
  * Currently displays a debug message and updates the UI.
  */
-void DashboardWidget::onSandboxScanClicked() {
+void DashboardWidget::onSandboxScanButtonClicked() {
     qDebug() << DashboardText::SANDBOX_SCAN;
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
-    ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SANDBOX_SCAN));
+    ui->dashboardTabWidget->setCurrentWidget(ui->sandboxTab);
+    
+    // Clear previous content
+    ui->sandboxResultsTextEdit->clear();
+    
+    // Add timestamp header
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
+    
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+    ui->sandboxResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // Add stylized starting message
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+    ui->sandboxResultsTextEdit->append(u"🔍 PROCESS:"_s);
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+    ui->sandboxResultsTextEdit->append(u"  "_s + QString::fromUtf8(DashboardText::SANDBOX_SCAN));
+    ui->sandboxResultsTextEdit->append(u""_s);
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+    ui->sandboxResultsTextEdit->append(u"Preparing isolated sandbox environment..."_s);
+    ui->sandboxResultsTextEdit->append(u"Loading file for analysis..."_s);
+    ui->sandboxResultsTextEdit->append(u"Monitoring file behavior in sandbox..."_s);
+}
+
+/**
+ * @brief Handles the Network Monitor button click.
+ * 
+ * Shows the network monitoring page and logs.
+ */
+void DashboardWidget::onNetworkMonitorButtonClicked() {
+    qDebug() << "Network Monitor button clicked";
+    ui->dashboardTabWidget->setCurrentWidget(ui->networkTab);
+    
+    // Get current timestamp
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
+    
+    // Toggle the monitoring state with improved visual feedback
+    if (m_networkMonitor->isMonitoring()) {
+        m_networkMonitor->stopMonitoring();
+        ui->networkMonitorButton->setText(u"Ağ İzlemeyi Başlat"_s);
+        ui->networkMonitorButton->setStyleSheet(u"QPushButton { background-color: #2196F3; color: white; }"_s);
+        
+        // Add stop message with timestamp
+        ui->networkCommunicationTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        ui->networkCommunicationTextEdit->append(u""_s);
+        ui->networkCommunicationTextEdit->append(u"==== Ağ İzleme Durduruldu: "_s + timestamp + u" ===="_s);
+    } else {
+        // Clear previous content when starting new monitoring session
+        ui->networkCommunicationTextEdit->clear();
+        
+        m_networkMonitor->startMonitoring();
+        ui->networkMonitorButton->setText(u"Ağ İzlemeyi Durdur"_s);
+        ui->networkMonitorButton->setStyleSheet(u"QPushButton { background-color: #F44336; color: white; }"_s);
+        
+        // Add start message with timestamp and header
+        ui->networkCommunicationTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->networkCommunicationTextEdit->append(u"==== Ağ İzleme Başlatıldı: "_s + timestamp + u" ===="_s);
+        ui->networkCommunicationTextEdit->append(u""_s);
+        ui->networkCommunicationTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        ui->networkCommunicationTextEdit->append(u"Ağ trafiği izleniyor..."_s);
+        ui->networkCommunicationTextEdit->append(u"Olası bağlantılar ve paketler burada gösterilecek."_s);
+        ui->networkCommunicationTextEdit->append(u""_s);
+    }
+}
+
+/**
+ * @brief Handles the Configuration button click.
+ * 
+ * Currently a placeholder for configuration functionality.
+ */
+void DashboardWidget::onConfigButtonClicked() {
+    qDebug() << "Config button clicked"; 
+    // Placeholder for configuration dialog or page
+    QMessageBox::information(this, u"Configuration"_s, u"Configuration options will be available in a future update."_s);
+}
+
+/**
+ * @brief Handles the Refresh button click.
+ * 
+ * Refreshes the current view and any associated data.
+ */
+void DashboardWidget::onRefreshButtonClicked() {
+    qDebug() << "Refresh button clicked";
+    
+    // Refresh the current active page
+    QWidget* currentWidget = ui->dashboardTabWidget->currentWidget();
+    
+    if (currentWidget == ui->networkTab) {
+        // If on network page, clear and restart monitoring
+        if (ui->networkCommunicationTextEdit) {
+            ui->networkCommunicationTextEdit->clear();
+        }
+        if (m_networkMonitor) {
+            m_networkMonitor->stopMonitoring();
+            m_networkMonitor->startMonitoring();
+        }
+    } else if (currentWidget == ui->basicScanTab) {
+        // Clear basic scan results
+        if (ui->basicScanResultsTextEdit) {
+            ui->basicScanResultsTextEdit->clear();
+        }
+    } else if (currentWidget == ui->advancedScanTab) {
+        // Clear advanced scan results
+        if (ui->advancedScanResultsTableWidget) {
+            ui->advancedScanResultsTableWidget->clearContents();
+            ui->advancedScanResultsTableWidget->setRowCount(0);
+        }
+    } else if (currentWidget == ui->cdrTab) {
+        // Clear CDR results
+        if (ui->cdrResultsTextEdit) {
+            ui->cdrResultsTextEdit->clear();
+        }
+    } else if (currentWidget == ui->sandboxTab) {
+        // Clear sandbox results
+        if (ui->sandboxResultsTextEdit) {
+            ui->sandboxResultsTextEdit->clear();
+        }
+    }
 }
 
 /**
@@ -133,7 +412,7 @@ void DashboardWidget::onSandboxScanClicked() {
  * the scan of that file and updates the UI accordingly.
  */
 void DashboardWidget::onBasicScanSelectFile() {
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
     ui->basicScanResultsTextEdit->clear();
     ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTING_FILE));
     
@@ -170,7 +449,7 @@ void DashboardWidget::onBasicScanSelectFile() {
  * that file for advanced scanning and updates the UI accordingly.
  */
 void DashboardWidget::onAdvancedScanSelectFile() {
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage); // Show progress in basic view initially
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab); // Show progress in basic view initially
     ui->basicScanResultsTextEdit->clear();
     ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTING_FILE));
     
@@ -221,17 +500,67 @@ void DashboardWidget::onAdvancedScanSelectFile() {
  * @param results The scan results as a formatted string.
  */
 void DashboardWidget::onBasicScanResultsReady(const QString& results) {
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
     ui->basicScanResultsTextEdit->clear();
     
-    // Set text color based on scan result
-    if (results.contains(u"MALICIOUS"_s)) {
-        ui->basicScanResultsTextEdit->setTextColor(Qt::red);
-    } else {
-        ui->basicScanResultsTextEdit->setTextColor(Qt::green);
-    }
+    // Get current timestamp for the scan
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
     
-    ui->basicScanResultsTextEdit->append(results);
+    // Add a header with timestamp
+    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+    ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
+    ui->basicScanResultsTextEdit->append(u""_s);
+    
+    // Format and colorize the scan results
+    if (results.contains(u"MALICIOUS"_s)) {
+        // Malicious result formatting
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+        ui->basicScanResultsTextEdit->append(u"⚠️ SCAN RESULT:"_s);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->basicScanResultsTextEdit->append(u"  MALICIOUS FILE DETECTED"_s);
+        ui->basicScanResultsTextEdit->append(u""_s);
+        
+        // Add remaining results with proper formatting
+        QStringList lines = results.split(u"\n"_s);
+        for(const QString& line : lines) {
+            if (line.contains(u"File:"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            } else if (line.contains(u"Hash:"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            } else if (line.contains(u"Threat:"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            } else {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            }
+        }
+    } else {
+        // Clean result formatting
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+        ui->basicScanResultsTextEdit->append(u"✓ SCAN RESULT:"_s);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->basicScanResultsTextEdit->append(u"  FILE IS CLEAN"_s);
+        ui->basicScanResultsTextEdit->append(u""_s);
+        
+        // Add remaining results with proper formatting
+        QStringList lines = results.split(u"\n"_s);
+        for(const QString& line : lines) {
+            if (line.contains(u"File:"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            } else if (line.contains(u"Hash:"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            } else if (!line.contains(u"CLEAN"_s)) {
+                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+                ui->basicScanResultsTextEdit->append(line);
+            }
+        }
+    }
 }
 
 /**
@@ -244,7 +573,7 @@ void DashboardWidget::onBasicScanResultsReady(const QString& results) {
  * @param errorMessage The descriptive error message.
  */
 void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString& errorMessage) {
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
     // Display error message in a more user-friendly way
     QString errorTitle;
     QString errorIcon;
@@ -276,12 +605,27 @@ void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString
     // Log the error
     qWarning() << "Basic Scan Error:" << static_cast<int>(errorCode) << "-" << errorMessage;
     
-    // Add error message to the scan results text edit
+    // Add stylized error message to the scan results
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
+    
+    // If the text area is empty, start with a timestamp
     if (ui->basicScanResultsTextEdit->toPlainText().isEmpty()) {
-        ui->basicScanResultsTextEdit->setText(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(errorMessage));
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+        ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
+        ui->basicScanResultsTextEdit->append(u""_s);
+        
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->basicScanResultsTextEdit->append(u"⚠️ ERROR:"_s);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        ui->basicScanResultsTextEdit->append(u"  "_s + errorMessage);
     } else if (!ui->basicScanResultsTextEdit->toPlainText().contains(errorMessage)) {
         // Only append if the error message isn't already there
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(errorMessage));
+        ui->basicScanResultsTextEdit->append(u""_s);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->basicScanResultsTextEdit->append(u"⚠️ ERROR:"_s);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        ui->basicScanResultsTextEdit->append(u"  "_s + errorMessage);
     }
     
     // For critical errors, show a message box
@@ -308,7 +652,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
     if (error.error != QJsonParseError::NoError) {
         qWarning() << "JSON Parse Error:" << error.errorString();
         QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), QString(u"Failed to parse VirusTotal response: %1"_s).arg(error.errorString()));
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         ui->basicScanResultsTextEdit->clear();
         ui->basicScanResultsTextEdit->setTextColor(Qt::red);
         ui->basicScanResultsTextEdit->append(QString(u"VirusTotal Response Parse Error: %1"_s).arg(error.errorString()));
@@ -318,7 +662,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
     if (!doc.isObject()) {
         qWarning() << "VirusTotal response is not a JSON object.";
         QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), u"Unexpected VirusTotal response format."_s);
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         ui->basicScanResultsTextEdit->clear();
         ui->basicScanResultsTextEdit->setTextColor(Qt::red);
         ui->basicScanResultsTextEdit->append(u"Unexpected VirusTotal response format."_s);
@@ -333,7 +677,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
         QString errorMessage = errorObj.value(u"message"_s).toString(u"Unknown VirusTotal API error."_s);
         qWarning() << "VirusTotal API Error:" << errorMessage;
         QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), errorMessage);
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         ui->basicScanResultsTextEdit->clear();
         ui->basicScanResultsTextEdit->setTextColor(Qt::red);
         ui->basicScanResultsTextEdit->append(QString(u"VirusTotal API Error: %1"_s).arg(errorMessage));
@@ -342,7 +686,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
 
     if (!rootObject.contains(u"data"_s) || !rootObject.value(u"data"_s).isObject()) {
         qWarning() << "VirusTotal response does not contain 'data' object. Analysis might be pending.";
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
             ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
             ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
@@ -354,7 +698,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
 
     if (!dataObject.contains(u"attributes"_s) || !dataObject.value(u"attributes"_s).isObject()) {
         qWarning() << "VirusTotal data object does not contain 'attributes'. Analysis might be pending.";
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
             ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
             ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
@@ -369,7 +713,7 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
 
     if (!hasResults || analysisStatus == QLatin1String("queued")) {
         qWarning() << "VirusTotal analysis is not complete or results are not yet available. Status:" << analysisStatus;
-        ui->scanResultsStackedWidget->setCurrentWidget(ui->basicScanPage);
+        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
         if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
              ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
              ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
@@ -378,84 +722,123 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
     }
     
     // At this point, we should have results
-    ui->scanResultsStackedWidget->setCurrentWidget(ui->advancedScanPage);
+    ui->dashboardTabWidget->setCurrentWidget(ui->advancedScanTab);
     ui->advancedScanResultsTableWidget->clearContents();
-    ui->advancedScanResultsTableWidget->setRowCount(0); 
-
+    ui->advancedScanResultsTableWidget->setRowCount(0);
+    
+    // Add visual improvements to the table
+    ui->advancedScanResultsTableWidget->setShowGrid(false);
+    ui->advancedScanResultsTableWidget->setAlternatingRowColors(true);
+    ui->advancedScanResultsTableWidget->verticalHeader()->setVisible(false);
+    ui->advancedScanResultsTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->advancedScanResultsTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->advancedScanResultsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    
+    // Get file metadata for displaying in the header
+    QString fileName = attributesObject.value(u"meaningful_name"_s).toString();
+    QString fileSha256 = dataObject.value(u"id"_s).toString();
+    
     QJsonObject analysisResults = attributesObject.value(u"results"_s).toObject();
 
-    // Prepare table
+    // Prepare table with improved headers
     ui->advancedScanResultsTableWidget->setColumnCount(3);
-    QStringList headers = {u"Engine"_s, u"Category"_s, u"Result"_s};
+    QStringList headers = {u"Tarama Motoru"_s, u"Kategori"_s, u"Sonuç"_s}; // Localized headers for Turkish
     ui->advancedScanResultsTableWidget->setHorizontalHeaderLabels(headers);
+    
+    // Configure header appearance
+    QFont headerFont = ui->advancedScanResultsTableWidget->horizontalHeader()->font();
+    headerFont.setBold(true);
+    headerFont.setPointSize(headerFont.pointSize() + 1);
+    ui->advancedScanResultsTableWidget->horizontalHeader()->setFont(headerFont);
 
+    // Add file info header to the results
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
+    
+    // Count categories for summary and populate the table
+    int maliciousCount = 0;
+    int suspiciousCount = 0;
+    int cleanCount = 0;
+    int totalEngines = analysisResults.keys().count();
+    
+    // Process each engine's result and populate the table
     int row = 0;
-    for (const QString& engineName : analysisResults.keys()) {
-        QJsonObject engineResult = analysisResults.value(engineName).toObject();
+    ui->advancedScanResultsTableWidget->setRowCount(totalEngines);
+    
+    for (auto it = analysisResults.constBegin(); it != analysisResults.constEnd(); ++it) {
+        QString engineName = it.key();
+        QJsonObject engineResult = it.value().toObject();
+        
         QString category = engineResult.value(u"category"_s).toString();
-        QString result = engineResult.value(u"result"_s).toString(u"N/A"_s); // Default to N/A if no result string
-
+        QString result = engineResult.value(u"result"_s).toString();
+        
+        // Set engine name in first column
         QTableWidgetItem* engineItem = new QTableWidgetItem(engineName);
-        QTableWidgetItem* categoryItem = new QTableWidgetItem(category);
-        QTableWidgetItem* resultItem = new QTableWidgetItem(result);
-
-        // Define text and background brushes
-        QBrush backgroundBrush(ui->advancedScanResultsTableWidget->palette().base()); // Default to theme's base color
-        QBrush foregroundBrush(ui->advancedScanResultsTableWidget->palette().text()); // Default to theme's text color
-
-        if (category.compare(u"malicious"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(192, 57, 43)); // Pomegranate Red
-            foregroundBrush = QBrush(Qt::white);
-        } else if (category.compare(u"suspicious"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(211, 84, 0)); // Pumpkin Orange
-            foregroundBrush = QBrush(Qt::white);
-        } else if (category.compare(u"undetected"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(40, 116, 50)); // Darker, desaturated green
-            foregroundBrush = QBrush(Qt::white);
-        } else if (category.compare(u"harmless"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(36, 113, 163)); // Darker, desaturated blue
-            foregroundBrush = QBrush(Qt::white);
-        } else if (category.compare(u"type-unsupported"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(93, 109, 126)); // Dark Slate Gray
-            foregroundBrush = QBrush(Qt::white);
-        } else if (category.compare(u"timeout"_s, Qt::CaseInsensitive) == 0) {
-            backgroundBrush = QBrush(QColor(183, 149, 11)); // Muted Dark Gold
-            foregroundBrush = QBrush(Qt::white);
-        }
-        // Other categories will use the default theme colors
-
-        ui->advancedScanResultsTableWidget->insertRow(row);
         ui->advancedScanResultsTableWidget->setItem(row, 0, engineItem);
+        
+        // Set category in second column
+        QTableWidgetItem* categoryItem = new QTableWidgetItem(category);
         ui->advancedScanResultsTableWidget->setItem(row, 1, categoryItem);
+        
+        // Set result in third column
+        QTableWidgetItem* resultItem = new QTableWidgetItem(result.isEmpty() ? u"--"_s : result);
         ui->advancedScanResultsTableWidget->setItem(row, 2, resultItem);
-
-        for (int col = 0; col < 3; ++col) {
-            if(QTableWidgetItem* item = ui->advancedScanResultsTableWidget->item(row, col)) {
-                item->setBackground(backgroundBrush);
-                item->setForeground(foregroundBrush);
-            }
+        
+        // Set colors based on category
+        QColor rowColor;
+        if (category == u"malicious"_s) {
+            rowColor = QColor(u"#FFEBEE"_s); // Light red background
+            maliciousCount++;
+            engineItem->setForeground(QColor(u"#C62828"_s)); // Dark red text
+            categoryItem->setForeground(QColor(u"#C62828"_s));
+            resultItem->setForeground(QColor(u"#C62828"_s));
+        } else if (category == u"suspicious"_s) {
+            rowColor = QColor(u"#FFF8E1"_s); // Light yellow background
+            suspiciousCount++;
+            engineItem->setForeground(QColor(u"#F57F17"_s)); // Dark orange text
+            categoryItem->setForeground(QColor(u"#F57F17"_s));
+            resultItem->setForeground(QColor(u"#F57F17"_s));
+        } else if (category == u"undetected"_s || category == u"clean"_s) {
+            cleanCount++;
+            engineItem->setForeground(QColor(u"#2E7D32"_s)); // Dark green text
+            categoryItem->setForeground(QColor(u"#2E7D32"_s));
+            resultItem->setForeground(QColor(u"#2E7D32"_s));
         }
+        
         row++;
     }
-    ui->advancedScanResultsTableWidget->resizeColumnsToContents();
-
-    // Make headers bold
-    QFont font = ui->advancedScanResultsTableWidget->horizontalHeader()->font();
-    font.setBold(true);
-    ui->advancedScanResultsTableWidget->horizontalHeader()->setFont(font);
     
-    // Display overall stats in the basicScanResultsTextEdit for a quick summary, or add new labels for this.
-    QJsonObject stats = attributesObject.value(u"stats"_s).toObject();
-    QString summary = QString(u"--- VirusTotal Full Report ---\nOverall Scan Status: completed\n--- Scan Statistics ---\n"_s) +
-                      QString(u"Malicious: %1\n"_s).arg(stats.value(u"malicious"_s).toInt(0)) +
-                      QString(u"Suspicious: %1\n"_s).arg(stats.value(u"suspicious"_s).toInt(0)) +
-                      QString(u"Undetected: %1\n"_s).arg(stats.value(u"undetected"_s).toInt(0)) +
-                      QString(u"Harmless: %1\n"_s).arg(stats.value(u"harmless"_s).toInt(0)) +
-                      QString(u"Timeout: %1\n"_s).arg(stats.value(u"timeout"_s).toInt(0)) +
-                      QString(u"Type Unsupported: %1\n"_s).arg(stats.value(u"type-unsupported"_s).toInt(0)) +
-                      QString(u"--- Detailed Engine Results shown in table ---"_s);
-
-    qDebug() << "VirusTotal results parsed and table populated.";
+    // Display a summary message at the top
+    QString threatSummary = QString(u"Dosya analizi tamamlandı: %1 motordan %2 zararlı, %3 şüpheli, %4 temiz tespit."_s)
+                            .arg(totalEngines)
+                            .arg(maliciousCount)
+                            .arg(suspiciousCount)
+                            .arg(cleanCount);
+    
+    // Update basic scan results text with summary as well
+    ui->basicScanResultsTextEdit->clear();
+    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+    ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
+    ui->basicScanResultsTextEdit->append(u""_s);
+    
+    if (maliciousCount > 0) {
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->basicScanResultsTextEdit->append(u"⚠️ VIRUS TOTAL ANALİZİ: ZARARLI"_s);
+    } else if (suspiciousCount > 0) {
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        ui->basicScanResultsTextEdit->append(u"⚠️ VIRUS TOTAL ANALİZİ: ŞÜPHELİ"_s);
+    } else {
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->basicScanResultsTextEdit->append(u"✓ VIRUS TOTAL ANALİZİ: TEMİZ"_s);
+    }
+    
+    ui->basicScanResultsTextEdit->append(u""_s);
+    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+    ui->basicScanResultsTextEdit->append(threatSummary);
+    
+    // Optimize table display
+    ui->advancedScanResultsTableWidget->resizeColumnsToContents();
+    ui->advancedScanResultsTableWidget->horizontalHeader()->setStretchLastSection(true);
 }
 
 /**
@@ -464,6 +847,28 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
  */
 void DashboardWidget::appendNetworkLog(const QString& logMessage) {
     if (ui && ui->networkCommunicationTextEdit) {
-        ui->networkCommunicationTextEdit->append(logMessage);
+        // Get current timestamp
+        QDateTime currentTime = QDateTime::currentDateTime();
+        QString timestamp = currentTime.toString(u"hh:mm:ss.zzz"_s);
+        
+        // Set color based on message type
+        if (logMessage.contains(u"ERROR"_s, Qt::CaseInsensitive) || 
+            logMessage.contains(u"FAILED"_s, Qt::CaseInsensitive)) {
+            ui->networkCommunicationTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        } else if (logMessage.contains(u"WARNING"_s, Qt::CaseInsensitive) ||
+                   logMessage.contains(u"polling"_s, Qt::CaseInsensitive) ||
+                   logMessage.contains(u"attempt"_s, Qt::CaseInsensitive)) {
+            ui->networkCommunicationTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        } else if (logMessage.contains(u"INFO"_s, Qt::CaseInsensitive)) {
+            ui->networkCommunicationTextEdit->setTextColor(QColor(u"#2196F3"_s));
+        } else if (logMessage.contains(u"CONNECTION"_s, Qt::CaseInsensitive) || 
+                  logMessage.contains(u"CONNECTED"_s, Qt::CaseInsensitive)) {
+            ui->networkCommunicationTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        } else {
+            ui->networkCommunicationTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        }
+        
+        // Format and append message with timestamp
+        ui->networkCommunicationTextEdit->append(u"["_s + timestamp + u"] "_s + logMessage);
     }
 }

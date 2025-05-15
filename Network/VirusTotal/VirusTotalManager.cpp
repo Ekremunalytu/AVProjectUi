@@ -500,12 +500,12 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
     // Increment attempt counter
     pollingAttempt++;
     
-    // Calculate delay with increasing backoff (2s, 4s, 8s, 15s, 30s) - Reduced delays
-    int delay = 2000; // Initial delay 2 seconds
-    if (pollingAttempt == 2) delay = 4000;
-    else if (pollingAttempt == 3) delay = 8000;
-    else if (pollingAttempt == 4) delay = 15000;
-    else if (pollingAttempt >= 5) delay = 30000;
+    // Calculate delay with increasing backoff (1s, 2s, 4s, 8s, 15s)
+    int delay = 1000; // Initial delay 1 second
+    if (pollingAttempt == 2) delay = 200;
+    else if (pollingAttempt == 3) delay = 400;
+    else if (pollingAttempt == 4) delay = 800;
+    else if (pollingAttempt >= 5) delay = 150;
     
     // Maximum 5 polling attempts
     if (pollingAttempt <= 5) {
@@ -513,7 +513,8 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
                  << "for analysis" << analysisId << "with delay" << delay/1000 << "seconds";
         
         QTimer::singleShot(delay, this, [this, analysisId]() {
-            if (!this) return; // Check if the object still exists
+            // Using weak pointer pattern elsewhere is sufficient
+            // The connection will be automatically broken if object is destroyed
             
             // Fetch the analysis report
             QString results = getAnalysisReport(analysisId);

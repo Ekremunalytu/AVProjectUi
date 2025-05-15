@@ -16,8 +16,8 @@ QT_END_NAMESPACE
 /**
  * @brief The DashboardWidget class provides the main dashboard interface for scanning operations.
  * 
- * This widget contains buttons for various scan types (basic, advanced, CDR, sandbox)
- * and displays the scan results. It serves as the primary user interface for initiating
+ * This widget uses a tabbed interface for different scan types (basic, advanced, CDR, sandbox, network)
+ * and displays the scan results in their respective tabs. It serves as the primary user interface for initiating
  * scans and viewing their results.
  */
 class DashboardWidget : public QWidget {
@@ -40,21 +40,40 @@ public slots:
     void appendNetworkLog(const QString& logMessage); // New slot for network logs
 
 private slots:
+    /**
+     * @brief Handles click on the Basic Scan button in the Basic Scan tab.
+     */
+    void onBasicScanButtonClicked();
     
     /**
-     * @brief Handles click on the Advanced Scan button.
+     * @brief Handles click on the Advanced Scan button in the Advanced Scan tab.
      */
-    void onAdvancedScanClicked();
+    void onAdvancedScanButtonClicked();
     
     /**
-     * @brief Handles click on the CDR Scan button.
+     * @brief Handles click on the CDR Scan button in the CDR tab.
      */
-    void onCdrScanClicked();
+    void onCdrScanButtonClicked();
     
     /**
-     * @brief Handles click on the Sandbox Scan button.
+     * @brief Handles click on the Sandbox Scan button in the Sandbox tab.
      */
-    void onSandboxScanClicked();
+    void onSandboxScanButtonClicked();
+    
+    /**
+     * @brief Handles click on the Network Monitor button in the Network tab.
+     */
+    void onNetworkMonitorButtonClicked();
+    
+    /**
+     * @brief Handles click on the Configuration button at the bottom of the interface.
+     */
+    void onConfigButtonClicked();
+    
+    /**
+     * @brief Handles click on the Refresh button at the bottom of the interface.
+     */
+    void onRefreshButtonClicked();
     
     /**
      * @brief Handles the file selection for Basic Scan.

@@ -5,6 +5,7 @@
         <file alias="images/applogo.png">UI/Resources/Images/applogo.png</file>
         <file alias="images/shield.png">UI/Resources/Images/shield.png</file>
         <file alias="styles/main.qss">UI/Styles/stylesheet.qss</file>
+        <file alias="styles/dashboard.css">UI/Styles/DashboardStyle.css</file>
         <file alias="images/dashboardLogo.png">UI/Resources/Images/dashboardLogo.png</file>
         <file alias="images/history.png">UI/Resources/Images/history.png</file>
         <file alias="images/ServiceStatus.png">UI/Resources/Images/ServiceStatus.png</file>

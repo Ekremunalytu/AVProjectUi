@@ -13,6 +13,7 @@ public:
     explicit NetworkMonitor(QObject *parent = nullptr);
     void startMonitoring(); // To start generating/capturing logs
     void stopMonitoring();  // To stop generating/capturing logs
+    bool isMonitoring() const; // To check if monitoring is active
 
 signals:
     void newLogMessage(const QString& message);
