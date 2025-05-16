@@ -70,7 +70,9 @@ VirusTotalManager::VirusTotalManager(const QString& apiKey)
     : QObject(nullptr), // Initialize QObject base class
       m_apiKey(apiKey), 
       m_lastSubmissionStatus(VTErrorCodes::NOT_SUBMITTED),
-      m_isScanning(false) {
+      m_isScanning(false),
+      m_pollingAttempt(0),
+      m_currentAnalysisId(QString()) {
     
     // If no API key provided, load it from AppConfig
     if (m_apiKey.isEmpty()) {
@@ -487,30 +489,29 @@ QString VirusTotalManager::getAnalysisReport(const QString& analysisId) {
  * Will attempt up to 5 times with increasing delay between attempts.
  */
 void VirusTotalManager::startPollingForResults(const QString& analysisId) {
-    // Store the analysis ID and attempt count in static variables
-    static int pollingAttempt = 0;
-    static QString currentAnalysisId;
-    
+    // Store the analysis ID and attempt count in instance variables for better thread safety
     // Reset attempt count if this is a new analysis
-    if (currentAnalysisId != analysisId) {
-        currentAnalysisId = analysisId;
-        pollingAttempt = 0;
+    if (m_currentAnalysisId != analysisId) {
+        m_currentAnalysisId = analysisId;
+        m_pollingAttempt = 0;
     }
     
     // Increment attempt counter
-    pollingAttempt++;
+    m_pollingAttempt++;
     
-    // Calculate delay with increasing backoff (1s, 2s, 4s, 8s, 15s)
-    int delay = 1000; // Initial delay 1 second
-    if (pollingAttempt == 2) delay = 200;
-    else if (pollingAttempt == 3) delay = 400;
-    else if (pollingAttempt == 4) delay = 800;
-    else if (pollingAttempt >= 5) delay = 150;
+    // Calculate delay with increasing backoff but more reasonable for faster responses
+    int delay = 500; // Initial delay 0.5 second
+    if (m_pollingAttempt == 2) delay = 1000;
+    else if (m_pollingAttempt == 3) delay = 1500;
+    else if (m_pollingAttempt == 4) delay = 2000;
+    else if (m_pollingAttempt == 5) delay = 3000;
+    else if (m_pollingAttempt == 6) delay = 4000; 
+    
     
     // Maximum 5 polling attempts
-    if (pollingAttempt <= 5) {
-        qDebug() << "Polling for VirusTotal results: attempt" << pollingAttempt 
-                 << "for analysis" << analysisId << "with delay" << delay/1000 << "seconds";
+    if (m_pollingAttempt <= 10) {
+        qDebug() << "Polling for VirusTotal results: attempt" << m_pollingAttempt 
+                 << "for analysis" << analysisId << "with delay" << (delay / 1000.0) << "seconds";
         
         QTimer::singleShot(delay, this, [this, analysisId]() {
             // Using weak pointer pattern elsewhere is sufficient
@@ -521,19 +522,22 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
             qDebug() << "Analysis results obtained in polling. Emitting signal.";
             m_lastResults = results;
             
-            // Check if analysis is completed
+            // Log the status more clearly and check if analysis is completed
             QJsonDocument jsonDoc = QJsonDocument::fromJson(results.toUtf8());
             bool isCompleted = false;
             
             if (!jsonDoc.isNull() && jsonDoc.isObject()) {
                 QJsonObject rootObj = jsonDoc.object();
-                if (rootObj.contains(QLatin1String("data")) && rootObj[QLatin1String("data")].isObject()) {
-                    QJsonObject dataObj = rootObj[QLatin1String("data")].toObject();
-                    if (dataObj.contains(QLatin1String("attributes")) && dataObj[QLatin1String("attributes")].isObject()) {
-                        QJsonObject attrsObj = dataObj[QLatin1String("attributes")].toObject();
-                        if (attrsObj.contains(QLatin1String("status"))) {
-                            QString status = attrsObj[QLatin1String("status")].toString();
-                            isCompleted = (status == QLatin1String("completed"));
+                if (rootObj.contains(QStringLiteral("data")) && 
+                    rootObj[QStringLiteral("data")].isObject()) {
+                    QJsonObject dataObj = rootObj[QStringLiteral("data")].toObject();
+                    if (dataObj.contains(QStringLiteral("attributes")) && 
+                        dataObj[QStringLiteral("attributes")].isObject()) {
+                        QJsonObject attrsObj = dataObj[QStringLiteral("attributes")].toObject();
+                        if (attrsObj.contains(QStringLiteral("status"))) {
+                            QString status = attrsObj[QStringLiteral("status")].toString();
+                            qDebug() << "VirusTotal analysis status:" << status;
+                            isCompleted = (status == QStringLiteral("completed"));
                         }
                     }
                 }
@@ -548,18 +552,75 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
             } else {
                 // Reset scanning flag when completed
                 m_isScanning = false;
-                pollingAttempt = 0;
+                m_pollingAttempt = 0;
             }
         });
     } else {
         // Max attempts reached, stop polling
         qDebug() << "Max polling attempts reached for analysis" << analysisId;
         m_isScanning = false;
-        pollingAttempt = 0;
+        m_pollingAttempt = 0;
         
-        // Emit one final signal with the last results we have
-        emit analysisResultsReady(m_lastResults + QStringLiteral("\n\nAnaliz zaman aşımına uğradı. Sonuç tam olmayabilir."));
+        // Create a proper timeout message by modifying the JSON properly
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(m_lastResults.toUtf8());
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject rootObj = jsonDoc.object();
+            
+            // Check if we're still in queued state
+            QString currentStatus = QStringLiteral("unknown");
+            if (rootObj.contains(QStringLiteral("data")) && 
+                rootObj[QStringLiteral("data")].isObject()) {
+                QJsonObject dataObj = rootObj[QStringLiteral("data")].toObject();
+                if (dataObj.contains(QStringLiteral("attributes")) && 
+                    dataObj[QStringLiteral("attributes")].isObject()) {
+                    QJsonObject attrsObj = dataObj[QStringLiteral("attributes")].toObject();
+                    if (attrsObj.contains(QStringLiteral("status"))) {
+                        currentStatus = attrsObj[QStringLiteral("status")].toString();
+                    }
+                }
+            }
+            
+            // Add appropriate timeout message based on status
+            if (currentStatus == QStringLiteral("queued")) {
+                rootObj.insert(QStringLiteral("timeout_info"), QJsonValue(QStringLiteral("VirusTotal hala dosyayı işleme sırasına almış durumda. Lütfen daha sonra tekrar kontrol ediniz.")));
+            } else {
+                rootObj.insert(QStringLiteral("timeout_info"), QJsonValue(QStringLiteral("Analiz zaman aşımına uğradı. Sonuç tam olmayabilir.")));
+            }
+            
+            // Add a clear status field at the root level for easier parsing
+            rootObj.insert(QStringLiteral("app_status"), QJsonValue(QStringLiteral("timeout")));
+            
+            // Update the results with properly formatted JSON
+            m_lastResults = QString::fromUtf8(QJsonDocument(rootObj).toJson(QJsonDocument::Compact));
+            
+            qDebug() << "Final VirusTotal results (with timeout):" << m_lastResults.left(100) << "...";
+        }
+        
+        // Emit final signal with properly formatted JSON
+        emit analysisResultsReady(m_lastResults);
     }
+}
+
+/**
+ * @brief Safely resets the polling state when refresh button is clicked
+ * 
+ * This method ensures that any ongoing network requests are properly canceled
+ * and the polling state is reset to prevent crashes during refresh operations.
+ */
+void VirusTotalManager::resetPollingState() {
+    // Cancel any ongoing network request
+    if (m_currentReply) {
+        m_currentReply->abort();
+        m_currentReply->deleteLater();
+        m_currentReply = nullptr;
+    }
+    
+    // Reset polling state
+    m_pollingAttempt = 0;
+    m_currentAnalysisId = QString();
+    m_isScanning = false;
+    
+    qDebug() << "VirusTotal polling state has been safely reset";
 }
 
 /**

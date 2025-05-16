@@ -293,13 +293,13 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcore-config.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtconfigmacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtdeprecationdefinitions.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcoreexports.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcompilerdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qprocessordetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsystemdetection.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/atomic \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcoreexports.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtdeprecationmarkers.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtclasshelpermacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtpreprocessorsupport.h \
@@ -674,6 +674,7 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmalloc.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qminmax.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnumeric.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20type_traits.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qoverload.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qswap.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtenvironmentvariables.h \
@@ -689,8 +690,8 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobjectdefs.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnamespace.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcompare.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstdlibdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcomparehelpers.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20type_traits.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/functional \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/binary_negate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/bind.h \
@@ -920,6 +921,7 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__chrono/file_clock.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmargins.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcheckedint_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q23utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qaction.h \
@@ -956,6 +958,7 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qset.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qhash.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qvarlengtharray.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qalloc.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpalette.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbrush.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qfont.h \
@@ -1024,6 +1027,7 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/u8path.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfileinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimezone.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFileInfo \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qapplication.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication.h \
@@ -1032,12 +1036,12 @@ CMakeFiles/AvProjectUi.dir/main.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstracteventdispatcher.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qeventloop.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdeadlinetimer.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qelapsedtimer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnativeinterface.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication_platform.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qinputmethod.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QtGlobal \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QLocale \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTranslator \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtranslator.h \

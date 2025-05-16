@@ -9,11 +9,19 @@
 	"INCLUDE_DIR" : "/Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/include",
 	"INPUTS" : 
 	[
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/history.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/sandboxScan.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/basicScan.png",
 		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/background.png",
 		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/shield.png",
-		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/settings.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/cdrScan.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/advancedScan.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/Settings.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/dashboardLogo.png",
 		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/applogo.png",
-		"/Volumes/Crucial/AVProjectUi/UI/Styles/stylesheet.qss"
+		"/Volumes/Crucial/AVProjectUi/UI/Resources/Images/ServiceStatus.png",
+		"/Volumes/Crucial/AVProjectUi/UI/Styles/stylesheet.qss",
+		"/Volumes/Crucial/AVProjectUi/UI/Styles/DashboardStyle.css"
 	],
 	"LOCK_FILE" : "/Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Lock.lock",
 	"MULTI_CONFIG" : false,

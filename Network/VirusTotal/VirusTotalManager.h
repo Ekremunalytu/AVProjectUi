@@ -37,6 +37,9 @@ public:
     // Original methods
     QString getAnalysisReport(const QString& analysisId);
     void startPollingForResults(const QString& analysisId);
+    
+    // New safe reset method to call when refresh button is clicked
+    void resetPollingState();
 
 signals:
     // Signal emitted when analysis results are ready
@@ -54,6 +57,10 @@ private:
     std::atomic<bool> m_isScanning;
     QNetworkAccessManager m_networkManager;
     QNetworkReply* m_currentReply = nullptr;
+    
+    // Polling state (moved from static variables for better thread safety)
+    int m_pollingAttempt = 0;
+    QString m_currentAnalysisId;
 };
 
 #endif //VIRUSTOTALMANAGER_H

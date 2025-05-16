@@ -7,7 +7,125 @@ QMainWindow {
 /* Birincil Butonlar (Örn: Karantinaya Git, Dosyayı Geri Yükle) */
 QPushButton[objectName="goToQuarantineButton"],
 QPushButton[objectName="restoreFileButton"] {
-    background-color: #007AFF; /* Ana vurgu rengi - Mavi */
+    background/* ScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+/* Dashboard Özel Stilleri */
+QWidget[objectName="DashboardWidget"] {
+    background-color: transparent; /* Arka plan transparan, böylece ana pencere arka planı görünür */
+}
+
+/* Tab Widget Genel Stilleri */
+QTabWidget::pane { 
+    border: 1px solid rgba(74, 74, 74, 0.6);
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.01);
+    margin-top: -1px;
+}
+
+QTabWidget::tab-bar {
+    left: 5px;
+}
+
+QTabBar::tab {
+    background-color: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(58, 58, 58, 0.7);
+    border-bottom: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px 18px;
+    margin-right: 3px;
+    color: #DDDDDD;
+    font-weight: bold;
+}
+
+QTabBar::tab:selected {
+    background-color: rgba(42, 130, 218, 0.15);
+    color: #FFFFFF;
+}
+
+QTabBar::tab:hover:!selected {
+    background-color: rgba(60, 60, 60, 0.3);
+}
+
+/* Dashboard Frame Stilleri */
+QFrame[objectName^="basicScanToolbarFrame"],
+QFrame[objectName^="advancedScanToolbarFrame"],
+QFrame[objectName^="cdrScanToolbarFrame"],
+QFrame[objectName^="sandboxToolbarFrame"],
+QFrame[objectName^="networkMonitorToolbarFrame"],
+QFrame[objectName^="configToolbarFrame"] {
+    border: 1px solid rgba(74, 74, 74, 0.5);
+    background-color: rgba(20, 20, 20, 0.15);
+    border-radius: 6px;
+}
+
+/* Dashboard İçerik Çerçeveleri */
+QFrame[objectName$="ResultsFrame"] {
+    border: 1px solid rgba(74, 74, 74, 0.4);
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 6px;
+}
+
+/* Dashboard Text Edit Alanları */
+QTextEdit[objectName$="ResultsTextEdit"],
+QTextEdit[objectName$="LogTextEdit"] {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: #e0e0e0;
+    selection-background-color: #2a82da;
+    selection-color: white;
+    font-family: "Consolas", "Monaco", "Menlo", monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 8px;
+}
+
+/* Dashboard Butonları */
+QPushButton[objectName="basicScanButton"],
+QPushButton[objectName="advancedScanButton"],
+QPushButton[objectName="cdrScanButton"],
+QPushButton[objectName="sandboxScanButton"],
+QPushButton[objectName="networkMonitorButton"],
+QPushButton[objectName="configButton"],
+QPushButton[objectName="refreshButton"] {
+    background-color: #2a82da;
+    color: white;
+    border-radius: 5px;
+    padding: 6px 14px;
+    border: none;
+    font-weight: bold;
+    min-width: 120px;
+    min-height: 30px;
+}
+
+QPushButton[objectName="basicScanButton"]:hover,
+QPushButton[objectName="advancedScanButton"]:hover,
+QPushButton[objectName="cdrScanButton"]:hover,
+QPushButton[objectName="sandboxScanButton"]:hover,
+QPushButton[objectName="networkMonitorButton"]:hover,
+QPushButton[objectName="configButton"]:hover,
+QPushButton[objectName="refreshButton"]:hover {
+    background-color: #3a92ea;
+}
+
+QPushButton[objectName="basicScanButton"]:pressed,
+QPushButton[objectName="advancedScanButton"]:pressed,
+QPushButton[objectName="cdrScanButton"]:pressed,
+QPushButton[objectName="sandboxScanButton"]:pressed,
+QPushButton[objectName="networkMonitorButton"]:pressed,
+QPushButton[objectName="configButton"]:pressed,
+QPushButton[objectName="refreshButton"]:pressed {
+    background-color: #1a72ca;
+}
+
+/* Dashboard Etiketleri */
+QLabel[objectName$="ScanLabel"] {
+    color: #e0e0e0;
+    font-size: 14px;
+    font-weight: bold;
+}lor: #007AFF; /* Ana vurgu rengi - Mavi */
     color: white;
     border: 1px solid #007AFF;
     padding: 6px 12px; /* Biraz daha kompakt padding */

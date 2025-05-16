@@ -809,6 +809,11 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.cpp \
   /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h \
   /Volumes/Crucial/AVProjectUi/Interface/IScanner.h \
+  /Volumes/Crucial/AVProjectUi/Interface/IVirusTotalScanner.h \
+  /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp \
+  /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h \
+  /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp \
+  /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h \
   /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp \
   /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h \
   /Volumes/Crucial/AVProjectUi/UI/Mainwindow/mainwindow.cpp \
@@ -817,15 +822,34 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.cpp \
   /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.h \
   /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/dashboardwidget.ui \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.h \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.ui \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.h \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.ui \
   AvProjectUi_autogen/moc_predefs.h \
   CMakeFiles/4.0.0/CMakeCXXCompiler.cmake \
   CMakeFiles/4.0.0/CMakeSystem.cmake \
   /Volumes/Crucial/AVProjectUi/main.cpp \
   /Volumes/Crucial/AVProjectUi/resources.qrc \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QCryptographicHash \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDateTime \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDebug \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDir \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFileInfo \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFlags \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QIODevice \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QList \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QMetaType \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QObject \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSettings \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSharedDataPointer \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QString \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QTimer \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QUrl \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QVariant \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtGlobal \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20iterator.h \
@@ -833,7 +857,10 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20type_traits.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q23utility.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q26numeric.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qabstracteventdispatcher.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalgorithms.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalloc.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qanystringview.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qarraydata.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qarraydataops.h \
@@ -842,6 +869,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qatomic.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qatomic_cxx11.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbasicatomic.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbasictimer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbindingstorage.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearray.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayalgorithms.h \
@@ -849,6 +877,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcomparehelpers.h \
@@ -859,14 +888,19 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontainerinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontainertools_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontiguouscache.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreevent.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcryptographichash.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdarwinhelpers.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdatastream.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdatetime.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdir.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdirlisting.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qendian.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qeventloop.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfile.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfiledevice.h \
@@ -895,9 +929,11 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmargins.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmath.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetacontainer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetaobject.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetatype.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qminmax.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnamespace.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnativeinterface.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnumeric.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobject.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobject_impl.h \
@@ -912,12 +948,14 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopeguard.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qset.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsettings.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qshareddata.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qshareddata_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsharedpointer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsharedpointer_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsize.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qspan.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstdlibdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstring.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstringalgorithms.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstringbuilder.h \
@@ -944,6 +982,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtenvironmentvariables.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtextstream.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtformat_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimezone.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtmetamacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtnoop.h \
@@ -971,8 +1010,11 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontmetrics.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontvariableaxis.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication_platform.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qicon.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qimage.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qinputmethod.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qkeysequence.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpaintdevice.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpalette.h \
@@ -987,11 +1029,34 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtguiglobal.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkAccessManager \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkReply \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkRequest \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QSslConfiguration \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QSslPreSharedKeyAuthenticator \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qabstractsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qhostaddress.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qhttpheaders.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkaccessmanager.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkreply.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkrequest.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qssl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslcertificate.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslconfiguration.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslerror.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslpresharedkeyauthenticator.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtcpsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetwork-config.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkexports.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkglobal.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QApplication \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QFileDialog \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMenu \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QVBoxLayout \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qapplication.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qboxlayout.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qdialog.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qfiledialog.h \
@@ -1039,6 +1104,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomSystemDepHelpers.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicTargetHelpers.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicTestHelpers.cmake \
@@ -1087,13 +1153,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinMicrophonePermissionPluginDependencies.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinMicrophonePermissionPluginTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinMicrophonePermissionPluginTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake \
@@ -1111,13 +1170,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusVersionlessAliasTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersion.cmake \
@@ -1211,13 +1263,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QWebpPluginConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QWebpPluginTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QWebpPluginTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersion.cmake \
@@ -1226,6 +1271,31 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkAdditionalTargetInfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersion.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersionImpl.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets-relwithdebinfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkVersionlessAliasTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginAdditionalTargetInfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginConfig.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets-relwithdebinfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginAdditionalTargetInfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginConfig.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets-relwithdebinfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginAdditionalTargetInfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets-relwithdebinfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginConfig.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets-relwithdebinfo.cmake \
@@ -1251,13 +1321,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfigVersion.cmake \
@@ -1267,13 +1330,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/QtTestProperties.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginTargets-relwithdebinfo.cmake \
@@ -1288,13 +1344,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets-relwithdebinfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsVersionlessAliasTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateAdditionalTargetInfo.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfig.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersion.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersionImpl.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateDependencies.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateTargets.cmake \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateVersionlessAliasTargets.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsAdditionalTargetInfo.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfig.cmake \
   /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersion.cmake \
@@ -1307,10 +1356,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsDependencies.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateDependencies.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersionImpl.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets-relwithdebinfo.cmake:
@@ -1321,13 +1366,9 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginConfig.cmake:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginAdditionalTargetInfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateVersionlessAliasTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets-relwithdebinfo.cmake:
 
@@ -1337,16 +1378,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestAdditionalTargetInfo.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateVersionlessAliasTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateAdditionalTargetInfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfigVersionImpl.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfigVersion.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets.cmake:
@@ -1355,13 +1386,13 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginConfig.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersion.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets-relwithdebinfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake:
 
@@ -1371,17 +1402,37 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets-relwithdebinfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginAdditionalTargetInfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginAdditionalTargetInfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets-relwithdebinfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets-relwithdebinfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkAdditionalTargetInfo.cmake:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsDependencies.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfigVersion.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersion.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QWebpPluginTargets-relwithdebinfo.cmake:
 
@@ -1415,17 +1466,15 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QTgaPluginAdditionalTargetInfo.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersion.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgPluginTargets-relwithdebinfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgPluginAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgIconPluginConfig.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QPdfPluginTargets.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets-relwithdebinfo.cmake:
 
@@ -1442,8 +1491,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QJpegPluginTargets.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QJpegPluginTargets-relwithdebinfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QJpegPluginConfig.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QJpegPluginAdditionalTargetInfo.cmake:
 
@@ -1475,18 +1522,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiAdditionalTargetInfo.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateVersionlessAliasTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsVersionlessTargets.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusConfigVersionImpl.cmake:
@@ -1495,21 +1530,9 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusAdditionalTargetInfo.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QTiffPluginConfig.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateDependencies.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersionImpl.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinMicrophonePermissionPluginTargets.cmake:
 
@@ -1539,9 +1562,9 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinCalendarPermissionPluginTargets.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinCalendarPermissionPluginTargets-relwithdebinfo.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersionImpl.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinCalendarPermissionPluginTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinCalendarPermissionPluginDependencies.cmake:
 
@@ -1571,6 +1594,8 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicTargetHelpers.cmake:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake:
@@ -1583,11 +1608,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersionImpl.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicCMakeHelpers.cmake:
 
@@ -1607,17 +1628,11 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/FindWrapAtomic.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsexports.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qlayout.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qgridlayout.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qboxlayout.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QVBoxLayout:
 
@@ -1627,7 +1642,49 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QFileDialog:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QApplication:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkglobal.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslsocket.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QJpegPluginConfig.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslpresharedkeyauthenticator.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslcertificate.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qssl.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkrequest.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkreply.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgPluginAdditionalTargetInfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qhttpheaders.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qhostaddress.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qboxlayout.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qabstractsocket.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QSslPreSharedKeyAuthenticator:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qmainwindow.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkRequest:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkReply:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QNetworkAccessManager:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtguiglobal.h:
 
@@ -1655,15 +1712,19 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpalette.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qinputmethod.h:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qimage.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontmetrics.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfont.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qcursor.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qcolor.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qbrush.h:
 
@@ -1741,6 +1802,8 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstring.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstdlibdetection.h:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qspan.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsize.h:
@@ -1765,7 +1828,7 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnumeric.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateVersionlessAliasTargets.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnativeinterface.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qnamespace.h:
 
@@ -1813,21 +1876,27 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfloat16.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfig.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfiledevice.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qeventloop.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdatetime.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcryptographichash.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication_platform.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreapplication.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontiguouscache.h:
 
@@ -1841,6 +1910,8 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusTools/Qt6DBusToolsTargets.cmake:
@@ -1853,8 +1924,6 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayalgorithms.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersion.cmake:
-
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtcoreglobal.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearray.h:
@@ -1862,6 +1931,8 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterable.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbindingstorage.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbasictimer.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbasicatomic.h:
 
@@ -1885,13 +1956,15 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qanystringview.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qcolor.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalloc.h:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalgorithms.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q26numeric.h:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q23utility.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QTiffPluginTargets-relwithdebinfo.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20utility.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20memory.h:
 
@@ -1899,15 +1972,47 @@ AvProjectUi_autogen/timestamp: /Applications/CMake.app/Contents/bin/cmake \
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtGlobal:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QTimer:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QString:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateVersionlessAliasTargets.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSettings:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QMetaType:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QIODevice:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFlags:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlConfigVersionImpl.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDir:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDateTime:
 
 /Volumes/Crucial/AVProjectUi/resources.qrc:
 
 CMakeFiles/4.0.0/CMakeSystem.cmake:
 
 AvProjectUi_autogen/moc_predefs.h:
+
+/Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.h:
+
+/Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.ui:
+
+/Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QTiffPluginTargets-relwithdebinfo.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20utility.h:
+
+/Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp:
 
 /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.cpp:
 
@@ -1917,9 +2022,17 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Volumes/Crucial/AVProjectUi/UI/Mainwindow/mainwindow.cpp:
 
+/Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp:
+
+/Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h:
+
+/Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp:
+
+/Volumes/Crucial/AVProjectUi/Interface/IVirusTotalScanner.h:
+
 /Volumes/Crucial/AVProjectUi/Interface/IScanner.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateAdditionalTargetInfo.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersion.cmake:
 
 /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h:
 
@@ -1963,9 +2076,13 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_u_char.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/QSslConfiguration:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpaintdevice.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_sigset_t.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginAdditionalTargetInfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qshareddata_impl.h:
 
@@ -2030,6 +2147,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_mutex_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_pthread/_pthread_once_t.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDebug:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/sfinae_helpers.h:
 
@@ -2131,6 +2250,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/errno.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslconfiguration.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_fd_copy.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cwctype:
@@ -2203,6 +2324,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/no_destroy.h:
 
+/Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/move.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/is_valid_range.h:
@@ -2218,8 +2341,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/move_backward.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/exception_guard.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateDependencies.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/pointer_to_binary_function.h:
 
@@ -2252,8 +2373,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/ranges_iterator_concept.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/void_t.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/underlying_type.h:
 
@@ -2389,13 +2508,13 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qfiledialog.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qsslerror.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/bounded_iter.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_integral.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cmath:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersion.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_fundamental.h:
 
@@ -2441,6 +2560,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/datasizeof.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtcpsocket.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/copy_cvref.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/copy_cv.h:
@@ -2472,6 +2593,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/binary_search.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/add_rvalue_reference.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkexports.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/add_pointer.h:
 
@@ -2603,6 +2726,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/gcd_lcm.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets.cmake:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/_types/_mach_port_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_signed_integer.h:
@@ -2673,6 +2798,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/remove_extent.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets.cmake:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/allocator_arg_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/swap_allocator.h:
@@ -2690,8 +2817,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/addressof.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersionImpl.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateTargets.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/arm/endian.h:
 
@@ -2749,6 +2874,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/projected.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets-relwithdebinfo.cmake:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/Qt6ConfigVersionImpl.cmake:
@@ -2762,6 +2889,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/ostreambuf_iterator.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiTools/Qt6GuiToolsConfig.cmake:
+
+/Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/remove_reference.h:
 
@@ -2815,10 +2944,6 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/directory_entry.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateDependencies.cmake:
-
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/move_sentinel.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/default_sentinel.h:
@@ -2838,6 +2963,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeLanguageInformation.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/_endian.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qapplication.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/typeinfo:
 
@@ -2884,8 +3011,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginConfig.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersion.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cstring:
 
@@ -2965,6 +3090,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QInsightTrackerPluginConfig.cmake:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetwork-config.h:
+
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeCommonLanguageInclude.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/inner_product.h:
@@ -3035,6 +3162,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cctype:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qnetworkaccessmanager.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__format/enable_insertable.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6QDarwinContactsPermissionPluginDependencies.cmake:
@@ -3075,6 +3204,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/file_type.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSharedDataPointer:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/file_time_type.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/replace.h:
@@ -3092,6 +3223,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicPluginHelpers_v2.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__exception/terminate.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QList:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__exception/nested_exception.h:
 
@@ -3112,6 +3245,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/stable_partition.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__math/fma.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stddef.h:
 
@@ -3168,8 +3303,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdbool.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/maybe_const.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersionImpl.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/same_as.h:
 
@@ -3281,6 +3414,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__compare/synth_three_way.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QUrl:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/mutex:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__compare/compare_three_way_result.h:
@@ -3337,6 +3472,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__chrono/convert_to_timespec.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qguiapplication_platform.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__charconv/to_chars_integral.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__charconv/to_chars_base_10.h:
@@ -3382,6 +3519,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__atomic/kill_dependency.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__configuration/compiler.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsettings.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/push_heap.h:
 
@@ -3432,8 +3571,6 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/list:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/common_type.h:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateDependencies.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtcore-config.h:
 
@@ -3493,7 +3630,7 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__utility/exchange.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateTargets.cmake:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetaobject.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/search_n.h:
 
@@ -3571,9 +3708,13 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__concepts/regular.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake:
+
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiTargets-relwithdebinfo.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__assertion_handler:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersionImpl.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/tuple_like_ext.h:
 
@@ -3681,6 +3822,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CMakeCommonLinkerInformation.cmake:
 
+/Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.ui:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/is_heap.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/upper_bound.h:
@@ -3711,9 +3854,9 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/Internal/CheckSourceCompiles.cmake:
 
-/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h:
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qabstracteventdispatcher.h:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersionImpl.cmake:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/hash.h:
 
@@ -3757,6 +3900,8 @@ AvProjectUi_autogen/moc_predefs.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_types.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkVersionlessAliasTargets.cmake:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/sort_heap.h:
 
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/FindPackageMessage.cmake:
@@ -3764,6 +3909,8 @@ AvProjectUi_autogen/moc_predefs.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/desugars_to.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/find_first_of.h:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimer.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/access.h:
 
@@ -3861,8 +4008,6 @@ CMakeFiles/4.0.0/CMakeCXXCompiler.cmake:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QSvgIconPluginTargets.cmake:
 
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateVersionlessAliasTargets.cmake:
-
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/unique_copy.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/invoke.h:
@@ -3874,8 +4019,6 @@ CMakeFiles/4.0.0/CMakeCXXCompiler.cmake:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/copy_n.h:
 
 /Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets.cmake:
-
-/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateAdditionalTargetInfo.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__debug_utils/sanitizers.h:
 
@@ -3893,6 +4036,8 @@ CMakeFiles/4.0.0/CMakeCXXCompiler.cmake:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_constructible.h:
 
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcoreevent.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__iterator/wrap_iter.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/machine/endian.h:
@@ -3900,6 +4045,8 @@ CMakeFiles/4.0.0/CMakeCXXCompiler.cmake:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/operations.h:
 
 /Applications/CMake.app/Contents/share/cmake-4.0/Modules/Compiler/Clang.cmake:
+
+/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QVariant:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/arm/types.h:
 

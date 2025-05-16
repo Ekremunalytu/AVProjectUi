@@ -813,6 +813,54 @@ Database/DbManager/DbManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s
 .PHONY : Database/DbManager/DbManager.cpp.s
 
+Network/Monitor/NetworkMonitor.o: Network/Monitor/NetworkMonitor.cpp.o
+.PHONY : Network/Monitor/NetworkMonitor.o
+
+# target to build an object file
+Network/Monitor/NetworkMonitor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o
+.PHONY : Network/Monitor/NetworkMonitor.cpp.o
+
+Network/Monitor/NetworkMonitor.i: Network/Monitor/NetworkMonitor.cpp.i
+.PHONY : Network/Monitor/NetworkMonitor.i
+
+# target to preprocess a source file
+Network/Monitor/NetworkMonitor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.i
+.PHONY : Network/Monitor/NetworkMonitor.cpp.i
+
+Network/Monitor/NetworkMonitor.s: Network/Monitor/NetworkMonitor.cpp.s
+.PHONY : Network/Monitor/NetworkMonitor.s
+
+# target to generate assembly for a file
+Network/Monitor/NetworkMonitor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.s
+.PHONY : Network/Monitor/NetworkMonitor.cpp.s
+
+Network/VirusTotal/VirusTotalManager.o: Network/VirusTotal/VirusTotalManager.cpp.o
+.PHONY : Network/VirusTotal/VirusTotalManager.o
+
+# target to build an object file
+Network/VirusTotal/VirusTotalManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.o
+
+Network/VirusTotal/VirusTotalManager.i: Network/VirusTotal/VirusTotalManager.cpp.i
+.PHONY : Network/VirusTotal/VirusTotalManager.i
+
+# target to preprocess a source file
+Network/VirusTotal/VirusTotalManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.i
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.i
+
+Network/VirusTotal/VirusTotalManager.s: Network/VirusTotal/VirusTotalManager.cpp.s
+.PHONY : Network/VirusTotal/VirusTotalManager.s
+
+# target to generate assembly for a file
+Network/VirusTotal/VirusTotalManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.s
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.s
+
 Scanner/Dashboard/BasicScanner/BasicScanner.o: Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
 .PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.o
 
@@ -884,6 +932,54 @@ UI/Widgets/Dashboard/DashboardWidget.s: UI/Widgets/Dashboard/DashboardWidget.cpp
 UI/Widgets/Dashboard/DashboardWidget.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.s
 .PHONY : UI/Widgets/Dashboard/DashboardWidget.cpp.s
+
+UI/Widgets/History/HistoryWidget.o: UI/Widgets/History/HistoryWidget.cpp.o
+.PHONY : UI/Widgets/History/HistoryWidget.o
+
+# target to build an object file
+UI/Widgets/History/HistoryWidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.o
+
+UI/Widgets/History/HistoryWidget.i: UI/Widgets/History/HistoryWidget.cpp.i
+.PHONY : UI/Widgets/History/HistoryWidget.i
+
+# target to preprocess a source file
+UI/Widgets/History/HistoryWidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.i
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.i
+
+UI/Widgets/History/HistoryWidget.s: UI/Widgets/History/HistoryWidget.cpp.s
+.PHONY : UI/Widgets/History/HistoryWidget.s
+
+# target to generate assembly for a file
+UI/Widgets/History/HistoryWidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.s
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.s
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.o: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.o
+
+# target to build an object file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.i: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.i
+
+# target to preprocess a source file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.s: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.s
+
+# target to generate assembly for a file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -976,6 +1072,12 @@ help:
 	@echo "... Database/DbManager/DbManager.o"
 	@echo "... Database/DbManager/DbManager.i"
 	@echo "... Database/DbManager/DbManager.s"
+	@echo "... Network/Monitor/NetworkMonitor.o"
+	@echo "... Network/Monitor/NetworkMonitor.i"
+	@echo "... Network/Monitor/NetworkMonitor.s"
+	@echo "... Network/VirusTotal/VirusTotalManager.o"
+	@echo "... Network/VirusTotal/VirusTotalManager.i"
+	@echo "... Network/VirusTotal/VirusTotalManager.s"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.o"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.i"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.s"
@@ -985,6 +1087,12 @@ help:
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.o"
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.i"
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.s"
+	@echo "... UI/Widgets/History/HistoryWidget.o"
+	@echo "... UI/Widgets/History/HistoryWidget.i"
+	@echo "... UI/Widgets/History/HistoryWidget.s"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.o"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.i"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

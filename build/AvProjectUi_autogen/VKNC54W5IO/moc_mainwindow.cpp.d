@@ -735,6 +735,7 @@
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q23utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalgorithms.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qalloc.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qanystringview.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qarraydata.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qarraydataops.h \
@@ -749,6 +750,7 @@
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearraylist.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcomparehelpers.h \
@@ -809,6 +811,7 @@
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsharedpointer_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsize.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qspan.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstdlibdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstring.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstringalgorithms.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstringbuilder.h \

@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NetworkMonitorWidget</class>
+ <widget class="QWidget" name="NetworkMonitorWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>   
+  <property name="windowTitle">
+    <string>Ağ İzleme</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget#NetworkMonitorWidget {
+      background-color: rgba(0, 0, 0, 0.02);
+      border-radius: 8px;
+    }</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+        QFrame#headerFrame {
+          background-color: rgba(20, 20, 20, 0.15);
+          border: 1px solid rgba(74, 74, 74, 0.5);
+          border-radius: 6px;
+        }
+       </string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="titleLabel">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Ağ İzleme</string>
+         </property>
+        </widget>
+       </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QFrame" name="statusFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="statusLabel">
+           <property name="text">
+            <string>Durum:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="statusIndicator">
+           <property name="minimumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgba(231, 76, 60, 0.9); border-radius: 8px; border: 1px solid rgba(231, 76, 60, 0.7);</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="statusValueLabel">
+           <property name="text">
+            <string>Pasif</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="controlsFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: #2a82da;
+            color: white;
+            border-radius: 5px;
+            padding: 6px 14px;
+            border: none;
+            font-weight: bold;
+          }
+          QPushButton:hover {
+            background-color: #3a92ea;
+          }
+          QPushButton:pressed {
+            background-color: #1a72ca;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>İzlemeyi Başlat</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/resources/icons/play.png</normaloff>:/resources/icons/play.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="stopButton">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: #DC3545;
+            color: white;
+            border-radius: 5px;
+            padding: 6px 14px;
+            border: none;
+            font-weight: bold;
+          }
+          QPushButton:hover {
+            background-color: #E04553;
+          }
+          QPushButton:pressed {
+            background-color: #C82333;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>İzlemeyi Durdur</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/resources/icons/stop.png</normaloff>:/resources/icons/stop.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clearButton">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: transparent;
+            color: #e0e0e0;
+            border: 1px solid rgba(74, 74, 74, 0.7);
+            border-radius: 5px;
+            padding: 6px 14px;
+          }
+          QPushButton:hover {
+            background-color: rgba(60, 60, 60, 0.3);
+          }
+          QPushButton:pressed {
+            background-color: rgba(40, 40, 40, 0.4);
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Kayıtları Temizle</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/resources/icons/clear.png</normaloff>:/resources/icons/clear.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="filterFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QFrame#filterFrame {
+        background-color: rgba(20, 20, 20, 0.15);
+        border: 1px solid rgba(74, 74, 74, 0.5);
+        border-radius: 6px;
+      }</string>
+     </property>
+     <layout class="QHBoxLayout" name="filterLayout">
+      <item>
+       <widget class="QLabel" name="filterLabel">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #e0e0e0;</string>
+        </property>
+        <property name="text">
+         <string>Filtre:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="protocolFilterComboBox">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QComboBox {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(74, 74, 74, 0.5);
+            border-radius: 4px;
+            color: #e0e0e0;
+            padding: 4px;
+          }
+          QComboBox::drop-down {
+            border: 0px;
+          }
+          QComboBox::down-arrow {
+            image: url(:/resources/icons/dropdown.png);
+            width: 12px;
+            height: 12px;
+          }
+          QComboBox QAbstractItemView {
+            border: 1px solid rgba(74, 74, 74, 0.7);
+            selection-background-color: #2a82da;
+            background-color: rgba(30, 30, 30, 0.9);
+            color: #e0e0e0;
+          }
+         </string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Tüm Protokoller</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>TCP</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>UDP</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>HTTP</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>HTTPS</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="ipFilterLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QLineEdit {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(74, 74, 74, 0.5);
+            border-radius: 4px;
+            color: #e0e0e0;
+            padding: 4px;
+          }
+          QLineEdit:focus {
+            border: 1px solid #2a82da;
+          }
+         </string>
+        </property>
+        <property name="placeholderText">
+         <string>IP Adresi Filtresi</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="portFilterLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QLineEdit {
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(74, 74, 74, 0.5);
+            border-radius: 4px;
+            color: #e0e0e0;
+            padding: 4px;
+          }
+          QLineEdit:focus {
+            border: 1px solid #2a82da;
+          }
+         </string>
+        </property>
+        <property name="placeholderText">
+         <string>Port Filtresi</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="applyFilterButton">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: #2a82da;
+            color: white;
+            border-radius: 5px;
+            padding: 6px 14px;
+            border: none;
+            font-weight: bold;
+          }
+          QPushButton:hover {
+            background-color: #3a92ea;
+          }
+          QPushButton:pressed {
+            background-color: #1a72ca;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Uygula</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resetFilterButton">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: transparent;
+            color: #e0e0e0;
+            border: 1px solid rgba(74, 74, 74, 0.7);
+            border-radius: 5px;
+            padding: 6px 14px;
+          }
+          QPushButton:hover {
+            background-color: rgba(60, 60, 60, 0.3);
+          }
+          QPushButton:pressed {
+            background-color: rgba(40, 40, 40, 0.4);
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Sıfırla</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="logsLabel">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #e0e0e0;</string>
+     </property>
+     <property name="text">
+      <string>Ağ Kayıtları</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableView" name="networkLogsTableView">
+     <property name="styleSheet">
+      <string notr="true">
+       QTableView {
+         background-color: rgba(0, 0, 0, 0.1);
+         border: none;
+         color: #e0e0e0;
+         selection-background-color: #2a82da;
+         selection-color: white;
+         gridline-color: rgba(74, 74, 74, 0.3);
+       }
+       QHeaderView::section {
+         background-color: rgba(20, 20, 20, 0.3);
+         color: #e0e0e0;
+         padding: 6px;
+         border: 1px solid rgba(74, 74, 74, 0.5);
+         font-weight: bold;
+       }
+       QTableView::item {
+         padding: 5px;
+         border-bottom: 1px solid rgba(74, 74, 74, 0.2);
+       }
+       QTableView::item:selected {
+         background-color: #2a82da;
+         color: white;
+       }
+      </string>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="statsFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+       QFrame#statsFrame {
+         background-color: rgba(20, 20, 20, 0.15);
+         border: 1px solid rgba(74, 74, 74, 0.5);
+         border-radius: 6px;
+       }
+       QLabel {
+         color: #e0e0e0;
+       }
+      </string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="logCounterLabel">
+        <property name="text">
+         <string>Toplam Kayıt Sayısı:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="logCountLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="activeConnectionsLabel">
+        <property name="text">
+         <string>Aktif Bağlantılar:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="activeConnectionsCountLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="exportLogsButton">
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+            background-color: transparent;
+            color: #2a82da;
+            border: 1px solid #2a82da;
+            border-radius: 5px;
+            padding: 6px 14px;
+          }
+          QPushButton:hover {
+            background-color: rgba(42, 130, 218, 0.1);
+          }
+          QPushButton:pressed {
+            background-color: rgba(42, 130, 218, 0.2);
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Kayıtları Dışa Aktar</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/resources/icons/export.png</normaloff>:/resources/icons/export.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

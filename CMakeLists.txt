@@ -48,6 +48,12 @@ qt_add_executable(AvProjectUi
         UI/Widgets/Dashboard/DashboardWidget.h
         UI/Widgets/Dashboard/DashboardWidget.ui
 
+        UI/Widgets/Dashboard/NetworkMonitor/NetworkMonitorWidget.cpp
+        UI/Widgets/Dashboard/NetworkMonitor/NetworkMonitorWidget.h
+        UI/Widgets/Dashboard/NetworkMonitor/NetworkMonitorWidget.ui
+        UI/Widgets/Dashboard/NetworkMonitor/NetworkLogModel.cpp
+        UI/Widgets/Dashboard/NetworkMonitor/NetworkLogModel.h
+
         ${PROJECT_RESOURCES}
 
         Database/DbManager/DbManager.cpp

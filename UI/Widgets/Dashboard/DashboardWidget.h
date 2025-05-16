@@ -7,7 +7,8 @@
 #include <memory>
 #include "Scanner/Dashboard/BasicScanner/BasicScanner.h"
 #include "Network/VirusTotal/VirusTotalManager.h"
-#include "Network/Monitor/NetworkMonitor.h" // Added include
+#include "Network/Monitor/NetworkMonitor.h" 
+#include "NetworkMonitor/NetworkMonitorWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
@@ -61,11 +62,6 @@ private slots:
     void onSandboxScanButtonClicked();
     
     /**
-     * @brief Handles click on the Network Monitor button in the Network tab.
-     */
-    void onNetworkMonitorButtonClicked();
-    
-    /**
      * @brief Handles click on the Configuration button at the bottom of the interface.
      */
     void onConfigButtonClicked();
@@ -107,6 +103,7 @@ private:
     std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
     std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
     NetworkMonitor *m_networkMonitor; ///< Network monitor instance
+    NetworkMonitorWidget *m_networkMonitorWidget; ///< Network monitor widget for UI
 };
 
 #endif // DASHBOARDWIDGET_H
