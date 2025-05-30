@@ -8,6 +8,7 @@
 #include "Scanner/Dashboard/BasicScanner/BasicScanner.h"
 #include "Network/VirusTotal/VirusTotalManager.h"
 #include "Network/Monitor/NetworkMonitor.h" // Added include
+#include "Scanner/CDRScanner.h" // Added for CDRScanner
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
@@ -106,6 +107,7 @@ private:
     Ui::DashboardWidget *ui; ///< Pointer to the UI form
     std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
     std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
+    std::unique_ptr<CDRScanner> m_cdrScanner; ///< Scanner for CDR operations
     NetworkMonitor *m_networkMonitor; ///< Network monitor instance
 };
 

@@ -71,15 +71,23 @@ include CMakeFiles/AvProjectUi.dir/flags.make
 
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/resources.qrc
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/history.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/sandboxScan.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/basicScan.png
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/background.png
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/shield.png
-AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/settings.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/cdrScan.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/advancedScan.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/Settings.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/dashboardLogo.png
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/applogo.png
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Resources/Images/ServiceStatus.png
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Styles/stylesheet.qss
+AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/UI/Styles/DashboardStyle.css
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for resources.qrc"
-	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json Debug
+	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json 
 
 CMakeFiles/AvProjectUi.dir/codegen:
 .PHONY : CMakeFiles/AvProjectUi.dir/codegen
@@ -168,10 +176,24 @@ CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.s: cmake
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Database/DatabaseService/DatabaseService.cpp -o CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.s
 
+CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o: /Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp
+CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o -MF CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o -c /Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp
+
+CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp > CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp -o CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.s
+
 CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
 CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o: /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp
 CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o -MF CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o -c /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp
 
 CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.i: cmake_force
@@ -182,10 +204,136 @@ CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s: cm
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp -o CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.s
 
+CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o: /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.cpp
+CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o -MF CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o -c /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.cpp
+
+CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.cpp > CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.cpp -o CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o: /Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp
+CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o -MF CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o -c /Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp
+
+CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp > CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp -o CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o: /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o -MF CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o -c /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp > CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o: /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o -MF CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o -c /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp > CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o: /Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o -MF CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o -c /Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp > CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp -o CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o: /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp
+CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o -MF CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o -c /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp
+
+CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp > CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp -o CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.s
+
+CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o: /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp
+CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o -MF CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o.d -o CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o -c /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp
+
+CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp > CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.i
+
+CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp -o CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.s
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o: /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp
+CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o -MF CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o.d -o CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o -c /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp > CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.i
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp -o CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.s
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
+CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o: /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp
+CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o -MF CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o.d -o CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o -c /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp > CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+
+CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp -o CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
+
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/AvProjectUi.dir/flags.make
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/AvProjectUi.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o -MF CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o.d -o CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o -c /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp
 
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.i: cmake_force
@@ -204,7 +352,17 @@ AvProjectUi_OBJECTS = \
 "CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o" \
+"CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o" \
 "CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o"
 
 # External object files for target AvProjectUi
@@ -216,15 +374,26 @@ AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Mainwi
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Database/DatabaseService/DatabaseService.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o
+AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp.o
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/build.make
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/QtWidgets
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtSql.framework/Versions/A/QtSql
+AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/QtNetwork
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/QtGui
 AvProjectUi.app/Contents/MacOS/AvProjectUi: /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/QtCore
 AvProjectUi.app/Contents/MacOS/AvProjectUi: CMakeFiles/AvProjectUi.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable AvProjectUi.app/Contents/MacOS/AvProjectUi"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable AvProjectUi.app/Contents/MacOS/AvProjectUi"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AvProjectUi.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

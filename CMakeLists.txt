@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.19)
+
+if(APPLE)
+  set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
+
 project(AvProjectUi LANGUAGES CXX)
 
 # C++ standard settings
@@ -29,6 +35,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
 include_directories(
     ${CMAKE_SOURCE_DIR}          # Root directory for absolute includes
     ${CMAKE_BINARY_DIR}          # Generated files directory (ui_*.h, etc.)
+    ${CMAKE_SOURCE_DIR}/Docker/include # Added for Docker headers
 )
 
 # Add resource file properly
@@ -56,9 +63,22 @@ qt_add_executable(AvProjectUi
         Database/DatabaseService/DatabaseService.cpp
         Database/DatabaseService/DatabaseService.h
         
+        Database/Models/ScanHistoryModel.cpp
+        Database/Models/ScanHistoryModel.h
+        
         Scanner/Dashboard/BasicScanner/BasicScanner.cpp
         Scanner/Dashboard/BasicScanner/BasicScanner.h
         
+        Scanner/CDRScanner.cpp
+        Scanner/CDRScanner.h 
+
+        Docker/src/docker/DockerManager.cpp
+        Docker/src/cdr/CdrManager.cpp
+        Docker/src/cdr/CdrSanitizer.cpp
+        Docker/src/cdr/FilesystemCompat.cpp
+        # Note: Docker/src/main.cpp and Docker/src/MainWindow.cpp from the Docker folder 
+        # are likely for a standalone test app and probably should not be included here.
+
         Core/AppConfig.h
         Network/VirusTotal/VirusTotalManager.cpp
         Network/VirusTotal/VirusTotalManager.h
@@ -78,6 +98,7 @@ qt_add_executable(AvProjectUi
 # Include directories with proper Qt paths
 target_include_directories(AvProjectUi PRIVATE
     ${CMAKE_SOURCE_DIR}                # Project root for absolute includes
+    ${CMAKE_SOURCE_DIR}/Docker/include # Docker component includes
     ${CMAKE_BINARY_DIR}                # Generated files (ui_*.h, etc.)
     ${Qt6Core_INCLUDE_DIRS}           # Qt Core includes
     ${Qt6Widgets_INCLUDE_DIRS}        # Qt Widgets includes

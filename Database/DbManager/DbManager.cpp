@@ -241,3 +241,12 @@ long DbManager::getSignatureCount(std::error_code& ec) const {
     ec = std::make_error_code(std::errc::protocol_error);
     return -1;
 }
+
+/**
+ * @brief Gets the database connection for direct queries.
+ * @return QSqlDatabase reference for the current connection.
+ * @note This method should only be used when the database is connected.
+ */
+QSqlDatabase& DbManager::getDatabase() const {
+    return pImpl->db;
+}

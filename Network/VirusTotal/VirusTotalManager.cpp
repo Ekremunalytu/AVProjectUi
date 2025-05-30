@@ -70,6 +70,7 @@ VirusTotalManager::VirusTotalManager(const QString& apiKey)
     : QObject(nullptr), // Initialize QObject base class
       m_apiKey(apiKey), 
       m_lastSubmissionStatus(VTErrorCodes::NOT_SUBMITTED),
+      m_lastError(),
       m_isScanning(false) {
     
     // If no API key provided, load it from AppConfig
@@ -194,6 +195,7 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
     if (effectiveApiKey.isEmpty()) {
         qWarning() << "Error: VirusTotal API key is not set or invalid.";
         m_lastSubmissionStatus = VTErrorCodes::ERROR_INVALID_API_KEY;
+        m_lastError = QStringLiteral("VirusTotal API key is not set or invalid");
         return false;
     }
     
@@ -209,6 +211,7 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
     if (!m_selectedFile.exists()) {
         qWarning() << "Error: No file selected for scanning. Use selectFile() first.";
         m_lastSubmissionStatus = VTErrorCodes::ERROR_NO_FILE_SELECTED;
+        m_lastError = QStringLiteral("No file selected for scanning");
         return false;
     }
     
@@ -340,6 +343,39 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
  */
 QString VirusTotalManager::getSubmissionStatus() const {
     return m_lastSubmissionStatus;
+}
+
+/**
+ * @brief Gets the last error that occurred during scanning
+ * @return Error message as a QString
+ */
+QString VirusTotalManager::getLastError() const {
+    return m_lastError;
+}
+
+/**
+ * @brief Sets the file path for scanning
+ * @param filePath The path to the file
+ */
+void VirusTotalManager::setFile(const QString& filePath) {
+    m_selectedFile = QFileInfo(filePath);
+    if (!m_selectedFile.exists()) {
+        m_lastError = QStringLiteral("File does not exist: ") + filePath;
+    } else if (!m_selectedFile.isFile()) {
+        m_lastError = QStringLiteral("Path is not a file: ") + filePath;
+    } else if (!m_selectedFile.isReadable()) {
+        m_lastError = QStringLiteral("File is not readable: ") + filePath;
+    } else {
+        m_lastError.clear();
+    }
+}
+
+/**
+ * @brief Gets the currently set file path
+ * @return The file path as a QString
+ */
+QString VirusTotalManager::getFile() const {
+    return m_selectedFile.filePath();
 }
 
 /**
@@ -487,41 +523,47 @@ QString VirusTotalManager::getAnalysisReport(const QString& analysisId) {
  * Will attempt up to 5 times with increasing delay between attempts.
  */
 void VirusTotalManager::startPollingForResults(const QString& analysisId) {
-    // Store the analysis ID and attempt count in static variables
-    static int pollingAttempt = 0;
-    static QString currentAnalysisId;
-    
-    // Reset attempt count if this is a new analysis
-    if (currentAnalysisId != analysisId) {
-        currentAnalysisId = analysisId;
-        pollingAttempt = 0;
+    // Bu fonksiyon çağrılmadan önce m_currentPollingAnalysisId ve m_pollingAttempt'in
+    // submitToRemoteService gibi bir yerde yeni analiz için ayarlandığını varsayıyoruz.
+    // Örnek:
+    // this->m_currentPollingAnalysisId = analysisId;
+    // this->m_pollingAttempt = 0;
+
+    // Eğer mevcut polling ID'si farklıysa veya yeni bir analiz başlatılıyorsa, deneme sayısını sıfırla.
+    // Bu, submitToRemoteService'de doğru başlatma yapıldıysa bir güvenlik önlemidir.
+    if (this->m_currentPollingAnalysisId != analysisId) {
+        this->m_currentPollingAnalysisId = analysisId;
+        this->m_pollingAttempt = 0;
     }
     
-    // Increment attempt counter
-    pollingAttempt++;
+    this->m_pollingAttempt++;
     
-    // Calculate delay with increasing backoff (1s, 2s, 4s, 8s, 15s)
-    int delay = 1000; // Initial delay 1 second
-    if (pollingAttempt == 2) delay = 200;
-    else if (pollingAttempt == 3) delay = 400;
-    else if (pollingAttempt == 4) delay = 800;
-    else if (pollingAttempt >= 5) delay = 150;
+    // Artan bekleme süresi ile gecikmeyi hesapla
+    int delayMs;
+    switch (this->m_pollingAttempt) {
+        case 1: delayMs = 5000; break;  // 5 saniye
+        case 2: delayMs = 10000; break; // 10 saniye
+        case 3: delayMs = 15000; break; // 15 saniye
+        case 4: delayMs = 20000; break; // 20 saniye
+        case 5: delayMs = 30000; break; // 30 saniye
+        default: delayMs = 30000; break; // 5 denemeden sonra (mevcut mantık 5'te durur)
+    }
     
-    // Maximum 5 polling attempts
-    if (pollingAttempt <= 5) {
-        qDebug() << "Polling for VirusTotal results: attempt" << pollingAttempt 
-                 << "for analysis" << analysisId << "with delay" << delay/1000 << "seconds";
+    // Maksimum 5 polling denemesi
+    if (this->m_pollingAttempt <= 5) {
+        qDebug() << "Polling for VirusTotal results: attempt" << this->m_pollingAttempt
+                 << "for analysis" << analysisId << "with delay" << (delayMs / 1000.0) << "seconds";
         
-        QTimer::singleShot(delay, this, [this, analysisId]() {
-            // Using weak pointer pattern elsewhere is sufficient
-            // The connection will be automatically broken if object is destroyed
+        QTimer::singleShot(delayMs, this, [this, analysisId]() {
+            // Zayıf işaretçi deseni başka yerlerde yeterlidir
+            // Nesne yok edilirse bağlantı otomatik olarak kesilecektir
             
-            // Fetch the analysis report
+            // Analiz raporunu al
             QString results = getAnalysisReport(analysisId);
             qDebug() << "Analysis results obtained in polling. Emitting signal.";
             m_lastResults = results;
             
-            // Check if analysis is completed
+            // Analizin tamamlanıp tamamlanmadığını kontrol et
             QJsonDocument jsonDoc = QJsonDocument::fromJson(results.toUtf8());
             bool isCompleted = false;
             
@@ -539,26 +581,30 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
                 }
             }
             
-            // Emit results regardless of completion status to update UI
+            // Tamamlanma durumundan bağımsız olarak UI'yi güncellemek için sonuçları yayınla
             emit analysisResultsReady(m_lastResults);
             
-            // If not completed, continue polling unless we reached max attempts
+            // Tamamlanmadıysa ve maksimum denemeye ulaşılmadıysa polling'e devam et
             if (!isCompleted) {
+                // Aynı analysisId için polling'e devam etmek üzere özyinelemeli çağrı
+                // m_pollingAttempt bir sonraki mantıksal deneme için zaten artırılmış olacak
+                // (startPollingForResults'ın bir sonraki çağrısında)
                 startPollingForResults(analysisId);
             } else {
-                // Reset scanning flag when completed
+                // Tamamlandığında tarama bayrağını ve polling durumunu sıfırla
                 m_isScanning = false;
-                pollingAttempt = 0;
+                // m_pollingAttempt bir sonraki yeni taramada submitToRemoteService içinde sıfırlanacak
             }
         });
     } else {
-        // Max attempts reached, stop polling
+        // Maksimum denemeye ulaşıldı, polling'i durdur
         qDebug() << "Max polling attempts reached for analysis" << analysisId;
         m_isScanning = false;
-        pollingAttempt = 0;
+        // m_pollingAttempt bir sonraki yeni taramada submitToRemoteService içinde sıfırlanacak
         
-        // Emit one final signal with the last results we have
-        emit analysisResultsReady(m_lastResults + QStringLiteral("\n\nAnaliz zaman aşımına uğradı. Sonuç tam olmayabilir."));
+        // En son alınan sonuçları yayınla. DashboardWidget "queued" veya eksik veriyi işlemeli.
+        // Ayrıştırma hatalarını önlemek için buraya JSON olmayan metin EKLEMEYİN.
+        emit analysisResultsReady(m_lastResults);
     }
 }
 

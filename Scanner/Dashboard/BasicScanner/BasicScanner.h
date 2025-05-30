@@ -9,6 +9,7 @@
 #include <memory>
 #include <system_error>
 #include "Interface/IScanner.h"
+#include "Interface/ScannerTypes.h"
 
 // Add Qt String Literal namespace for Qt 6 compatibility
 using namespace Qt::StringLiterals;
@@ -106,10 +107,28 @@ public:
     bool checkHashInDatabase(const QString& hash, ScannerErrorCode* errorCode = nullptr);
     
     /**
-     * @brief Gets the last error that occurred during scanning.
+     * @brief Gets a human-readable description of the last error.
+     * @return Error message as a QString.
+     */
+    QString getLastError() const override;
+    
+    /**
+     * @brief Sets the file path for scanning.
+     * @param filePath The path to the file.
+     */
+    void setFile(const QString& filePath) override;
+    
+    /**
+     * @brief Gets the currently set file path.
+     * @return The file path as a QString.
+     */
+    QString getFile() const override;
+    
+    /**
+     * @brief Gets the last error code that occurred during scanning.
      * @return The error code for the last error.
      */
-    ScannerErrorCode getLastError() const;
+    ScannerErrorCode getLastErrorCode() const;
     
     /**
      * @brief Gets a human-readable description of the last error.

@@ -10,6 +10,7 @@
 #include "../Widgets/Dashboard/DashboardWidget.h"
 #include "../Widgets/History/HistoryWidget.h" // Added include for HistoryWidget
 #include "../Widgets/ServiceStatus/ServiceStatusWidget.h" // Added include for ServiceStatusWidget
+#include "Database/DatabaseService/DatabaseService.h" // Added include for DatabaseService
 
 /**
  * @brief Constructs and initializes the main window.
@@ -37,7 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dashboardPage->setLayout(dashboardLayout);
 
     // Create the history widget and add it to the history page
-    HistoryWidget *historyWidget = new HistoryWidget(this);
+    auto& dbService = DatabaseService::getInstance();
+    HistoryWidget *historyWidget = new HistoryWidget(dbService.getDbManager(), this);
     QVBoxLayout *historyLayout = new QVBoxLayout(ui->historyPage);
     historyLayout->addWidget(historyWidget);
     ui->historyPage->setLayout(historyLayout);

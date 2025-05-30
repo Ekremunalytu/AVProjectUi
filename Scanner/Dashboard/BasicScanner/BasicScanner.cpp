@@ -135,7 +135,7 @@ bool BasicScanner::scanFile(const QString& filePath)
                     tr("Invalid file selected: %1").arg(m_selectedFile.filePath()));
         m_results = tr("Invalid file selected.");
         emit scanResultsReady(m_results);
-        emit scanError(getLastError(), getLastErrorMessage());
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
     
@@ -144,7 +144,7 @@ bool BasicScanner::scanFile(const QString& filePath)
                     tr(StandardText::DB_NOT_AVAILABLE));
         m_results = tr("Error: %1").arg(StandardText::DB_NOT_AVAILABLE);
         emit scanResultsReady(m_results);
-        emit scanError(getLastError(), getLastErrorMessage());
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
     
@@ -161,7 +161,7 @@ bool BasicScanner::scanFile(const QString& filePath)
         // Error is already set by calculateSha256
         m_results = tr("Failed to calculate hash for file: %1").arg(m_selectedFile.fileName());
         emit scanResultsReady(m_results);
-        emit scanError(getLastError(), getLastErrorMessage());
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
     
@@ -177,7 +177,7 @@ bool BasicScanner::scanFile(const QString& filePath)
         // Error is already set by checkHashInDatabase
         m_results = tr("Error checking database: %1").arg(getLastErrorMessage());
         emit scanResultsReady(m_results);
-        emit scanError(getLastError(), getLastErrorMessage());
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
     
@@ -255,7 +255,7 @@ QString BasicScanner::calculateSha256(const QString& filePath, ScannerErrorCode*
     if (!file.exists()) {
         setLastError(ScannerErrorCode::FileNotFound, 
                     tr("File does not exist: %1").arg(filePath));
-        if (errorCode) *errorCode = getLastError();
+        if (errorCode) *errorCode = getLastErrorCode();
         return QString();
     }
     
@@ -263,7 +263,7 @@ QString BasicScanner::calculateSha256(const QString& filePath, ScannerErrorCode*
         setLastError(ScannerErrorCode::FileNotReadable,
                     tr("Failed to open file for hash calculation: %1").arg(file.errorString()));
         qWarning() << getLastErrorMessage();
-        if (errorCode) *errorCode = getLastError();
+        if (errorCode) *errorCode = getLastErrorCode();
         return QString();
     }
     
@@ -279,7 +279,7 @@ QString BasicScanner::calculateSha256(const QString& filePath, ScannerErrorCode*
             setLastError(ScannerErrorCode::HashCalculationFailed,
                         tr("Error reading file during hash calculation: %1").arg(file.errorString()));
             file.close();
-            if (errorCode) *errorCode = getLastError();
+            if (errorCode) *errorCode = getLastErrorCode();
             return QString();
         }
         hasher.addData(buffer);
@@ -304,7 +304,7 @@ bool BasicScanner::checkHashInDatabase(const QString& hash, ScannerErrorCode* er
         setLastError(ScannerErrorCode::DatabaseNotConnected,
                     tr("No database manager available when checking hash"));
         qWarning() << getLastErrorMessage();
-        if (errorCode) *errorCode = getLastError();
+        if (errorCode) *errorCode = getLastErrorCode();
         return false;
     }
     
@@ -315,7 +315,7 @@ bool BasicScanner::checkHashInDatabase(const QString& hash, ScannerErrorCode* er
         setLastError(ScannerErrorCode::DatabaseQueryFailed,
                     tr("Error checking hash in database: %1").arg(ec.message().c_str()));
         qWarning() << getLastErrorMessage();
-        if (errorCode) *errorCode = getLastError();
+        if (errorCode) *errorCode = getLastErrorCode();
         return false;
     }
     
@@ -324,12 +324,61 @@ bool BasicScanner::checkHashInDatabase(const QString& hash, ScannerErrorCode* er
 }
 
 /**
+ * @brief Returns a human-readable message for the last error
+ * 
+ * If a custom error message was set, returns that. Otherwise,
+ * returns a default message for the error code.
+ * 
+ * @return Error message string
+ */
+QString BasicScanner::getLastError() const
+{
+    if (!m_lastErrorMessage.isEmpty()) {
+        return m_lastErrorMessage;
+    }
+    
+    return getDefaultErrorMessage(m_lastError);
+}
+
+/**
  * @brief Returns the error code for the last error that occurred
  * @return Error code
  */
-ScannerErrorCode BasicScanner::getLastError() const
+ScannerErrorCode BasicScanner::getLastErrorCode() const
 {
     return m_lastError;
+}
+
+/**
+ * @brief Sets the file to be scanned
+ * @param filePath Path to the file to set for scanning
+ */
+void BasicScanner::setFile(const QString& filePath)
+{
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        setLastError(ScannerErrorCode::FileNotFound,
+                    tr("File does not exist or is not a valid file: %1").arg(filePath));
+        return;
+    }
+    
+    if (!fileInfo.isReadable()) {
+        setLastError(ScannerErrorCode::FileNotReadable,
+                    tr("The file '%1' is not readable.").arg(filePath));
+        return;
+    }
+    
+    m_selectedFile = fileInfo;
+    setLastError(ScannerErrorCode::NoError);
+}
+
+/**
+ * @brief Gets the currently set file path
+ * @return Path to the currently set file, or empty string if no file is set
+ */
+QString BasicScanner::getFile() const
+{
+    return m_selectedFile.filePath();
 }
 
 /**

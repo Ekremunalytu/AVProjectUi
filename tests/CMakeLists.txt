@@ -14,7 +14,7 @@ include(CTest)
 enable_testing()
 
 # Qt Test paketini bulma
-find_package(Qt6 REQUIRED COMPONENTS Test Sql Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Test Sql Core Widgets Network)
 
 # Test kaynağı dizinleri
 set(TEST_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -36,6 +36,29 @@ set(DASHBOARD_TEST
     ${TEST_SOURCES_DIR}/UI/DashboardTest.h
     ${CMAKE_SOURCE_DIR}/UI/Widgets/Dashboard/DashboardWidget.cpp
     ${CMAKE_SOURCE_DIR}/UI/Widgets/Dashboard/DashboardWidget.h
+    
+    # Dependencies for DashboardWidget
+    ${CMAKE_SOURCE_DIR}/Database/DbManager/DbManager.cpp
+    ${CMAKE_SOURCE_DIR}/Database/DbManager/DbManager.h
+    ${CMAKE_SOURCE_DIR}/Database/DatabaseService/DatabaseService.cpp
+    ${CMAKE_SOURCE_DIR}/Database/DatabaseService/DatabaseService.h
+    ${CMAKE_SOURCE_DIR}/Database/Models/ScanHistoryModel.cpp
+    ${CMAKE_SOURCE_DIR}/Database/Models/ScanHistoryModel.h
+    ${CMAKE_SOURCE_DIR}/Scanner/Dashboard/BasicScanner/BasicScanner.cpp
+    ${CMAKE_SOURCE_DIR}/Scanner/Dashboard/BasicScanner/BasicScanner.h
+    ${CMAKE_SOURCE_DIR}/Scanner/CDRScanner.cpp
+    ${CMAKE_SOURCE_DIR}/Scanner/CDRScanner.h
+    ${CMAKE_SOURCE_DIR}/Network/VirusTotal/VirusTotalManager.cpp
+    ${CMAKE_SOURCE_DIR}/Network/VirusTotal/VirusTotalManager.h
+    ${CMAKE_SOURCE_DIR}/Network/Monitor/NetworkMonitor.cpp
+    ${CMAKE_SOURCE_DIR}/Network/Monitor/NetworkMonitor.h
+    
+    # Docker components
+    ${CMAKE_SOURCE_DIR}/Docker/src/docker/DockerManager.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/CdrManager.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/CdrSanitizer.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/FilesystemCompat.cpp
+    
     ${COMMON_TEST_HEADERS}
 )
 
@@ -43,18 +66,21 @@ set(DASHBOARD_TEST
 add_executable(DashboardTest ${DASHBOARD_TEST})
 target_include_directories(DashboardTest PRIVATE
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/Docker/include
     ${CMAKE_BINARY_DIR}
     ${TEST_SOURCES_DIR}
     ${Qt6Core_INCLUDE_DIRS}
     ${Qt6Widgets_INCLUDE_DIRS}
     ${Qt6Test_INCLUDE_DIRS}
     ${Qt6Sql_INCLUDE_DIRS}
+    ${Qt6Network_INCLUDE_DIRS}
 )
 target_link_libraries(DashboardTest PRIVATE
     Qt::Core
     Qt::Widgets
     Qt::Test
     Qt::Sql
+    Qt::Network
 )
 
 # MainWindow test projesi
@@ -65,6 +91,33 @@ set(MAINWINDOW_TEST
     ${CMAKE_SOURCE_DIR}/UI/Mainwindow/mainwindow.h
     ${CMAKE_SOURCE_DIR}/UI/Widgets/Dashboard/DashboardWidget.cpp
     ${CMAKE_SOURCE_DIR}/UI/Widgets/Dashboard/DashboardWidget.h
+    
+    # Dependencies
+    ${CMAKE_SOURCE_DIR}/Database/DbManager/DbManager.cpp
+    ${CMAKE_SOURCE_DIR}/Database/DbManager/DbManager.h
+    ${CMAKE_SOURCE_DIR}/Database/DatabaseService/DatabaseService.cpp
+    ${CMAKE_SOURCE_DIR}/Database/DatabaseService/DatabaseService.h
+    ${CMAKE_SOURCE_DIR}/Database/Models/ScanHistoryModel.cpp
+    ${CMAKE_SOURCE_DIR}/Database/Models/ScanHistoryModel.h
+    ${CMAKE_SOURCE_DIR}/Scanner/Dashboard/BasicScanner/BasicScanner.cpp
+    ${CMAKE_SOURCE_DIR}/Scanner/Dashboard/BasicScanner/BasicScanner.h
+    ${CMAKE_SOURCE_DIR}/Scanner/CDRScanner.cpp
+    ${CMAKE_SOURCE_DIR}/Scanner/CDRScanner.h
+    ${CMAKE_SOURCE_DIR}/Network/VirusTotal/VirusTotalManager.cpp
+    ${CMAKE_SOURCE_DIR}/Network/VirusTotal/VirusTotalManager.h
+    ${CMAKE_SOURCE_DIR}/Network/Monitor/NetworkMonitor.cpp
+    ${CMAKE_SOURCE_DIR}/Network/Monitor/NetworkMonitor.h
+    ${CMAKE_SOURCE_DIR}/UI/Widgets/History/HistoryWidget.cpp
+    ${CMAKE_SOURCE_DIR}/UI/Widgets/History/HistoryWidget.h
+    ${CMAKE_SOURCE_DIR}/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp
+    ${CMAKE_SOURCE_DIR}/UI/Widgets/ServiceStatus/ServiceStatusWidget.h
+    
+    # Docker components
+    ${CMAKE_SOURCE_DIR}/Docker/src/docker/DockerManager.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/CdrManager.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/CdrSanitizer.cpp
+    ${CMAKE_SOURCE_DIR}/Docker/src/cdr/FilesystemCompat.cpp
+    
     ${COMMON_TEST_HEADERS}
 )
 
@@ -72,18 +125,21 @@ set(MAINWINDOW_TEST
 add_executable(MainWindowTest ${MAINWINDOW_TEST})
 target_include_directories(MainWindowTest PRIVATE
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/Docker/include
     ${CMAKE_BINARY_DIR}
     ${TEST_SOURCES_DIR}
     ${Qt6Core_INCLUDE_DIRS}
     ${Qt6Widgets_INCLUDE_DIRS}
     ${Qt6Test_INCLUDE_DIRS}
     ${Qt6Sql_INCLUDE_DIRS}
+    ${Qt6Network_INCLUDE_DIRS}
 )
 target_link_libraries(MainWindowTest PRIVATE
     Qt::Core
     Qt::Widgets
     Qt::Test
     Qt::Sql
+    Qt::Network
 )
 
 # Database test projesi

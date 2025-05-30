@@ -1,11 +1,10 @@
 CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/mocs_compilation.cpp \
-  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/LZCMINFI5T/moc_BasicScanner.cpp \
-  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/LZCMINFI5T/../../../Scanner/Dashboard/BasicScanner/BasicScanner.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QObject \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobject.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobjectdefs.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnamespace.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/5FHTD7KA5N/moc_ScanHistoryModel.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/5FHTD7KA5N/../../../Database/Models/ScanHistoryModel.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QAbstractTableModel \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcompare.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qglobal.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/type_traits \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config \
@@ -294,13 +293,13 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcore-config.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtconfigmacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtdeprecationdefinitions.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcoreexports.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcompilerdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qprocessordetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsystemdetection.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/atomic \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtcoreexports.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtdeprecationmarkers.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtclasshelpermacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtpreprocessorsupport.h \
@@ -675,15 +674,15 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmalloc.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qminmax.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnumeric.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20type_traits.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qoverload.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qswap.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtenvironmentvariables.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtresource.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qttranslation.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qversiontagging.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcompare.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstdlibdetection.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcomparehelpers.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20type_traits.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/functional \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/binary_negate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/bind.h \
@@ -839,21 +838,23 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/default_searcher.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/not_fn.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/perfect_forward.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmetamacros.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobjectdefs_impl.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfunctionaltools_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qhash.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qalgorithms.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20functional.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcontainertools_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qxptype_traits.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qhashfunctions.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstring.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qchar.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringview.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbytearray.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qrefcount.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnamespace.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmetamacros.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qarraydata.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qpair.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qarraydatapointer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qarraydataops.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcontainertools_impl.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qxptype_traits.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20functional.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20memory.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q17memory.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbytearrayalgorithms.h \
@@ -868,8 +869,6 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringbuilder.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringconverter.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringconverter_base.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlist.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qhashfunctions.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/numeric \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/accumulate.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__numeric/adjacent_difference.h \
@@ -887,10 +886,14 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/execution \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__type_traits/is_execution_policy.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qiterator.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlist.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbytearraylist.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringlist.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qalgorithms.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qstringmatcher.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobject.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobjectdefs.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qobjectdefs_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfunctionaltools_impl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qscopedpointer.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmetatype.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatastream.h \
@@ -911,15 +914,77 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/chrono \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__chrono/file_clock.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qvariant.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdebug.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtextstream.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcontiguouscache.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsharedpointer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qshareddata.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsharedpointer_impl.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/set \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/unordered_set \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmap.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qshareddata_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qset.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qvarlengtharray.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qalloc.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q23utility.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20utility.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDateTime \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatetime.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcalendar.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlocale.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QSortFilterProxyModel \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsortfilterproxymodel.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstractproxymodel.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qregularexpression.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/QIcon \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qicon.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtguiglobal.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtgui-config.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtguiexports.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsize.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcheckedint_impl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmargins.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpixmap.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpaintdevice.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qwindowdefs.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qrect.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qpoint.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcolor.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qrgb.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qrgba64.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qimage.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpixelformat.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtransform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpolygon.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qregion.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qspan.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cassert \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20iterator.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qline.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/QColor \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmochelpers.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmocconstants.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20algorithm.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q23type_traits.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/7VOMM7PQXP/moc_NetworkMonitor.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/7VOMM7PQXP/../../../Network/Monitor/NetworkMonitor.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QObject \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QString \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTimer \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qbasictimer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstracteventdispatcher.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qeventloop.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdeadlinetimer.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WJKWDP7RTE/moc_VirusTotalManager.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WJKWDP7RTE/../../../Network/VirusTotal/VirusTotalManager.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFileInfo \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfileinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfile.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfiledevice.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qiodevice.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qspan.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/cassert \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/filesystem \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/copy_options.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/directory_entry.h \
@@ -952,60 +1017,73 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/path_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/recursive_directory_iterator.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__filesystem/u8path.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qshareddata.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatetime.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcalendar.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qlocale.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qvariant.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdebug.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtextstream.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcontiguouscache.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsharedpointer.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsharedpointer_impl.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/set \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/unordered_set \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmap.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qshareddata_impl.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qset.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qhash.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qvarlengtharray.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q23utility.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20utility.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimezone.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QCryptographicHash \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qtnetworkglobal.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qtnetwork-config.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qtnetworkexports.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qhttpheaders.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmetaobject.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QSharedDataPointer \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QUrl \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qurl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QVariant \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q26numeric.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QList \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QSslConfiguration \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslconfiguration.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qtcpsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qabstractsocket.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qhostaddress.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslerror.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslcertificate.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcryptographichash.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QFileDialog \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qfiledialog.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtguiglobal.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtgui-config.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtguiexports.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgets-config.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgetsexports.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qssl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFlags \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QSslPreSharedKeyAuthenticator \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslpresharedkeyauthenticator.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QMetaType \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QNetworkReply \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qnetworkreply.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QIODevice \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QNetworkRequest \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WJKWDP7RTE/../../../Network/VirusTotal/../../Interface/IVirusTotalScanner.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WJKWDP7RTE/../../../Network/VirusTotal/../../Interface/IScanner.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WJKWDP7RTE/../../../Network/VirusTotal/../../Core/AppConfig.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QSettings \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsettings.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDebug \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDir \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdir.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdirlisting.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qurl.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QApplication \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgets-config.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qtwidgetsexports.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreevent.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qnativeinterface.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcoreapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcursor.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbitmap.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qinputmethod.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qguiapplication_platform.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QtGlobal \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QSslError \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/LZCMINFI5T/moc_BasicScanner.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/LZCMINFI5T/../../../Scanner/Dashboard/BasicScanner/BasicScanner.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QCryptographicHash \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QFileDialog \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qfiledialog.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qdialog.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qwidget.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qwindowdefs.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qmargins.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qaction.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qkeysequence.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qicon.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsize.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpixmap.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpaintdevice.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qrect.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qpoint.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcolor.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qrgb.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qrgba64.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qimage.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpixelformat.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qtransform.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpolygon.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qregion.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qline.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qpalette.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbrush.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qfont.h \
@@ -1014,13 +1092,8 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qfontinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qfontvariableaxis.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qsizepolicy.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qcursor.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Headers/qbitmap.h \
   /Volumes/Crucial/AVProjectUi/Interface/IScanner.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmochelpers.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtmocconstants.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20algorithm.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q23type_traits.h \
+  /Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h \
   /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/VKNC54W5IO/moc_mainwindow.cpp \
   /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/VKNC54W5IO/../../../UI/Mainwindow/mainwindow.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QMainWindow \
@@ -1036,4 +1109,16 @@ CMakeFiles/AvProjectUi.dir/AvProjectUi_autogen/mocs_compilation.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QWidget \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QMenu \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qmenu.h \
-  /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h
+  /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h \
+  /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h \
+  /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h \
+  /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.h \
+  /Volumes/Crucial/AVProjectUi/Interface/IDockerScanner.h \
+  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerManager.h \
+  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerTypes.h \
+  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerExceptions.h \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/ZCSZOWQAHW/moc_HistoryWidget.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/ZCSZOWQAHW/../../../UI/Widgets/History/HistoryWidget.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QModelIndex \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WUBMP3TJF5/moc_ServiceStatusWidget.cpp \
+  /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/WUBMP3TJF5/../../../UI/Widgets/ServiceStatus/ServiceStatusWidget.h

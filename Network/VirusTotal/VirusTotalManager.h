@@ -32,6 +32,9 @@ public:
     QString getResults() const override;
     bool isScanning() const override;
     bool cancelScan() override;
+    QString getLastError() const override;
+    void setFile(const QString& filePath) override;
+    QString getFile() const override;
     bool scan(); // Not in interface, so no override
 
     // Original methods
@@ -50,10 +53,13 @@ private:
     QString m_lastAnalysisId;
     QString m_lastSubmissionStatus;
     QString m_lastResults;
+    QString m_lastError;
     QFileInfo m_selectedFile;
     std::atomic<bool> m_isScanning;
     QNetworkAccessManager m_networkManager;
     QNetworkReply* m_currentReply = nullptr;
+    QString m_currentPollingAnalysisId; // Added member variable
+    int m_pollingAttempt = 0;          // Added member variable
 };
 
 #endif //VIRUSTOTALMANAGER_H

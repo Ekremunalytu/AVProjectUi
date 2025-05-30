@@ -76,6 +76,7 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicSbomSystemDepHelpers.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicTargetHelpers.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6/QtPublicTestHelpers.cmake",
@@ -111,14 +112,6 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6CoreTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6CorePrivate/Qt6CorePrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6CoreMacros.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/GNUInstallDirs.cmake",
@@ -251,28 +244,12 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBusPrivate/Qt6DBusPrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusMacros.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/MacroAddFileDependencies.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6DBus/Qt6DBusVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6GuiPrivate/Qt6GuiPrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6GuiPlugins.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Gui/Qt6QCocoaIntegrationPluginConfig.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
@@ -373,14 +350,6 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6WidgetsPrivate/Qt6WidgetsPrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6WidgetsPlugins.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Widgets/Qt6QMacStylePluginConfig.cmake",
@@ -397,14 +366,6 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6SqlPrivate/Qt6SqlPrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlPlugins.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
@@ -427,6 +388,36 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersion.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfigVersionImpl.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkTargets-relwithdebinfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkAdditionalTargetInfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginConfig.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginTargets-relwithdebinfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QAppleNetworkInformationPluginAdditionalTargetInfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginConfig.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginTargets-relwithdebinfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QSecureTransportBackendPluginAdditionalTargetInfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets-relwithdebinfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginAdditionalTargetInfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginConfig.cmake",
+		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Network/Qt6NetworkVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfigVersion.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfigVersionImpl.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestConfig.cmake",
@@ -435,14 +426,6 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestTargets-relwithdebinfo.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersion.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfigVersionImpl.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateConfig.cmake",
-		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/CMakeFindDependencyMacro.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateDependencies.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateTargets.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateAdditionalTargetInfo.cmake",
-		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6TestPrivate/Qt6TestPrivateVersionlessAliasTargets.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/QtTestProperties.cmake",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/cmake/Qt6Test/Qt6TestVersionlessAliasTargets.cmake",
 		"/Applications/CMake.app/Contents/share/cmake-4.0/Modules/GNUInstallDirs.cmake",
@@ -475,6 +458,30 @@
 			null
 		],
 		[
+			"/Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.h",
+			"MU",
+			"5FHTD7KA5N/moc_ScanHistoryModel.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h",
+			"MU",
+			"7VOMM7PQXP/moc_NetworkMonitor.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h",
+			"MU",
+			"WJKWDP7RTE/moc_VirusTotalManager.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.h",
+			"MU",
+			"LYHEH2HC4S/moc_CDRScanner.cpp",
+			null
+		],
+		[
 			"/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h",
 			"MU",
 			"LZCMINFI5T/moc_BasicScanner.cpp",
@@ -491,6 +498,18 @@
 			"MU",
 			"OCSRL3HCH7/moc_DashboardWidget.cpp",
 			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.h",
+			"MU",
+			"ZCSZOWQAHW/moc_HistoryWidget.cpp",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.h",
+			"MU",
+			"WUBMP3TJF5/moc_ServiceStatusWidget.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -500,8 +519,10 @@
 	[
 		"QT_CORE_LIB",
 		"QT_GUI_LIB",
+		"QT_NETWORK_LIB",
 		"QT_NO_CAST_FROM_ASCII",
 		"QT_NO_CAST_TO_ASCII",
+		"QT_NO_DEBUG",
 		"QT_NO_TRANSLATION",
 		"QT_SQL_LIB",
 		"QT_WIDGETS_LIB"
@@ -517,6 +538,7 @@
 	[
 		"/Volumes/Crucial/AVProjectUi",
 		"/Volumes/Crucial/AVProjectUi/build",
+		"/Volumes/Crucial/AVProjectUi/Docker/include",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtDBus.framework/Headers",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtDBus.framework",
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers",
@@ -529,6 +551,8 @@
 		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtSql.framework",
 		"/Volumes/Crucial/QT/6.10.0/macos/mkspecs/macx-clang",
 		"/Volumes/Crucial/QT/6.10.0/macos/include",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers",
+		"/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework",
 		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
 		"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include",
 		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
@@ -578,6 +602,42 @@
 			null
 		],
 		[
+			"/Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.cpp",
+			"MU",
+			null
+		],
+		[ "/Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.cpp", "MU", null ],
+		[
 			"/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.cpp",
 			"MU",
 			null
@@ -589,6 +649,16 @@
 		],
 		[
 			"/Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"/Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp",
 			"MU",
 			null
 		],

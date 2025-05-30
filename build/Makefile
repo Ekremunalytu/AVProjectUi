@@ -813,6 +813,198 @@ Database/DbManager/DbManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/DbManager/DbManager.cpp.s
 .PHONY : Database/DbManager/DbManager.cpp.s
 
+Database/Models/ScanHistoryModel.o: Database/Models/ScanHistoryModel.cpp.o
+.PHONY : Database/Models/ScanHistoryModel.o
+
+# target to build an object file
+Database/Models/ScanHistoryModel.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.o
+.PHONY : Database/Models/ScanHistoryModel.cpp.o
+
+Database/Models/ScanHistoryModel.i: Database/Models/ScanHistoryModel.cpp.i
+.PHONY : Database/Models/ScanHistoryModel.i
+
+# target to preprocess a source file
+Database/Models/ScanHistoryModel.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.i
+.PHONY : Database/Models/ScanHistoryModel.cpp.i
+
+Database/Models/ScanHistoryModel.s: Database/Models/ScanHistoryModel.cpp.s
+.PHONY : Database/Models/ScanHistoryModel.s
+
+# target to generate assembly for a file
+Database/Models/ScanHistoryModel.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Database/Models/ScanHistoryModel.cpp.s
+.PHONY : Database/Models/ScanHistoryModel.cpp.s
+
+Docker/src/cdr/CdrManager.o: Docker/src/cdr/CdrManager.cpp.o
+.PHONY : Docker/src/cdr/CdrManager.o
+
+# target to build an object file
+Docker/src/cdr/CdrManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.o
+.PHONY : Docker/src/cdr/CdrManager.cpp.o
+
+Docker/src/cdr/CdrManager.i: Docker/src/cdr/CdrManager.cpp.i
+.PHONY : Docker/src/cdr/CdrManager.i
+
+# target to preprocess a source file
+Docker/src/cdr/CdrManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.i
+.PHONY : Docker/src/cdr/CdrManager.cpp.i
+
+Docker/src/cdr/CdrManager.s: Docker/src/cdr/CdrManager.cpp.s
+.PHONY : Docker/src/cdr/CdrManager.s
+
+# target to generate assembly for a file
+Docker/src/cdr/CdrManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrManager.cpp.s
+.PHONY : Docker/src/cdr/CdrManager.cpp.s
+
+Docker/src/cdr/CdrSanitizer.o: Docker/src/cdr/CdrSanitizer.cpp.o
+.PHONY : Docker/src/cdr/CdrSanitizer.o
+
+# target to build an object file
+Docker/src/cdr/CdrSanitizer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.o
+.PHONY : Docker/src/cdr/CdrSanitizer.cpp.o
+
+Docker/src/cdr/CdrSanitizer.i: Docker/src/cdr/CdrSanitizer.cpp.i
+.PHONY : Docker/src/cdr/CdrSanitizer.i
+
+# target to preprocess a source file
+Docker/src/cdr/CdrSanitizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.i
+.PHONY : Docker/src/cdr/CdrSanitizer.cpp.i
+
+Docker/src/cdr/CdrSanitizer.s: Docker/src/cdr/CdrSanitizer.cpp.s
+.PHONY : Docker/src/cdr/CdrSanitizer.s
+
+# target to generate assembly for a file
+Docker/src/cdr/CdrSanitizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/CdrSanitizer.cpp.s
+.PHONY : Docker/src/cdr/CdrSanitizer.cpp.s
+
+Docker/src/cdr/FilesystemCompat.o: Docker/src/cdr/FilesystemCompat.cpp.o
+.PHONY : Docker/src/cdr/FilesystemCompat.o
+
+# target to build an object file
+Docker/src/cdr/FilesystemCompat.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.o
+.PHONY : Docker/src/cdr/FilesystemCompat.cpp.o
+
+Docker/src/cdr/FilesystemCompat.i: Docker/src/cdr/FilesystemCompat.cpp.i
+.PHONY : Docker/src/cdr/FilesystemCompat.i
+
+# target to preprocess a source file
+Docker/src/cdr/FilesystemCompat.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.i
+.PHONY : Docker/src/cdr/FilesystemCompat.cpp.i
+
+Docker/src/cdr/FilesystemCompat.s: Docker/src/cdr/FilesystemCompat.cpp.s
+.PHONY : Docker/src/cdr/FilesystemCompat.s
+
+# target to generate assembly for a file
+Docker/src/cdr/FilesystemCompat.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/cdr/FilesystemCompat.cpp.s
+.PHONY : Docker/src/cdr/FilesystemCompat.cpp.s
+
+Docker/src/docker/DockerManager.o: Docker/src/docker/DockerManager.cpp.o
+.PHONY : Docker/src/docker/DockerManager.o
+
+# target to build an object file
+Docker/src/docker/DockerManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.o
+.PHONY : Docker/src/docker/DockerManager.cpp.o
+
+Docker/src/docker/DockerManager.i: Docker/src/docker/DockerManager.cpp.i
+.PHONY : Docker/src/docker/DockerManager.i
+
+# target to preprocess a source file
+Docker/src/docker/DockerManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.i
+.PHONY : Docker/src/docker/DockerManager.cpp.i
+
+Docker/src/docker/DockerManager.s: Docker/src/docker/DockerManager.cpp.s
+.PHONY : Docker/src/docker/DockerManager.s
+
+# target to generate assembly for a file
+Docker/src/docker/DockerManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Docker/src/docker/DockerManager.cpp.s
+.PHONY : Docker/src/docker/DockerManager.cpp.s
+
+Network/Monitor/NetworkMonitor.o: Network/Monitor/NetworkMonitor.cpp.o
+.PHONY : Network/Monitor/NetworkMonitor.o
+
+# target to build an object file
+Network/Monitor/NetworkMonitor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.o
+.PHONY : Network/Monitor/NetworkMonitor.cpp.o
+
+Network/Monitor/NetworkMonitor.i: Network/Monitor/NetworkMonitor.cpp.i
+.PHONY : Network/Monitor/NetworkMonitor.i
+
+# target to preprocess a source file
+Network/Monitor/NetworkMonitor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.i
+.PHONY : Network/Monitor/NetworkMonitor.cpp.i
+
+Network/Monitor/NetworkMonitor.s: Network/Monitor/NetworkMonitor.cpp.s
+.PHONY : Network/Monitor/NetworkMonitor.s
+
+# target to generate assembly for a file
+Network/Monitor/NetworkMonitor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/Monitor/NetworkMonitor.cpp.s
+.PHONY : Network/Monitor/NetworkMonitor.cpp.s
+
+Network/VirusTotal/VirusTotalManager.o: Network/VirusTotal/VirusTotalManager.cpp.o
+.PHONY : Network/VirusTotal/VirusTotalManager.o
+
+# target to build an object file
+Network/VirusTotal/VirusTotalManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.o
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.o
+
+Network/VirusTotal/VirusTotalManager.i: Network/VirusTotal/VirusTotalManager.cpp.i
+.PHONY : Network/VirusTotal/VirusTotalManager.i
+
+# target to preprocess a source file
+Network/VirusTotal/VirusTotalManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.i
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.i
+
+Network/VirusTotal/VirusTotalManager.s: Network/VirusTotal/VirusTotalManager.cpp.s
+.PHONY : Network/VirusTotal/VirusTotalManager.s
+
+# target to generate assembly for a file
+Network/VirusTotal/VirusTotalManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Network/VirusTotal/VirusTotalManager.cpp.s
+.PHONY : Network/VirusTotal/VirusTotalManager.cpp.s
+
+Scanner/CDRScanner.o: Scanner/CDRScanner.cpp.o
+.PHONY : Scanner/CDRScanner.o
+
+# target to build an object file
+Scanner/CDRScanner.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.o
+.PHONY : Scanner/CDRScanner.cpp.o
+
+Scanner/CDRScanner.i: Scanner/CDRScanner.cpp.i
+.PHONY : Scanner/CDRScanner.i
+
+# target to preprocess a source file
+Scanner/CDRScanner.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.i
+.PHONY : Scanner/CDRScanner.cpp.i
+
+Scanner/CDRScanner.s: Scanner/CDRScanner.cpp.s
+.PHONY : Scanner/CDRScanner.s
+
+# target to generate assembly for a file
+Scanner/CDRScanner.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/Scanner/CDRScanner.cpp.s
+.PHONY : Scanner/CDRScanner.cpp.s
+
 Scanner/Dashboard/BasicScanner/BasicScanner.o: Scanner/Dashboard/BasicScanner/BasicScanner.cpp.o
 .PHONY : Scanner/Dashboard/BasicScanner/BasicScanner.o
 
@@ -884,6 +1076,54 @@ UI/Widgets/Dashboard/DashboardWidget.s: UI/Widgets/Dashboard/DashboardWidget.cpp
 UI/Widgets/Dashboard/DashboardWidget.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/Dashboard/DashboardWidget.cpp.s
 .PHONY : UI/Widgets/Dashboard/DashboardWidget.cpp.s
+
+UI/Widgets/History/HistoryWidget.o: UI/Widgets/History/HistoryWidget.cpp.o
+.PHONY : UI/Widgets/History/HistoryWidget.o
+
+# target to build an object file
+UI/Widgets/History/HistoryWidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.o
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.o
+
+UI/Widgets/History/HistoryWidget.i: UI/Widgets/History/HistoryWidget.cpp.i
+.PHONY : UI/Widgets/History/HistoryWidget.i
+
+# target to preprocess a source file
+UI/Widgets/History/HistoryWidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.i
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.i
+
+UI/Widgets/History/HistoryWidget.s: UI/Widgets/History/HistoryWidget.cpp.s
+.PHONY : UI/Widgets/History/HistoryWidget.s
+
+# target to generate assembly for a file
+UI/Widgets/History/HistoryWidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/History/HistoryWidget.cpp.s
+.PHONY : UI/Widgets/History/HistoryWidget.cpp.s
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.o: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.o
+
+# target to build an object file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.o
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.i: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.i
+
+# target to preprocess a source file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.i
+
+UI/Widgets/ServiceStatus/ServiceStatusWidget.s: UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.s
+
+# target to generate assembly for a file
+UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
+.PHONY : UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -976,6 +1216,30 @@ help:
 	@echo "... Database/DbManager/DbManager.o"
 	@echo "... Database/DbManager/DbManager.i"
 	@echo "... Database/DbManager/DbManager.s"
+	@echo "... Database/Models/ScanHistoryModel.o"
+	@echo "... Database/Models/ScanHistoryModel.i"
+	@echo "... Database/Models/ScanHistoryModel.s"
+	@echo "... Docker/src/cdr/CdrManager.o"
+	@echo "... Docker/src/cdr/CdrManager.i"
+	@echo "... Docker/src/cdr/CdrManager.s"
+	@echo "... Docker/src/cdr/CdrSanitizer.o"
+	@echo "... Docker/src/cdr/CdrSanitizer.i"
+	@echo "... Docker/src/cdr/CdrSanitizer.s"
+	@echo "... Docker/src/cdr/FilesystemCompat.o"
+	@echo "... Docker/src/cdr/FilesystemCompat.i"
+	@echo "... Docker/src/cdr/FilesystemCompat.s"
+	@echo "... Docker/src/docker/DockerManager.o"
+	@echo "... Docker/src/docker/DockerManager.i"
+	@echo "... Docker/src/docker/DockerManager.s"
+	@echo "... Network/Monitor/NetworkMonitor.o"
+	@echo "... Network/Monitor/NetworkMonitor.i"
+	@echo "... Network/Monitor/NetworkMonitor.s"
+	@echo "... Network/VirusTotal/VirusTotalManager.o"
+	@echo "... Network/VirusTotal/VirusTotalManager.i"
+	@echo "... Network/VirusTotal/VirusTotalManager.s"
+	@echo "... Scanner/CDRScanner.o"
+	@echo "... Scanner/CDRScanner.i"
+	@echo "... Scanner/CDRScanner.s"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.o"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.i"
 	@echo "... Scanner/Dashboard/BasicScanner/BasicScanner.s"
@@ -985,6 +1249,12 @@ help:
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.o"
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.i"
 	@echo "... UI/Widgets/Dashboard/DashboardWidget.s"
+	@echo "... UI/Widgets/History/HistoryWidget.o"
+	@echo "... UI/Widgets/History/HistoryWidget.i"
+	@echo "... UI/Widgets/History/HistoryWidget.s"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.o"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.i"
+	@echo "... UI/Widgets/ServiceStatus/ServiceStatusWidget.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

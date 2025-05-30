@@ -12,6 +12,9 @@
 #include <QStringView>    // For QStringView
 #include "Interface/IDbManager.h" // For the IDbManager interface
 
+// Forward declarations
+class QSqlDatabase;
+
 // Add Qt String Literal namespace for Qt 6 compatibility
 using namespace Qt::StringLiterals;
 
@@ -67,6 +70,13 @@ public:
       * @copydoc IDbManager::getSignatureCount
       */
       long getSignatureCount(std::error_code& ec) const override;
+
+     /**
+      * @brief Gets the database connection for direct queries.
+      * @return QSqlDatabase reference for the current connection.
+      * @note This method should only be used when the database is connected.
+      */
+      class QSqlDatabase& getDatabase() const;
 
 private:
      /**

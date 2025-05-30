@@ -6,19 +6,29 @@
 #define HISTORYWIDGET_H
 
 #include <QWidget>
+#include <QModelIndex>
 
-// Forward declaration for the UI class generated from HistoryWidget.ui
+// Forward declarations
 namespace Ui {
 class HistoryWidget;
 }
+
+class ScanHistoryModel;
+class ScanHistoryFilterModel;
+class DbManager;
 
 class HistoryWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit HistoryWidget(QWidget *parent = nullptr);
+    explicit HistoryWidget(DbManager* dbManager = nullptr, QWidget *parent = nullptr);
     ~HistoryWidget();
+
+    // Public methods for external components to add scan records
+    void addScanRecord(const QString& fileName, const QString& filePath, 
+                      const QString& fileHash, const QString& threatName,
+                      bool isMalicious, int scanType = 0);
 
 private slots:
     // Slotlar kullanıcı etkileşimlerini işlemek için
@@ -43,9 +53,16 @@ private slots:
     void onClearAllHistoryClicked();
 
 private:
-    // setupUi() fonksiyonuna artık gerek yok, ui dosyası halledecek.
-    // UI Elemanları ve Layoutlar ui dosyası üzerinden yönetilecek.
-    Ui::HistoryWidget *ui; // UI sınıfı için işaretçi
+    void setupTableView();
+    void setupFilters();
+    void updateDetailsDisplay();
+    void showContextMenu(const QPoint& position);
+    QString formatScanDetails(const struct ScanHistoryRecord& record) const;
+    
+    Ui::HistoryWidget *ui;
+    ScanHistoryModel* m_model;
+    ScanHistoryFilterModel* m_filterModel;
+    DbManager* m_dbManager;
 };
 
 #endif //HISTORYWIDGET_H

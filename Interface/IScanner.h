@@ -72,6 +72,24 @@ public:
      *         if there was no active scan or if it could not be canceled).
      */
     virtual bool cancelScan() = 0;
+    
+    /**
+     * @brief Gets the last error that occurred during scanning.
+     * @return Error message as a QString.
+     */
+    virtual QString getLastError() const = 0;
+    
+    /**
+     * @brief Sets the file path for scanning.
+     * @param filePath The path to the file.
+     */
+    virtual void setFile(const QString& filePath) = 0;
+    
+    /**
+     * @brief Gets the currently set file path.
+     * @return The file path as a QString.
+     */
+    virtual QString getFile() const = 0;
 };
 
 #endif // ISCANNER_H 

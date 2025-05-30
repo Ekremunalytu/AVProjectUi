@@ -14,6 +14,7 @@
 #include <QDateTime>
 #include <QColor>
 #include <QHeaderView>
+#include <QFileDialog> // Added for file dialog
 
 using namespace Qt::StringLiterals;
 
@@ -66,6 +67,7 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     ui(new Ui::DashboardWidget),
     m_basicScanner(std::make_unique<BasicScanner>(this, DatabaseService::getInstance().getDbManager())),
     m_virusTotalManager(std::make_unique<VirusTotalManager>()),
+    m_cdrScanner(std::make_unique<CDRScanner>()), // Initialize CDRScanner
     m_networkMonitor(new NetworkMonitor(this)) // Instantiate NetworkMonitor
 {
     ui->setupUi(this);
@@ -267,13 +269,46 @@ void DashboardWidget::onCdrScanButtonClicked() {
     // Add stylized starting message
     ui->cdrResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
     ui->cdrResultsTextEdit->append(u"🔍 PROCESS:"_s);
-    ui->cdrResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#2196F3"_s)); // Blue for process name
     ui->cdrResultsTextEdit->append(u"  "_s + QString::fromUtf8(DashboardText::CDR_SCAN));
     ui->cdrResultsTextEdit->append(u""_s);
-    ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-    ui->cdrResultsTextEdit->append(u"Analyzing file structure..."_s);
-    ui->cdrResultsTextEdit->append(u"Looking for potentially malicious content..."_s);
-    ui->cdrResultsTextEdit->append(u"Preparing to disarm and reconstruct file..."_s);
+
+    // Open file dialog to select a file
+    QString filePath = QFileDialog::getOpenFileName(this, 
+                                                    tr("Select File for CDR Scan"), 
+                                                    QDir::homePath(), 
+                                                    tr("All Files (*.*)"));
+
+    if (filePath.isEmpty()) {
+        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FFA726"_s)); // Orange for warnings/cancellations
+        ui->cdrResultsTextEdit->append(tr("File selection canceled."));
+        return;
+    }
+
+    ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s)); // Default text color
+    ui->cdrResultsTextEdit->append(tr("Selected file: %1").arg(filePath));
+    ui->cdrResultsTextEdit->append(tr("Initiating CDR process..."));
+
+    if (m_cdrScanner) {
+        bool success = m_cdrScanner->scanFile(filePath);
+        if (success) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s)); // Green for success
+            ui->cdrResultsTextEdit->append(tr("CDR process completed successfully."));
+            ui->cdrResultsTextEdit->append(tr("Sanitized file saved at: %1").arg(m_cdrScanner->getSanitizedFilePath()));
+            // Here you would typically display logs from the CDR process.
+            // For now, we're just showing the status.
+            // To show Docker logs, you would call a method like m_cdrScanner->getProcessLogs()
+            // which in turn would use m_dockerManager->getContainerLogs(...)
+            // Example: ui->cdrResultsTextEdit->append(m_cdrScanner->getProcessLogs());
+        } else {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
+            ui->cdrResultsTextEdit->append(tr("CDR process failed."));
+            ui->cdrResultsTextEdit->append(tr("Error: %1").arg(m_cdrScanner->getLastError()));
+        }
+    } else {
+        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
+        ui->cdrResultsTextEdit->append(tr("CDRScanner not initialized."));
+    }
 }
 
 /**
@@ -425,13 +460,13 @@ void DashboardWidget::onBasicScanSelectFile() {
         if (!m_basicScanner->scanFile(m_basicScanner->getSelectedFile().filePath())) {
             // Handle scan initiation error - already handled by error signal, 
             // but we can add additional UI updates if needed
-            if (m_basicScanner->getLastError() != ScannerErrorCode::NoError) {
+            if (m_basicScanner->getLastErrorCode() != ScannerErrorCode::NoError) {
                 ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
                     m_basicScanner->getLastErrorMessage()));
             }
         }
     } else {
-        if (m_basicScanner->getLastError() == ScannerErrorCode::NoError) {
+        if (m_basicScanner->getLastErrorCode() == ScannerErrorCode::NoError) {
             // User canceled file selection, not an error
             ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTION_CANCELED));
         } else {
@@ -474,13 +509,13 @@ void DashboardWidget::onAdvancedScanSelectFile() {
             }
         } else {
             // Handle scan initiation error
-            if (m_basicScanner->getLastError() != ScannerErrorCode::NoError) {
+            if (m_basicScanner->getLastErrorCode() != ScannerErrorCode::NoError) {
                 ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
                     m_basicScanner->getLastErrorMessage()));
             }
         }
     } else {
-        if (m_basicScanner->getLastError() == ScannerErrorCode::NoError) {
+        if (m_basicScanner->getLastErrorCode() == ScannerErrorCode::NoError) {
             // User canceled file selection, not an error
             ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTION_CANCELED));
         } else {

@@ -72,7 +72,7 @@ AvProjectUi_autogen/timestamp: /Volumes/Crucial/QT/6.10.0/macos/libexec/moc
 AvProjectUi_autogen/timestamp: /Volumes/Crucial/QT/6.10.0/macos/libexec/uic
 AvProjectUi_autogen/timestamp: CMakeFiles/AvProjectUi_autogen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target AvProjectUi"
-	/Applications/CMake.app/Contents/bin/cmake -E cmake_autogen /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutogenInfo.json Debug
+	/Applications/CMake.app/Contents/bin/cmake -E cmake_autogen /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutogenInfo.json ""
 	/Applications/CMake.app/Contents/bin/cmake -E touch /Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/timestamp
 
 CMakeFiles/AvProjectUi_autogen.dir/codegen:
