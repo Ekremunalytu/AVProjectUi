@@ -126,7 +126,8 @@ private: // m_settings is now private
 
     // Helper function to get the actual path to config.ini
     QString getActualConfigIniPath() const {
-        return QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../../../../Core/config.ini"));
+        // Corrected path to config.ini relative to the application executable directory
+        return QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini"));
     }
 
     // Helper function to get the default database path relative to config.ini's directory

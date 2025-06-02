@@ -20,7 +20,19 @@ include(CTest)
 enable_testing()
 
 # Qt path configuration - adjust this according to your Qt installation
-set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
+# set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos") # Commented out for Windows
+if(APPLE)
+  set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
+elseif(WIN32)
+  # Windows için Qt yolunu buraya ekleyin veya ortam değişkeni olarak ayarlayın
+  set(CMAKE_PREFIX_PATH "C:/Qt/6.9.0/mingw_64")
+  # Ortam değişkeni CMAKE_PREFIX_PATH tanımlıysa bu satıra gerek olmayabilir.
+  # if(DEFINED ENV{CMAKE_PREFIX_PATH})
+  #   set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+  # else()
+  #   message(WARNING "CMAKE_PREFIX_PATH ortam değişkeni veya CMakeLists.txt içinde Windows için Qt yolu tanımlanmamış. Lütfen Qt kurulum yolunuzu belirtin.")
+  # endif()
+endif()
 
 # Find required Qt packages with proper version
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Network Test)
@@ -144,3 +156,13 @@ add_custom_target(build_and_test
     COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+if(WIN32)
+    # Qt DLL'lerini kopyalamak için bir hedef ekleyin
+    add_custom_command(TARGET AvProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_PREFIX_PATH}/bin # Qt bin klasörünün yolu
+        $<TARGET_FILE_DIR:AvProjectUi> # Hedef yürütülebilir dosyanın dizini
+        COMMENT "Copying Qt DLLs to build directory"
+    )
+endif()

@@ -66,48 +66,47 @@ DbManager::~DbManager() noexcept = default;
  * @note This function is marked noexcept; all errors are reported via std::error_code.
  */
 std::error_code DbManager::connectDatabase(QStringView dbPath) noexcept {
-    // If pImpl is null (should not happen if constructor didn't terminate due to bad_alloc)
-    if (!pImpl) {
-        return std::make_error_code(std::errc::state_not_recoverable);
+    std::error_code ec; // Bu satırı ekle
+    // Ensure that only one connection is attempted or managed by this instance
+    if (pImpl->db.isOpen()) {
+        // Optional: Log if trying to connect while already connected
+        // Or, decide if this should be an error or a re-connect attempt
+        // For now, assume we close existing before opening new, or this is initial connect.
     }
 
-    auto& db = pImpl->db; // Convenience reference to the QSqlDatabase object in Impl.
+    // Use a unique connection name to allow multiple instances of DbManager
+    // or to avoid conflicts if Qt's default connection is used elsewhere.
+    // QString connectionName = QUuid::createUuid().toString(); // Consider if needed
+    // pImpl->db = QSqlDatabase::addDatabase(u"QSQLITE"_s, connectionName);
+    // If using default connection:
+    pImpl->db = QSqlDatabase::addDatabase(u"QSQLITE"_s);
+    pImpl->db.setDatabaseName(dbPath.toString());
 
-    // If the database connection is already valid and open, consider it a success.
-    if (db.isValid() && db.isOpen()) {
-        // Note: If called with a different dbPath than the currently open one,
-        // this implementation does not switch databases; it just returns success.
-        return {}; // Default std::error_code signifies success.
-    }
+    qDebug() << "DbManager::connectDatabase - Attempting to open database:" << dbPath;
+    qDebug() << "DbManager::connectDatabase - Available SQL drivers:" << QSqlDatabase::drivers();
+    qDebug() << "DbManager::connectDatabase - Using driver: QSQLITE, for database file:" << pImpl->db.databaseName();
 
-    // If there's an existing connection with this name, close and remove it first
-    if (QSqlDatabase::contains(pImpl->connectionName)) {
-        QSqlDatabase oldDb = QSqlDatabase::database(pImpl->connectionName);
-        if (oldDb.isOpen()) {
-            oldDb.close();
+    if (!pImpl->db.open()) {
+        qWarning() << "DbManager::connectDatabase - Failed to open database. Qt LastError:" << pImpl->db.lastError().text();
+        qWarning() << "DbManager::connectDatabase - Driver name:" << pImpl->db.driverName();
+        qWarning() << "DbManager::connectDatabase - Is valid:" << pImpl->db.isValid();
+        // Map specific Qt errors to std::error_code if possible, otherwise a generic one
+        if (pImpl->db.lastError().type() == QSqlError::ConnectionError) {
+            ec = std::make_error_code(std::errc::connection_refused);
+        } else if (pImpl->db.lastError().type() == QSqlError::StatementError || pImpl->db.lastError().type() == QSqlError::TransactionError) {
+            ec = std::make_error_code(std::errc::io_error); // Or a more specific DB error
+        } else {
+            ec = std::make_error_code(std::errc::protocol_error); // Generic placeholder
         }
-        QSqlDatabase::removeDatabase(pImpl->connectionName);
+        return ec;
     }
 
-    // Add a new SQLite database connection using a unique connection name
-    db = QSqlDatabase::addDatabase(u"QSQLITE"_s, pImpl->connectionName);
-    
-    if (!db.isValid()) { // Check if the driver was loaded correctly
-        qWarning() << "Failed to add QSQLITE database driver:" << db.lastError().text();
-        return std::make_error_code(std::errc::operation_not_supported);
-    }
-    
-    QString dbPathStr = QString(dbPath);
-    db.setDatabaseName(dbPathStr); // Set the database file path.
+    qDebug() << "DbManager::connectDatabase - Database opened successfully.";
+    qDebug() << "DbManager::connectDatabase - Is valid after open:" << pImpl->db.isValid();
+    qDebug() << "DbManager::connectDatabase - Is open after open:" << pImpl->db.isOpen();
 
-    // Attempt to open the database connection.
-    if (!db.open()) {
-        qWarning() << "Failed to open database:" << dbPathStr << "Error:" << db.lastError().text();
-        return std::make_error_code(std::errc::io_error);
-    }
-
-    qInfo() << "Database connected successfully:" << dbPathStr;
-    return {}; // Success.
+    ec.clear();
+    return ec;
 }
 
 /**
@@ -131,6 +130,20 @@ bool DbManager::isDatabaseConnected() const noexcept {
  * If an error occurs (ec is set), the return value should be considered unreliable.
  */
 bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) const {
+    qDebug() << "DbManager::isSha256Exists - Checking hash:" << sha256Hash;
+    qDebug() << "DbManager::isSha256Exists - DB Open:" << pImpl->db.isOpen() << "DB Valid:" << pImpl->db.isValid();
+
+    if (!pImpl->db.isOpen()) {
+        qWarning() << "DbManager::isSha256Exists - Database is not open. Qt LastError:" << pImpl->db.lastError().text();
+        ec = std::make_error_code(std::errc::not_connected);
+        return false;
+    }
+    if (!pImpl->db.isValid()) {
+        qWarning() << "DbManager::isSha256Exists - Database driver not valid. Qt LastError:" << pImpl->db.lastError().text();
+        // This could indicate the driver was found but is not functional.
+        ec = std::make_error_code(std::errc::invalid_argument); // Or perhaps operation_not_supported
+        return false;
+    }
     // Ensure the database is connected before proceeding.
     if (!isDatabaseConnected()) {
         qWarning() << "Database not connected";
@@ -167,7 +180,7 @@ bool DbManager::isSha256Exists(QStringView sha256Hash, std::error_code& ec) cons
             return false;
         } else {
             // Table exists but query failed for some other reason
-            qWarning() << "Query execution failed:" << query.lastError().text();
+            qWarning() << "Query execution failed for hash check. SQL error:" << query.lastError().text() << "Original query:" << query.lastQuery();
             ec = std::make_error_code(std::errc::io_error);
             return false;
         }

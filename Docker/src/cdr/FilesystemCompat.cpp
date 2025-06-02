@@ -210,20 +210,86 @@ std::uintmax_t file_size(const Path& path) {
     return file_size(path.string());
 }
 
-bool create_directories(const std::string& path) {
-    if (path.empty()) return false;
-    if (exists(path)) return is_directory(path);
-    
-    // Create parent directories first
-    Path p(path);
-    Path parent = p.parent_path();
-    if (!parent.empty() && !exists(parent)) {
-        if (!create_directories(parent)) {
-            return false;
+
+// Helper function for recursive directory creation (POSIX)
+static bool create_directories_recursive_impl(const std::string& path_s) {
+    if (path_s.empty()) {
+        return true; // Successfully "created" an empty path
+    }
+
+    std::string path = path_s;
+    // Normalize path separators to '/'
+    for (char &c : path) {
+        if (c == '\\') {
+            c = '/';
         }
     }
-    
-    return mkdir(path.c_str(), 0755) == 0 || errno == EEXIST;
+    // Remove trailing slash if not root and path is not empty
+    if (path.length() > 1 && path.back() == '/') {
+        path.pop_back();
+    }
+    if (path.empty()) { // Original path was just "/" or "\"
+        return true;
+    }
+
+    char tmp[1024]; // Using a fixed-size buffer; ensure it's large enough or use dynamic allocation.
+    strncpy(tmp, path.c_str(), sizeof(tmp) - 1);
+    tmp[sizeof(tmp) - 1] = '\0'; // Ensure null termination
+
+    char *p = tmp;
+    // Skip leading drive letter or first slash to correctly form paths like "C:/Users" or "/usr/bin"
+    #if defined(_WIN32) || defined(_WIN64)
+    if (strlen(tmp) >= 2 && tmp[1] == ':' && (tmp[0] >= 'a' && tmp[0] <= 'z' || tmp[0] >= 'A' && tmp[0] <= 'Z')) {
+        p = tmp + 2; // Skip "C:"
+        if (*p == '/') p++; // Skip "C:/"
+    } else if (*p == '/') {
+        p++; // Skip leading "/"
+    }
+    #else
+    if (*p == '/') {
+        p++; // Skip leading "/"
+    }
+    #endif
+
+
+    // Iterate over path components
+    while (*p) {
+        char *slash = strchr(p, '/');
+        if (slash) {
+            *slash = '\0'; // Temporarily terminate at this component
+        }
+
+        struct stat st;
+        // Check current cumulative path (tmp)
+        if (stat(tmp, &st) != 0) { // If path component does not exist
+            #if defined(__MINGW32__) || defined(__MINGW64__)
+            if (mkdir(tmp) != 0 && errno != EEXIST) {
+            #else
+            if (mkdir(tmp, 0755) != 0 && errno != EEXIST) {
+            #endif
+                if (slash) *slash = '/'; // Restore slash before returning
+                return false; // Failed to create directory
+            }
+        } else if (!S_ISDIR(st.st_mode)) { // Exists but is not a directory
+            if (slash) *slash = '/'; // Restore slash
+            return false;
+        }
+
+        if (slash) {
+            *slash = '/'; // Restore slash
+            p = slash + 1;  // Move to next component
+        } else {
+            break; // No more slashes, processed full path
+        }
+    }
+    return true;
+}
+
+bool create_directories(const std::string& path_str) {
+    if (CDR::FileSystem::exists(path_str)) {
+        return CDR::FileSystem::is_directory(path_str);
+    }
+    return create_directories_recursive_impl(path_str);
 }
 
 bool create_directories(const Path& path) {

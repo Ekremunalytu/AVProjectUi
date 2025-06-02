@@ -9,7 +9,13 @@
 #include <sstream>   // For std::stringstream
 #include <algorithm> // For std::remove, std::transform
 #include <iomanip>   // For std::quoted (potentially)
-#include <sys/wait.h> // For WIFEXITED and WEXITSTATUS
+
+// Platform-specific includes for process management
+#if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__) || defined(__MINGW64__)
+#include <windows.h> // For Windows-specific process handling
+#else
+#include <sys/wait.h> // For WIFEXITED and WEXITSTATUS (POSIX)
+#endif
 
 // Qt6 includes for JSON parsing (ensure these are consistently used)
 #include <QtCore/QJsonDocument>
@@ -198,7 +204,12 @@ std::pair<std::string, int> DockerManager::executeCliCommand(const std::string& 
     // Redirect stderr to stdout to capture errors as well
     std::string commandWithStdErrRedirect = fullCommand + " 2>&1";
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__) || defined(__MINGW64__)
+    FILE* pipe = _popen(commandWithStdErrRedirect.c_str(), "r");
+#else
     FILE* pipe = popen(commandWithStdErrRedirect.c_str(), "r");
+#endif
+
     if (!pipe) {
         // std::cerr << "DEBUG: popen() failed for command: " << fullCommand << std::endl; // Disabled by default
         throw CommandFailureException(fullCommand, -1, "popen() failed.", "Failed to execute command (popen failed)");
@@ -208,6 +219,16 @@ std::pair<std::string, int> DockerManager::executeCliCommand(const std::string& 
         result += buffer.data();
     }
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__MINGW32__) || defined(__MINGW64__)
+    status = _pclose(pipe);
+    // On Windows, _pclose returns the exit status directly, or -1 on error.
+    exitCode = status;
+    if (status == -1) {
+         // pclose error
+        std::cerr << "DEBUG: _pclose() failed for command: " << fullCommand << std::endl;
+        throw CommandFailureException(fullCommand, -1, result, "_pclose() failed after command execution.");
+    }
+#else
     status = pclose(pipe);
     if (status == -1) {
         // pclose error
@@ -222,6 +243,7 @@ std::pair<std::string, int> DockerManager::executeCliCommand(const std::string& 
             std::cerr << "DEBUG: Command did not terminate normally: " << fullCommand << std::endl;
         }
     }
+#endif
     // Show output and exit code for debugging
     // std::cout << "DEBUG: Command output: " << result << std::endl; // Disabled by default to reduce noise
     // std::cout << "DEBUG: Command exit code: " << exitCode << std::endl;

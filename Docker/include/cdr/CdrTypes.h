@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept> // Added for std::runtime_error
 
 namespace CDR {
 

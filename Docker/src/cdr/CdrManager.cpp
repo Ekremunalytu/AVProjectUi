@@ -1217,7 +1217,7 @@ SanitizedFileInfo CdrManager::scanFileInContainer(const std::string& filePath,
         
         // Prepare sanitized output path
         std::string sanitizedFileName = "sanitized_" + result.fileName;
-        std::string outputPath = std::filesystem::path(filePath).parent_path() / sanitizedFileName;
+        std::string outputPath = (std::filesystem::path(filePath).parent_path() / sanitizedFileName).string();
         std::string containerOutputPath = "/cdr/output/" + sanitizedFileName;
         
         // Execute CDR scanning based on file type

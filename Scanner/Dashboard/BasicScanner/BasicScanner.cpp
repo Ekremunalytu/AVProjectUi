@@ -313,7 +313,10 @@ bool BasicScanner::checkHashInDatabase(const QString& hash, ScannerErrorCode* er
     
     if (ec) {
         setLastError(ScannerErrorCode::DatabaseQueryFailed,
-                    tr("Error checking hash in database: %1").arg(ec.message().c_str()));
+                    tr("Error checking hash in database: %1 (code: %2, category: %3)")
+                        .arg(ec.message().c_str())
+                        .arg(ec.value())
+                        .arg(QString::fromStdString(ec.category().name())));
         qWarning() << getLastErrorMessage();
         if (errorCode) *errorCode = getLastErrorCode();
         return false;
