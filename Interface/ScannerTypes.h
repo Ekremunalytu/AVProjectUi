@@ -23,4 +23,24 @@ enum class ScanStatus {
     Cancelled
 };
 
+/**
+ * @brief Scanner error codes
+ */
+enum class ScannerErrorCode {
+    NoError = 0,
+    FileNotFound,
+    AccessDenied,
+    ScanFailed,
+    NetworkError,
+    ApiError,
+    DatabaseNotConnected,
+    FileNotReadable,
+    ScanInProgress,
+    HashCalculationFailed,
+    DatabaseQueryFailed,
+    InvalidInput,
+    MaliciousFileDetected,
+    UnknownError
+};
+
 #endif // SCANNER_TYPES_H

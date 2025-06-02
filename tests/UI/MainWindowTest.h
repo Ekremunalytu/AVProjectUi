@@ -4,6 +4,7 @@
 #include <QTest>
 #include <QObject>
 #include "UI/Mainwindow/mainwindow.h"
+#include "Database/DbManager/DbManager.h"
 
 class MainWindowTest : public QObject
 {
@@ -29,6 +30,7 @@ private slots:
 
 private:
     MainWindow *mainWindow;
+    DbManager *testDbManager;
 };
 
 #endif // MAINWINDOWTEST_H 

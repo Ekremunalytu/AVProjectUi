@@ -1012,11 +1012,12 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QStatusBar \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qstatusbar.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QWidget \
-  /Volumes/Crucial/AVProjectUi/UI/Mainwindow/../Widgets/Dashboard/DashboardWidget.h \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QMenu \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QString \
-  /Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QObject \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTimer \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimer.h \
+  /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFileInfo \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfileinfo.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qfile.h \
@@ -1056,16 +1057,6 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdatetime.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcalendar.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimezone.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QCryptographicHash \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcryptographichash.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QFileDialog \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qfiledialog.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdir.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdirlisting.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/qdialog.h \
-  /Volumes/Crucial/AVProjectUi/Interface/IScanner.h \
-  /Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h \
-  /Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qtnetworkglobal.h \
@@ -1078,6 +1069,7 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QUrl \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q26numeric.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QList \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QObject \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QSslConfiguration \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslconfiguration.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslsocket.h \
@@ -1086,6 +1078,7 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qhostaddress.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslerror.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qsslcertificate.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcryptographichash.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/qssl.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QFlags \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QSslPreSharedKeyAuthenticator \
@@ -1097,26 +1090,35 @@ CMakeFiles/AvProjectUi.dir/UI/Mainwindow/mainwindow.cpp.o: \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Headers/QNetworkRequest \
   /Volumes/Crucial/AVProjectUi/Network/VirusTotal/../../Interface/IVirusTotalScanner.h \
   /Volumes/Crucial/AVProjectUi/Network/VirusTotal/../../Interface/IScanner.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QtPlugin \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qplugin.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qpointer.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qjsonobject.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qjsonvalue.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcborvalue.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qcborcommon.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qregularexpression.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/quuid.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qjsondocument.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qjsonparseerror.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/q20algorithm.h \
   /Volumes/Crucial/AVProjectUi/Network/VirusTotal/../../Core/AppConfig.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QSettings \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qsettings.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDebug \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDir \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdir.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qdirlisting.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QtGlobal \
   /Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QTimer \
-  /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qtimer.h \
-  /Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.h \
-  /Volumes/Crucial/AVProjectUi/Interface/IDockerScanner.h \
-  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerManager.h \
-  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerTypes.h \
-  /Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerExceptions.h \
-  /Volumes/Crucial/AVProjectUi/UI/Mainwindow/../Widgets/History/HistoryWidget.h \
+  /Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QModelIndex \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/qabstractitemmodel.h \
-  /Volumes/Crucial/AVProjectUi/UI/Mainwindow/../Widgets/ServiceStatus/ServiceStatusWidget.h \
+  /Volumes/Crucial/AVProjectUi/UI/Widgets/ServiceStatus/ServiceStatusWidget.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QDateTime \
   /Volumes/Crucial/AVProjectUi/Database/DatabaseService/DatabaseService.h \
   /Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h \
   /Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Headers/QStringView \
-  /Volumes/Crucial/AVProjectUi/Interface/IDbManager.h
+  /Volumes/Crucial/AVProjectUi/Interface/IDbManager.h \
+  /Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Headers/QTabWidget

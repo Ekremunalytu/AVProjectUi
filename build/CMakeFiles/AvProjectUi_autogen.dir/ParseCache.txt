@@ -2531,7 +2531,9 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QUrl
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QVariant
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtGlobal
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtPlugin
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20algorithm.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20iterator.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20memory.h
@@ -2557,6 +2559,8 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearraylist.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborcommon.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h
@@ -2580,6 +2584,7 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdir.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdirlisting.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qendian.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qeventloop.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfile.h
@@ -2599,6 +2604,10 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiodevicebase.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterable.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterator.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsondocument.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonobject.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonparseerror.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlatin1stringview.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qline.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlist.h
@@ -2621,10 +2630,13 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobjectdefs_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qoverload.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpair.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qplugin.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpoint.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qprocessordetection.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qregularexpression.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopeguard.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qset.h
@@ -2675,6 +2687,7 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtypes.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qurl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qutf8stringview.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/quuid.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvariant.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvarlengtharray.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h
@@ -3487,20 +3500,13 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/limits.h
  mdp:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/17/include/stdarg.h
  mdp:/Volumes/Crucial/AVProjectUi/Core/AppConfig.h
- mdp:/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerExceptions.h
- mdp:/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerManager.h
- mdp:/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerTypes.h
- mdp:/Volumes/Crucial/AVProjectUi/Interface/IDockerScanner.h
  mdp:/Volumes/Crucial/AVProjectUi/Interface/IScanner.h
  mdp:/Volumes/Crucial/AVProjectUi/Interface/IVirusTotalScanner.h
  mdp:/Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h
  mdp:/Volumes/Crucial/AVProjectUi/Network/Monitor/NetworkMonitor.h
  mdp:/Volumes/Crucial/AVProjectUi/Network/VirusTotal/VirusTotalManager.h
- mdp:/Volumes/Crucial/AVProjectUi/Scanner/CDRScanner.h
- mdp:/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h
  mdp:/Volumes/Crucial/AVProjectUi/UI/Widgets/Dashboard/DashboardWidget.h
  mdp:/Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/moc_predefs.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QCryptographicHash
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDebug
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDir
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFileInfo
@@ -3516,7 +3522,9 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QUrl
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QVariant
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtGlobal
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtPlugin
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20algorithm.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20iterator.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20memory.h
@@ -3542,6 +3550,8 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearraylist.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborcommon.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h
@@ -3585,6 +3595,10 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiodevicebase.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterable.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterator.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsondocument.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonobject.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonparseerror.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlatin1stringview.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qline.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlist.h
@@ -3607,10 +3621,13 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobjectdefs_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qoverload.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpair.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qplugin.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpoint.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qprocessordetection.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qregularexpression.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopeguard.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qset.h
@@ -3662,6 +3679,7 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtypes.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qurl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qutf8stringview.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/quuid.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvariant.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvarlengtharray.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h
@@ -3717,12 +3735,9 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkexports.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkglobal.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QApplication
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QFileDialog
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMenu
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qapplication.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qdialog.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qfiledialog.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qmenu.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qsizepolicy.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgets-config.h
@@ -5937,6 +5952,12 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/view_interface.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__split_buffer
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__std_mbstate_t.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/atomic_unique_lock.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_list_view.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_shared_ptr.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_source.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_state.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/char_traits.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/constexpr_c_functions.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/extern_template_lists.h
@@ -5945,10 +5966,14 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/error_code.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/error_condition.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/system_error.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/formatter.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/id.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/jthread.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/poll_with_backoff.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/support.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/support/pthread.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/this_thread.h
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/thread.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/find_index.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/ignore.h
@@ -6133,6 +6158,7 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/format
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/functional
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/future
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/initializer_list
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ios
@@ -6155,6 +6181,7 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/queue
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ratio
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/set
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/sstream
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stack
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdbool.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stddef.h
@@ -6167,6 +6194,7 @@
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string.h
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string_view
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/system_error
+ mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/thread
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/tuple
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/type_traits
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/typeinfo
@@ -6274,11 +6302,20 @@
  mdp:/Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h
  mdp:/Volumes/Crucial/AVProjectUi/Scanner/Dashboard/BasicScanner/BasicScanner.h
  mdp:/Volumes/Crucial/AVProjectUi/build/AvProjectUi_autogen/moc_predefs.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QCryptographicHash
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDebug
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDirIterator
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QElapsedTimer
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFile
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFileInfo
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QObject
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QQueue
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QRegularExpression
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QString
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QTextStream
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QThread
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtPlugin
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20algorithm.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20iterator.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20memory.h
@@ -6301,8 +6338,9 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearraylist.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborcommon.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcomparehelpers.h
@@ -6313,13 +6351,15 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontainerinfo.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontainertools_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcontiguouscache.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcryptographichash.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdarwinhelpers.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdatastream.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdatetime.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdir.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdiriterator.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdirlisting.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qelapsedtimer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qendian.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qfile.h
@@ -6339,14 +6379,16 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiodevicebase.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterable.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterator.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsondocument.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonobject.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonparseerror.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonvalue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlatin1stringview.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qline.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlist.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlocale.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlogging.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmalloc.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmap.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmargins.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmath.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetacontainer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qmetatype.h
@@ -6359,10 +6401,12 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobjectdefs_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qoverload.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpair.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpoint.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qplugin.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qprocessordetection.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qqueue.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qregularexpression.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopedpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qscopeguard.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qset.h
@@ -6370,7 +6414,6 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qshareddata_impl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsharedpointer.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsharedpointer_impl.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qsize.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qspan.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstdlibdetection.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qstring.h
@@ -6399,6 +6442,7 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtenvironmentvariables.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtextstream.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtformat_impl.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qthread.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimezone.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtmetamacros.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtnoop.h
@@ -6412,44 +6456,12 @@
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtypes.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qurl.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qutf8stringview.h
+ mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/quuid.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvariant.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvarlengtharray.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qxptype_traits.h
  mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qyieldcpu.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qaction.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qbitmap.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qbrush.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qcolor.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qcursor.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfont.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontinfo.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontmetrics.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qfontvariableaxis.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qicon.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qimage.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qkeysequence.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpaintdevice.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpalette.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpixelformat.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpixmap.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qpolygon.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qregion.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qrgb.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qrgba64.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtgui-config.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtguiexports.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtguiglobal.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qtransform.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtGui.framework/Versions/A/Headers/qwindowdefs.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QFileDialog
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qdialog.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qfiledialog.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qsizepolicy.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgets-config.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsexports.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qtwidgetsglobal.h
- mdp:/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qwidget.h
 /Volumes/Crucial/AVProjectUi/UI/Widgets/History/HistoryWidget.h
  mmc:Q_OBJECT
  mdp:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/Availability.h

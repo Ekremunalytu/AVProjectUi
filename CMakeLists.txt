@@ -7,6 +7,8 @@ endif()
 
 project(AvProjectUi LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Added to generate compile_commands.json
+
 # C++ standard settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -103,6 +105,7 @@ target_include_directories(AvProjectUi PRIVATE
     ${Qt6Core_INCLUDE_DIRS}           # Qt Core includes
     ${Qt6Widgets_INCLUDE_DIRS}        # Qt Widgets includes
     ${Qt6Sql_INCLUDE_DIRS}            # Qt SQL includes
+    ${Qt6Network_INCLUDE_DIRS}        # Qt Network includes (explicitly added)
 )
 
 # Add compile definitions to ensure proper Qt handling

@@ -7,10 +7,14 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../Widgets/Dashboard/DashboardWidget.h"
-#include "../Widgets/History/HistoryWidget.h" // Added include for HistoryWidget
-#include "../Widgets/ServiceStatus/ServiceStatusWidget.h" // Added include for ServiceStatusWidget
-#include "Database/DatabaseService/DatabaseService.h" // Added include for DatabaseService
+#include "UI/Widgets/Dashboard/DashboardWidget.h"
+#include "UI/Widgets/History/HistoryWidget.h" // Added include
+#include "UI/Widgets/ServiceStatus/ServiceStatusWidget.h" // Added include
+#include "Database/DatabaseService/DatabaseService.h" // Added include
+
+#include "Database/DbManager/DbManager.h" // Corrected path
+#include <QVBoxLayout>
+#include <QTabWidget>
 
 /**
  * @brief Constructs and initializes the main window.
@@ -21,9 +25,10 @@
  * 
  * @param parent Parent widget pointer
  */
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(DbManager* dbManager, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_dbManager(dbManager)
 {
     // Set up the UI from the .ui file
     ui->setupUi(this);
@@ -32,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     showFullScreen();
     
     // Create the dashboard widget and add it to the dashboard page
-    DashboardWidget *dashboardWidget = new DashboardWidget(this);
+    DashboardWidget *dashboardWidget = new DashboardWidget(m_dbManager, this); // Pass dbManager
     QVBoxLayout *dashboardLayout = new QVBoxLayout(ui->dashboardPage);
     dashboardLayout->addWidget(dashboardWidget);
     ui->dashboardPage->setLayout(dashboardLayout);

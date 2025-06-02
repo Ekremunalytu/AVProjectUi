@@ -526,6 +526,12 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/view_interface.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__split_buffer \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__std_mbstate_t.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/atomic_unique_lock.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_list_view.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/intrusive_shared_ptr.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_source.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_state.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__stop_token/stop_token.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/char_traits.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/constexpr_c_functions.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__string/extern_template_lists.h \
@@ -534,10 +540,14 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/error_code.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/error_condition.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__system_error/system_error.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/formatter.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/id.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/jthread.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/poll_with_backoff.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/support.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/support/pthread.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/this_thread.h \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__thread/thread.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/find_index.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tuple/ignore.h \
@@ -722,6 +732,7 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/format \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/forward_list \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/functional \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/future \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/initializer_list \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iomanip \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ios \
@@ -744,6 +755,7 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/queue \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ratio \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/set \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/sstream \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stack \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stdbool.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/stddef.h \
@@ -756,6 +768,7 @@ AvProjectUi_autogen/timestamp: \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string.h \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/string_view \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/system_error \
+	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/thread \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/tuple \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/type_traits \
 	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/typeinfo \
@@ -867,14 +880,10 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/AVProjectUi/Database/DbManager/DbManager.h \
 	/Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.cpp \
 	/Volumes/Crucial/AVProjectUi/Database/Models/ScanHistoryModel.h \
-	/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerExceptions.h \
-	/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerManager.h \
-	/Volumes/Crucial/AVProjectUi/Docker/include/docker/DockerTypes.h \
 	/Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrManager.cpp \
 	/Volumes/Crucial/AVProjectUi/Docker/src/cdr/CdrSanitizer.cpp \
 	/Volumes/Crucial/AVProjectUi/Docker/src/cdr/FilesystemCompat.cpp \
 	/Volumes/Crucial/AVProjectUi/Docker/src/docker/DockerManager.cpp \
-	/Volumes/Crucial/AVProjectUi/Interface/IDockerScanner.h \
 	/Volumes/Crucial/AVProjectUi/Interface/IScanner.h \
 	/Volumes/Crucial/AVProjectUi/Interface/IVirusTotalScanner.h \
 	/Volumes/Crucial/AVProjectUi/Interface/ScannerTypes.h \
@@ -900,10 +909,12 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/AVProjectUi/main.cpp \
 	/Volumes/Crucial/AVProjectUi/resources.qrc \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QAbstractTableModel \
-	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QCryptographicHash \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDateTime \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDebug \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDir \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QDirIterator \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QElapsedTimer \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFile \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFileInfo \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QFlags \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QIODevice \
@@ -911,15 +922,21 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QMetaType \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QModelIndex \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QObject \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QQueue \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QRegularExpression \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSettings \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSharedDataPointer \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QSortFilterProxyModel \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QString \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QTextStream \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QThread \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QTimer \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QUrl \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QVariant \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtGlobal \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/QtPlugin \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q17memory.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20algorithm.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20functional.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20iterator.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/q20memory.h \
@@ -947,6 +964,8 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearraylist.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qbytearrayview.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcalendar.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborcommon.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcborvalue.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qchar.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcheckedint_impl.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qcompare.h \
@@ -969,7 +988,9 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdeadlinetimer.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdebug.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdir.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdiriterator.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qdirlisting.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qelapsedtimer.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qendian.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qeventloop.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qexceptionhandling.h \
@@ -990,6 +1011,10 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiodevicebase.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterable.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qiterator.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsondocument.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonobject.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonparseerror.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qjsonvalue.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlatin1stringview.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qline.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qlist.h \
@@ -1012,8 +1037,11 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qobjectdefs_impl.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qoverload.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpair.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qplugin.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpoint.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qpointer.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qprocessordetection.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qqueue.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrect.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qrefcount.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qregularexpression.h \
@@ -1055,6 +1083,7 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtenvironmentvariables.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtextstream.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtformat_impl.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qthread.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimer.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtimezone.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtmetamacros.h \
@@ -1069,6 +1098,7 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qtypes.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qurl.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qutf8stringview.h \
+	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/quuid.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvariant.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qvarlengtharray.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtCore.framework/Versions/A/Headers/qversiontagging.h \
@@ -1126,15 +1156,12 @@ AvProjectUi_autogen/timestamp: \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkexports.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtNetwork.framework/Versions/A/Headers/qtnetworkglobal.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QApplication \
-	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QFileDialog \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMainWindow \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QMenu \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QVBoxLayout \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/QWidget \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qapplication.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qboxlayout.h \
-	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qdialog.h \
-	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qfiledialog.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qgridlayout.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qlayout.h \
 	/Volumes/Crucial/QT/6.10.0/macos/lib/QtWidgets.framework/Versions/A/Headers/qlayoutitem.h \

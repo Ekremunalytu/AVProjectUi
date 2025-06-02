@@ -69,6 +69,108 @@ QTabBar::tab:hover:!selected {
       </attribute>
       <layout class="QVBoxLayout" name="basicScanTabLayout">
        <item>
+        <widget class="QFrame" name="basicScanControlsFrame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="basicScanControlsLayout">
+          <item>
+           <widget class="QPushButton" name="selectFileButton_dashboard">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Select File</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/images/openFile.png</normaloff>:/images/openFile.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="basicScanButton_dashboard"> <!-- Renamed from basicScanButton -->
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Run Basic Scan</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/images/basicScan.png</normaloff>:/images/basicScan.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="scanDirectoryButton_dashboard">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Scan Directory</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/images/scanFolder.png</normaloff>:/images/scanFolder.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="basicScanControlsSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="directoryScanStatusLabel_dashboard">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QProgressBar" name="directoryScanProgressBar_dashboard">
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="textVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QFrame" name="basicScanResultsFrame">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -93,7 +195,7 @@ QFrame {
          </property>
          <layout class="QVBoxLayout" name="basicScanResultsFrameLayout">
           <item>
-           <widget class="QTextEdit" name="basicScanResultsTextEdit">
+           <widget class="QTextEdit" name="basicScanResultsTextEdit"> <!-- Basic scan results -->
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -109,29 +211,6 @@ QFrame {
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="basicScanButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Run Basic Scan</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../../resources.qrc">
-           <normaloff>:/images/basicScan.png</normaloff>:/images/basicScan.png</iconset>
-         </property>
         </widget>
        </item>
       </layout>
@@ -168,7 +247,7 @@ QFrame {
          </property>
          <layout class="QVBoxLayout" name="advancedScanResultsFrameLayout">
           <item>
-           <widget class="QTableWidget" name="advancedScanResultsTableWidget">
+           <widget class="QTableWidget" name="advancedScanResultsTableWidget"> <!-- Advanced scan results table -->
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -196,7 +275,7 @@ QFrame {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="advancedScanButton">
+        <widget class="QPushButton" name="advancedScanButton_dashboard"> <!-- Renamed from advancedScanButton -->
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -252,7 +331,7 @@ QFrame {
          </property>
          <layout class="QVBoxLayout" name="cdrResultsFrameLayout">
           <item>
-           <widget class="QTextEdit" name="cdrResultsTextEdit">
+           <widget class="QTextEdit" name="cdrResultsTextEdit"> <!-- CDR scan results -->
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -271,7 +350,7 @@ QFrame {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="cdrScanButton">
+        <widget class="QPushButton" name="cdrScanButton_dashboard"> <!-- Renamed from cdrScanButton -->
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -327,7 +406,7 @@ QFrame {
          </property>
          <layout class="QVBoxLayout" name="sandboxResultsFrameLayout">
           <item>
-           <widget class="QTextEdit" name="sandboxResultsTextEdit">
+           <widget class="QTextEdit" name="sandboxResultsTextEdit"> <!-- Sandbox scan results -->
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -346,7 +425,7 @@ QFrame {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="sandboxScanButton">
+        <widget class="QPushButton" name="sandboxScanButton_dashboard"> <!-- Renamed from sandboxScanButton -->
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>

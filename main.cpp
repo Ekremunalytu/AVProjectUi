@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     }
 
     // Create and display the main application window
-    MainWindow w;
+    MainWindow w(dbService.getDbManager());
     w.show();
     
     // Start the application event loop

@@ -19,7 +19,11 @@ void MainWindowTest::cleanupTestCase()
 // Her test başlangıcında çalışacak
 void MainWindowTest::init()
 {
-    mainWindow = new MainWindow();
+    // Create test database manager instance
+    testDbManager = new DbManager();
+    
+    // Create MainWindow with test database manager
+    mainWindow = new MainWindow(testDbManager);
 }
 
 // Her test bitiminde çalışacak
@@ -27,6 +31,8 @@ void MainWindowTest::cleanup()
 {
     delete mainWindow;
     mainWindow = nullptr;
+    delete testDbManager;
+    testDbManager = nullptr;
 }
 
 // MainWindow'un doğru şekilde başlatılıp başlatılmadığını test et

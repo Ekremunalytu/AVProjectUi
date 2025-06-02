@@ -1046,8 +1046,8 @@ CMakeFiles/ContinuousSubmit.dir/clean:
 # Target rules for target CMakeFiles/AvProjectUi.dir
 
 # All Build rule for target.
-CMakeFiles/AvProjectUi.dir/all: CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir/all
 CMakeFiles/AvProjectUi.dir/all: CMakeFiles/AvProjectUi_autogen.dir/all
+CMakeFiles/AvProjectUi.dir/all: CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 "Built target AvProjectUi"
@@ -1065,8 +1065,8 @@ AvProjectUi: CMakeFiles/AvProjectUi.dir/rule
 .PHONY : AvProjectUi
 
 # codegen rule for target.
-CMakeFiles/AvProjectUi.dir/codegen: CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir/all
 CMakeFiles/AvProjectUi.dir/codegen: CMakeFiles/AvProjectUi_autogen.dir/all
+CMakeFiles/AvProjectUi.dir/codegen: CMakeFiles/AvProjectUi_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AvProjectUi.dir/build.make CMakeFiles/AvProjectUi.dir/codegen
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 "Finished codegen for target AvProjectUi"
 .PHONY : CMakeFiles/AvProjectUi.dir/codegen

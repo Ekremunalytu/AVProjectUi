@@ -15,6 +15,8 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTabWidget>
@@ -32,28 +34,35 @@ public:
     QTabWidget *dashboardTabWidget;
     QWidget *basicScanTab;
     QVBoxLayout *basicScanTabLayout;
+    QFrame *basicScanControlsFrame;
+    QHBoxLayout *basicScanControlsLayout;
+    QPushButton *selectFileButton_dashboard;
+    QPushButton *basicScanButton_dashboard;
+    QPushButton *scanDirectoryButton_dashboard;
+    QSpacerItem *basicScanControlsSpacer;
+    QLabel *directoryScanStatusLabel_dashboard;
+    QProgressBar *directoryScanProgressBar_dashboard;
     QFrame *basicScanResultsFrame;
     QVBoxLayout *basicScanResultsFrameLayout;
     QTextEdit *basicScanResultsTextEdit;
-    QPushButton *basicScanButton;
     QWidget *advancedScanTab;
     QVBoxLayout *advancedScanTabLayout;
     QFrame *advancedScanResultsFrame;
     QVBoxLayout *advancedScanResultsFrameLayout;
     QTableWidget *advancedScanResultsTableWidget;
-    QPushButton *advancedScanButton;
+    QPushButton *advancedScanButton_dashboard;
     QWidget *cdrTab;
     QVBoxLayout *cdrTabLayout;
     QFrame *cdrResultsFrame;
     QVBoxLayout *cdrResultsFrameLayout;
     QTextEdit *cdrResultsTextEdit;
-    QPushButton *cdrScanButton;
+    QPushButton *cdrScanButton_dashboard;
     QWidget *sandboxTab;
     QVBoxLayout *sandboxTabLayout;
     QFrame *sandboxResultsFrame;
     QVBoxLayout *sandboxResultsFrameLayout;
     QTextEdit *sandboxResultsTextEdit;
-    QPushButton *sandboxScanButton;
+    QPushButton *sandboxScanButton_dashboard;
     QWidget *networkTab;
     QVBoxLayout *networkTabLayout;
     QFrame *networkResultsFrame;
@@ -82,44 +91,88 @@ public:
         basicScanTab->setObjectName("basicScanTab");
         basicScanTabLayout = new QVBoxLayout(basicScanTab);
         basicScanTabLayout->setObjectName("basicScanTabLayout");
+        basicScanControlsFrame = new QFrame(basicScanTab);
+        basicScanControlsFrame->setObjectName("basicScanControlsFrame");
+        basicScanControlsFrame->setFrameShape(QFrame::StyledPanel);
+        basicScanControlsFrame->setFrameShadow(QFrame::Raised);
+        basicScanControlsLayout = new QHBoxLayout(basicScanControlsFrame);
+        basicScanControlsLayout->setObjectName("basicScanControlsLayout");
+        selectFileButton_dashboard = new QPushButton(basicScanControlsFrame);
+        selectFileButton_dashboard->setObjectName("selectFileButton_dashboard");
+        selectFileButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/images/openFile.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        selectFileButton_dashboard->setIcon(icon);
+
+        basicScanControlsLayout->addWidget(selectFileButton_dashboard);
+
+        basicScanButton_dashboard = new QPushButton(basicScanControlsFrame);
+        basicScanButton_dashboard->setObjectName("basicScanButton_dashboard");
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(basicScanButton_dashboard->sizePolicy().hasHeightForWidth());
+        basicScanButton_dashboard->setSizePolicy(sizePolicy);
+        basicScanButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/images/basicScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        basicScanButton_dashboard->setIcon(icon1);
+
+        basicScanControlsLayout->addWidget(basicScanButton_dashboard);
+
+        scanDirectoryButton_dashboard = new QPushButton(basicScanControlsFrame);
+        scanDirectoryButton_dashboard->setObjectName("scanDirectoryButton_dashboard");
+        scanDirectoryButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/images/scanFolder.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        scanDirectoryButton_dashboard->setIcon(icon2);
+
+        basicScanControlsLayout->addWidget(scanDirectoryButton_dashboard);
+
+        basicScanControlsSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        basicScanControlsLayout->addItem(basicScanControlsSpacer);
+
+
+        basicScanTabLayout->addWidget(basicScanControlsFrame);
+
+        directoryScanStatusLabel_dashboard = new QLabel(basicScanTab);
+        directoryScanStatusLabel_dashboard->setObjectName("directoryScanStatusLabel_dashboard");
+        directoryScanStatusLabel_dashboard->setAlignment(Qt::AlignCenter);
+
+        basicScanTabLayout->addWidget(directoryScanStatusLabel_dashboard);
+
+        directoryScanProgressBar_dashboard = new QProgressBar(basicScanTab);
+        directoryScanProgressBar_dashboard->setObjectName("directoryScanProgressBar_dashboard");
+        directoryScanProgressBar_dashboard->setValue(0);
+        directoryScanProgressBar_dashboard->setTextVisible(true);
+
+        basicScanTabLayout->addWidget(directoryScanProgressBar_dashboard);
+
         basicScanResultsFrame = new QFrame(basicScanTab);
         basicScanResultsFrame->setObjectName("basicScanResultsFrame");
-        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(1);
-        sizePolicy.setHeightForWidth(basicScanResultsFrame->sizePolicy().hasHeightForWidth());
-        basicScanResultsFrame->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(1);
+        sizePolicy1.setHeightForWidth(basicScanResultsFrame->sizePolicy().hasHeightForWidth());
+        basicScanResultsFrame->setSizePolicy(sizePolicy1);
         basicScanResultsFrame->setFrameShape(QFrame::StyledPanel);
         basicScanResultsFrame->setFrameShadow(QFrame::Sunken);
         basicScanResultsFrameLayout = new QVBoxLayout(basicScanResultsFrame);
         basicScanResultsFrameLayout->setObjectName("basicScanResultsFrameLayout");
         basicScanResultsTextEdit = new QTextEdit(basicScanResultsFrame);
         basicScanResultsTextEdit->setObjectName("basicScanResultsTextEdit");
-        QSizePolicy sizePolicy1(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(basicScanResultsTextEdit->sizePolicy().hasHeightForWidth());
-        basicScanResultsTextEdit->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(basicScanResultsTextEdit->sizePolicy().hasHeightForWidth());
+        basicScanResultsTextEdit->setSizePolicy(sizePolicy2);
         basicScanResultsTextEdit->setReadOnly(true);
 
         basicScanResultsFrameLayout->addWidget(basicScanResultsTextEdit);
 
 
         basicScanTabLayout->addWidget(basicScanResultsFrame);
-
-        basicScanButton = new QPushButton(basicScanTab);
-        basicScanButton->setObjectName("basicScanButton");
-        QSizePolicy sizePolicy2(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(basicScanButton->sizePolicy().hasHeightForWidth());
-        basicScanButton->setSizePolicy(sizePolicy2);
-        basicScanButton->setMinimumSize(QSize(150, 40));
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/images/basicScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        basicScanButton->setIcon(icon);
-
-        basicScanTabLayout->addWidget(basicScanButton);
 
         dashboardTabWidget->addTab(basicScanTab, QString());
         advancedScanTab = new QWidget();
@@ -128,8 +181,8 @@ public:
         advancedScanTabLayout->setObjectName("advancedScanTabLayout");
         advancedScanResultsFrame = new QFrame(advancedScanTab);
         advancedScanResultsFrame->setObjectName("advancedScanResultsFrame");
-        sizePolicy.setHeightForWidth(advancedScanResultsFrame->sizePolicy().hasHeightForWidth());
-        advancedScanResultsFrame->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(advancedScanResultsFrame->sizePolicy().hasHeightForWidth());
+        advancedScanResultsFrame->setSizePolicy(sizePolicy1);
         advancedScanResultsFrame->setFrameShape(QFrame::StyledPanel);
         advancedScanResultsFrame->setFrameShadow(QFrame::Sunken);
         advancedScanResultsFrameLayout = new QVBoxLayout(advancedScanResultsFrame);
@@ -152,16 +205,16 @@ public:
 
         advancedScanTabLayout->addWidget(advancedScanResultsFrame);
 
-        advancedScanButton = new QPushButton(advancedScanTab);
-        advancedScanButton->setObjectName("advancedScanButton");
-        sizePolicy2.setHeightForWidth(advancedScanButton->sizePolicy().hasHeightForWidth());
-        advancedScanButton->setSizePolicy(sizePolicy2);
-        advancedScanButton->setMinimumSize(QSize(150, 40));
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/images/advancedScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        advancedScanButton->setIcon(icon1);
+        advancedScanButton_dashboard = new QPushButton(advancedScanTab);
+        advancedScanButton_dashboard->setObjectName("advancedScanButton_dashboard");
+        sizePolicy.setHeightForWidth(advancedScanButton_dashboard->sizePolicy().hasHeightForWidth());
+        advancedScanButton_dashboard->setSizePolicy(sizePolicy);
+        advancedScanButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/images/advancedScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        advancedScanButton_dashboard->setIcon(icon3);
 
-        advancedScanTabLayout->addWidget(advancedScanButton);
+        advancedScanTabLayout->addWidget(advancedScanButton_dashboard);
 
         dashboardTabWidget->addTab(advancedScanTab, QString());
         cdrTab = new QWidget();
@@ -170,8 +223,8 @@ public:
         cdrTabLayout->setObjectName("cdrTabLayout");
         cdrResultsFrame = new QFrame(cdrTab);
         cdrResultsFrame->setObjectName("cdrResultsFrame");
-        sizePolicy.setHeightForWidth(cdrResultsFrame->sizePolicy().hasHeightForWidth());
-        cdrResultsFrame->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(cdrResultsFrame->sizePolicy().hasHeightForWidth());
+        cdrResultsFrame->setSizePolicy(sizePolicy1);
         cdrResultsFrame->setFrameShape(QFrame::StyledPanel);
         cdrResultsFrame->setFrameShadow(QFrame::Sunken);
         cdrResultsFrameLayout = new QVBoxLayout(cdrResultsFrame);
@@ -187,16 +240,16 @@ public:
 
         cdrTabLayout->addWidget(cdrResultsFrame);
 
-        cdrScanButton = new QPushButton(cdrTab);
-        cdrScanButton->setObjectName("cdrScanButton");
-        sizePolicy2.setHeightForWidth(cdrScanButton->sizePolicy().hasHeightForWidth());
-        cdrScanButton->setSizePolicy(sizePolicy2);
-        cdrScanButton->setMinimumSize(QSize(150, 40));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/images/cdrScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        cdrScanButton->setIcon(icon2);
+        cdrScanButton_dashboard = new QPushButton(cdrTab);
+        cdrScanButton_dashboard->setObjectName("cdrScanButton_dashboard");
+        sizePolicy.setHeightForWidth(cdrScanButton_dashboard->sizePolicy().hasHeightForWidth());
+        cdrScanButton_dashboard->setSizePolicy(sizePolicy);
+        cdrScanButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/images/cdrScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        cdrScanButton_dashboard->setIcon(icon4);
 
-        cdrTabLayout->addWidget(cdrScanButton);
+        cdrTabLayout->addWidget(cdrScanButton_dashboard);
 
         dashboardTabWidget->addTab(cdrTab, QString());
         sandboxTab = new QWidget();
@@ -205,8 +258,8 @@ public:
         sandboxTabLayout->setObjectName("sandboxTabLayout");
         sandboxResultsFrame = new QFrame(sandboxTab);
         sandboxResultsFrame->setObjectName("sandboxResultsFrame");
-        sizePolicy.setHeightForWidth(sandboxResultsFrame->sizePolicy().hasHeightForWidth());
-        sandboxResultsFrame->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(sandboxResultsFrame->sizePolicy().hasHeightForWidth());
+        sandboxResultsFrame->setSizePolicy(sizePolicy1);
         sandboxResultsFrame->setFrameShape(QFrame::StyledPanel);
         sandboxResultsFrame->setFrameShadow(QFrame::Sunken);
         sandboxResultsFrameLayout = new QVBoxLayout(sandboxResultsFrame);
@@ -222,16 +275,16 @@ public:
 
         sandboxTabLayout->addWidget(sandboxResultsFrame);
 
-        sandboxScanButton = new QPushButton(sandboxTab);
-        sandboxScanButton->setObjectName("sandboxScanButton");
-        sizePolicy2.setHeightForWidth(sandboxScanButton->sizePolicy().hasHeightForWidth());
-        sandboxScanButton->setSizePolicy(sizePolicy2);
-        sandboxScanButton->setMinimumSize(QSize(150, 40));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/images/sandboxScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        sandboxScanButton->setIcon(icon3);
+        sandboxScanButton_dashboard = new QPushButton(sandboxTab);
+        sandboxScanButton_dashboard->setObjectName("sandboxScanButton_dashboard");
+        sizePolicy.setHeightForWidth(sandboxScanButton_dashboard->sizePolicy().hasHeightForWidth());
+        sandboxScanButton_dashboard->setSizePolicy(sizePolicy);
+        sandboxScanButton_dashboard->setMinimumSize(QSize(150, 40));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/images/sandboxScan.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        sandboxScanButton_dashboard->setIcon(icon5);
 
-        sandboxTabLayout->addWidget(sandboxScanButton);
+        sandboxTabLayout->addWidget(sandboxScanButton_dashboard);
 
         dashboardTabWidget->addTab(sandboxTab, QString());
         networkTab = new QWidget();
@@ -240,8 +293,8 @@ public:
         networkTabLayout->setObjectName("networkTabLayout");
         networkResultsFrame = new QFrame(networkTab);
         networkResultsFrame->setObjectName("networkResultsFrame");
-        sizePolicy.setHeightForWidth(networkResultsFrame->sizePolicy().hasHeightForWidth());
-        networkResultsFrame->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(networkResultsFrame->sizePolicy().hasHeightForWidth());
+        networkResultsFrame->setSizePolicy(sizePolicy1);
         networkResultsFrame->setFrameShape(QFrame::StyledPanel);
         networkResultsFrame->setFrameShadow(QFrame::Sunken);
         networkResultsFrameLayout = new QVBoxLayout(networkResultsFrame);
@@ -259,8 +312,8 @@ public:
 
         networkMonitorButton = new QPushButton(networkTab);
         networkMonitorButton->setObjectName("networkMonitorButton");
-        sizePolicy2.setHeightForWidth(networkMonitorButton->sizePolicy().hasHeightForWidth());
-        networkMonitorButton->setSizePolicy(sizePolicy2);
+        sizePolicy.setHeightForWidth(networkMonitorButton->sizePolicy().hasHeightForWidth());
+        networkMonitorButton->setSizePolicy(sizePolicy);
         networkMonitorButton->setMinimumSize(QSize(150, 40));
 
         networkTabLayout->addWidget(networkMonitorButton);
@@ -277,23 +330,23 @@ public:
 
         configButton = new QPushButton(DashboardWidget);
         configButton->setObjectName("configButton");
-        sizePolicy2.setHeightForWidth(configButton->sizePolicy().hasHeightForWidth());
-        configButton->setSizePolicy(sizePolicy2);
+        sizePolicy.setHeightForWidth(configButton->sizePolicy().hasHeightForWidth());
+        configButton->setSizePolicy(sizePolicy);
         configButton->setMinimumSize(QSize(120, 40));
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/images/settings.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        configButton->setIcon(icon4);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/images/settings.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        configButton->setIcon(icon6);
 
         buttonsLayout->addWidget(configButton);
 
         refreshButton = new QPushButton(DashboardWidget);
         refreshButton->setObjectName("refreshButton");
-        sizePolicy2.setHeightForWidth(refreshButton->sizePolicy().hasHeightForWidth());
-        refreshButton->setSizePolicy(sizePolicy2);
+        sizePolicy.setHeightForWidth(refreshButton->sizePolicy().hasHeightForWidth());
+        refreshButton->setSizePolicy(sizePolicy);
         refreshButton->setMinimumSize(QSize(120, 40));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/images/refresh.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        refreshButton->setIcon(icon5);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/images/refresh.png"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        refreshButton->setIcon(icon7);
 
         buttonsLayout->addWidget(refreshButton);
 
@@ -340,6 +393,10 @@ public:
 "  background-color: rgba(60, 60, 60, 0.2);\n"
 "}\n"
 "      ", nullptr));
+        selectFileButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Select File", nullptr));
+        basicScanButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Run Basic Scan", nullptr));
+        scanDirectoryButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Scan Directory", nullptr));
+        directoryScanStatusLabel_dashboard->setText(QString());
         basicScanResultsFrame->setStyleSheet(QCoreApplication::translate("DashboardWidget", "\n"
 "QFrame {\n"
 "    border: 1px solid #4A4A4A;\n"
@@ -348,7 +405,6 @@ public:
 "}\n"
 "          ", nullptr));
         basicScanResultsTextEdit->setPlaceholderText(QCoreApplication::translate("DashboardWidget", "Basic scan results will be shown here...", nullptr));
-        basicScanButton->setText(QCoreApplication::translate("DashboardWidget", "Run Basic Scan", nullptr));
         dashboardTabWidget->setTabText(dashboardTabWidget->indexOf(basicScanTab), QCoreApplication::translate("DashboardWidget", "Basic Scan", nullptr));
         advancedScanResultsFrame->setStyleSheet(QCoreApplication::translate("DashboardWidget", "\n"
 "QFrame {\n"
@@ -357,7 +413,7 @@ public:
 "    border-radius: 4px;\n"
 "}\n"
 "          ", nullptr));
-        advancedScanButton->setText(QCoreApplication::translate("DashboardWidget", "Run Advanced Scan", nullptr));
+        advancedScanButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Run Advanced Scan", nullptr));
         dashboardTabWidget->setTabText(dashboardTabWidget->indexOf(advancedScanTab), QCoreApplication::translate("DashboardWidget", "Advanced Scan", nullptr));
         cdrResultsFrame->setStyleSheet(QCoreApplication::translate("DashboardWidget", "\n"
 "QFrame {\n"
@@ -367,7 +423,7 @@ public:
 "}\n"
 "          ", nullptr));
         cdrResultsTextEdit->setPlaceholderText(QCoreApplication::translate("DashboardWidget", "CDR (Content Disarm & Reconstruction) results will be shown here...", nullptr));
-        cdrScanButton->setText(QCoreApplication::translate("DashboardWidget", "Run CDR Scan", nullptr));
+        cdrScanButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Run CDR Scan", nullptr));
         dashboardTabWidget->setTabText(dashboardTabWidget->indexOf(cdrTab), QCoreApplication::translate("DashboardWidget", "CDR", nullptr));
         sandboxResultsFrame->setStyleSheet(QCoreApplication::translate("DashboardWidget", "\n"
 "QFrame {\n"
@@ -377,7 +433,7 @@ public:
 "}\n"
 "          ", nullptr));
         sandboxResultsTextEdit->setPlaceholderText(QCoreApplication::translate("DashboardWidget", "Sandbox analysis results will be shown here...", nullptr));
-        sandboxScanButton->setText(QCoreApplication::translate("DashboardWidget", "Run Sandbox Analysis", nullptr));
+        sandboxScanButton_dashboard->setText(QCoreApplication::translate("DashboardWidget", "Run Sandbox Analysis", nullptr));
         dashboardTabWidget->setTabText(dashboardTabWidget->indexOf(sandboxTab), QCoreApplication::translate("DashboardWidget", "Sandbox", nullptr));
         networkResultsFrame->setStyleSheet(QCoreApplication::translate("DashboardWidget", "\n"
 "QFrame {\n"

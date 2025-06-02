@@ -87,7 +87,7 @@ AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/AVProjectUi/U
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 AvProjectUi_autogen/EWIEGA46WW/qrc_resources.cpp: /Volumes/Crucial/QT/6.10.0/macos/libexec/rcc
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Volumes/Crucial/AVProjectUi/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic RCC for resources.qrc"
-	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json 
+	/Applications/CMake.app/Contents/bin/cmake -E cmake_autorcc /Volumes/Crucial/AVProjectUi/build/CMakeFiles/AvProjectUi_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json Debug
 
 CMakeFiles/AvProjectUi.dir/codegen:
 .PHONY : CMakeFiles/AvProjectUi.dir/codegen

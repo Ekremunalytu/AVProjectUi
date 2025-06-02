@@ -3,7 +3,6 @@
 #define QT_NETWORK_LIB 1
 #define QT_NO_CAST_FROM_ASCII 1
 #define QT_NO_CAST_TO_ASCII 1
-#define QT_NO_DEBUG 1
 #define QT_NO_TRANSLATION 1
 #define QT_SQL_LIB 1
 #define QT_WIDGETS_LIB 1

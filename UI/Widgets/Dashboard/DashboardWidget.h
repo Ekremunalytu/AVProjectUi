@@ -4,15 +4,20 @@
 #include <QWidget>
 #include <QMenu>
 #include <QString>
-#include <memory>
-#include "Scanner/Dashboard/BasicScanner/BasicScanner.h"
+#include <QTimer>
+#include <memory> // Keep this if other parts of the header use it, otherwise it might be removable if VirusTotalManager is the only user.
 #include "Network/VirusTotal/VirusTotalManager.h"
-#include "Network/Monitor/NetworkMonitor.h" // Added include
-#include "Scanner/CDRScanner.h" // Added for CDRScanner
+#include "Network/Monitor/NetworkMonitor.h"
+#include "Interface/ScannerTypes.h" // Ensure this is present for ScannerErrorCode
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
 QT_END_NAMESPACE
+
+// Forward declaration
+class DbManager;
+class BasicScanner; // Forward declaration for BasicScanner
+class CDRScanner;   // Forward declaration for CDRScanner
 
 /**
  * @brief The DashboardWidget class provides the main dashboard interface for scanning operations.
@@ -29,12 +34,12 @@ public:
      * @brief Constructs a DashboardWidget.
      * @param parent The parent widget.
      */
-    explicit DashboardWidget(QWidget *parent = nullptr);
+    explicit DashboardWidget(DbManager* dbManager, QWidget *parent = nullptr); // Modified constructor
     
     /**
      * @brief Destroys the DashboardWidget and frees resources.
      */
-    ~DashboardWidget();
+    ~DashboardWidget() override;
 
 public slots:
     void handleVirusTotalResults(const QString& results);
@@ -42,73 +47,53 @@ public slots:
 
 private slots:
     /**
-     * @brief Handles click on the Basic Scan button in the Basic Scan tab.
-     */
-    void onBasicScanButtonClicked();
-    
-    /**
-     * @brief Handles click on the Advanced Scan button in the Advanced Scan tab.
-     */
-    void onAdvancedScanButtonClicked();
-    
-    /**
-     * @brief Handles click on the CDR Scan button in the CDR tab.
-     */
-    void onCdrScanButtonClicked();
-    
-    /**
-     * @brief Handles click on the Sandbox Scan button in the Sandbox tab.
-     */
-    void onSandboxScanButtonClicked();
-    
-    /**
-     * @brief Handles click on the Network Monitor button in the Network tab.
-     */
-    void onNetworkMonitorButtonClicked();
-    
-    /**
-     * @brief Handles click on the Configuration button at the bottom of the interface.
-     */
-    void onConfigButtonClicked();
-    
-    /**
-     * @brief Handles click on the Refresh button at the bottom of the interface.
-     */
-    void onRefreshButtonClicked();
-    
-    /**
-     * @brief Handles the file selection for Basic Scan.
-     * 
-     * Opens a file dialog and initiates scanning of the selected file.
-     */
-    void onBasicScanSelectFile();
-    
-    /**
-     * @brief Handles the file selection for Advanced Scan.
-     * 
-     * Opens a file dialog and processes the selected file for advanced scanning.
-     */
-    void onAdvancedScanSelectFile();
-    
-    /**
-     * @brief Processes and displays scan results.
+     * @brief Processes and displays scan results from BasicScanner.
      * @param results String containing the scan results.
      */
-    void onBasicScanResultsReady(const QString& results);
+    void onBasicScanResultsReady(const QString& results); // Kept - matches connection and definition
     
     /**
-     * @brief Handles and displays scanner errors.
+     * @brief Handles and displays scanner errors from BasicScanner.
      * @param errorCode The error code.
      * @param errorMessage A descriptive error message.
      */
-    void onBasicScanError(ScannerErrorCode errorCode, const QString& errorMessage);
+    void handleScanError(ScannerErrorCode errorCode, const QString& errorMessage); // Kept - matches connection and definition
+    void handleDirectoryScanStarted(const QString& directoryPath);
+    void handleFileProcessed(const QString& filePath, const QString& result, bool isMalicious, int progressValue);
+    void handleDirectoryScanFinished(const QString& directoryPath, int filesScanned, int threatsFound);
+
+    // Slots for UI elements (auto-connected or manually connected)
+    void on_basicScanButton_dashboard_clicked();
+    void on_advancedScanButton_dashboard_clicked();
+    void on_cdrScanButton_dashboard_clicked();
+    void on_sandboxScanButton_dashboard_clicked();
+    void on_configButton_clicked(); // Assuming a configButton might exist or be planned
+    void on_refreshButton_clicked(); // Assuming a refreshButton might exist or be planned
+    void onRefreshButtonClicked(); // Declaration for the existing implementation
+    void onAdvancedScanSelectFile(); // Declaration for the existing implementation
+
+    // New slots for new buttons
+    void on_selectFileButton_dashboard_clicked();
+    void on_scanDirectoryButton_dashboard_clicked();
+    void onNetworkMonitorButtonClicked(); // Added declaration
+    
+    // CDR scan result handling
+    void handleCDRScanCompletion();
+    void checkCDRScanStatus();
 
 private:
     Ui::DashboardWidget *ui; ///< Pointer to the UI form
-    std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
-    std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
-    std::unique_ptr<CDRScanner> m_cdrScanner; ///< Scanner for CDR operations
+    DbManager* m_dbManager; // Added DbManager member
+    BasicScanner* m_basicScanner; 
+    CDRScanner* m_cdrScanner; ///< Scanner for CDR operations
+    VirusTotalManager* m_virusTotalManager; // Added m_virusTotalManager
     NetworkMonitor *m_networkMonitor; ///< Network monitor instance
+    QString m_selectedFileForBasicScan; // To store selected file path
+    QTimer* m_cdrStatusTimer; // Timer to poll CDR scan status
+
+    void setupConnections();
+    void initializeScanners(); // Added for scanner initialization
+    void updateBasicScanUI(bool scanning);
 };
 
 #endif // DASHBOARDWIDGET_H

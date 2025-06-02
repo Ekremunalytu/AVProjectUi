@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QFileInfo>
+#include <QtPlugin> // Added for Q_DECLARE_INTERFACE
 
 /**
  * @brief The IScanner interface provides an abstract base for file scanning operations.
@@ -92,4 +93,6 @@ public:
     virtual QString getFile() const = 0;
 };
 
-#endif // ISCANNER_H 
+Q_DECLARE_INTERFACE(IScanner, "com.company.project.IScanner/1.0") // Added to declare the interface to Qt's meta-object system
+
+#endif // ISCANNER_H

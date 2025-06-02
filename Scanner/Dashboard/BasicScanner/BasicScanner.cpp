@@ -9,6 +9,9 @@
 #include "Database/DbManager/DbManager.h"
 #include "Database/DatabaseService/DatabaseService.h"
 #include <QFile>
+#include <QFileDialog> // Added for QFileDialog
+#include <QCryptographicHash> // Added for QCryptographicHash
+#include <QDirIterator> // Added for directory scanning
 #include <QDebug>
 #include <system_error>
 
@@ -44,9 +47,14 @@ namespace StandardText {
  */
 BasicScanner::BasicScanner(QObject* parent, DbManager* dbManager)
     : QObject(parent),
-      m_isScanning(false),
+      m_isScanning(false), // General flag, might need more granular control
       m_dbManager(dbManager),
-      m_lastError(ScannerErrorCode::NoError)
+      m_lastError(ScannerErrorCode::NoError),
+      m_totalFilesToScan(0),
+      m_processedFilesCount(0),
+      m_threatsFoundInDirectory(0),
+      m_isDirectoryScanActive(false),
+      m_recursiveScan(true)
 {
     // If no DbManager provided, get from DatabaseService
     if (!m_dbManager) {
@@ -118,83 +126,207 @@ bool BasicScanner::selectFile()
  */
 bool BasicScanner::scanFile(const QString& filePath)
 {
-    // Reset error state
     setLastError(ScannerErrorCode::NoError);
-    
-    if (m_isScanning) {
+
+    if (m_isScanning || m_isDirectoryScanActive) { // Prevent concurrent scans
         setLastError(ScannerErrorCode::ScanInProgress);
-        return false;
-    }
-    
-    if (!filePath.isEmpty()) {
-        m_selectedFile = QFileInfo(filePath);
-    }
-    
-    if (!m_selectedFile.exists() || !m_selectedFile.isFile()) {
-        setLastError(ScannerErrorCode::FileNotFound,
-                    tr("Invalid file selected: %1").arg(m_selectedFile.filePath()));
-        m_results = tr("Invalid file selected.");
-        emit scanResultsReady(m_results);
         emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
-    
+
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        setLastError(ScannerErrorCode::FileNotFound,
+                    tr("Invalid file selected: %1").arg(filePath));
+        m_results = tr("Invalid file selected.");
+        emit scanResultsReady(m_results, false); 
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
+        return false;
+    }
+
     if (!m_dbManager) {
         setLastError(ScannerErrorCode::DatabaseNotConnected,
                     tr(StandardText::DB_NOT_AVAILABLE));
         m_results = tr("Error: %1").arg(StandardText::DB_NOT_AVAILABLE);
-        emit scanResultsReady(m_results);
+        emit scanResultsReady(m_results, false);
         emit scanError(getLastErrorCode(), getLastErrorMessage());
         return false;
     }
+
+    m_isScanning = true; // Indicate a scan is active
+
+    // Process single file directly without queue mechanism
+    QMetaObject::invokeMethod(this, "processSingleFile", Qt::QueuedConnection, Q_ARG(QString, filePath));
+
+    return true;
+}
+
+bool BasicScanner::startDirectoryScan(const QString& directoryPath, bool recursive)
+{
+    setLastError(ScannerErrorCode::NoError);
+
+    if (m_isScanning || m_isDirectoryScanActive) { // Prevent concurrent scans
+        setLastError(ScannerErrorCode::ScanInProgress);
+        emit scanError(getLastErrorCode(), tr("Another scan operation is already in progress."));
+        return false;
+    }
+
+    QDir dir(directoryPath);
+    if (!dir.exists()) {
+        setLastError(ScannerErrorCode::FileNotFound, tr("Directory not found: %1").arg(directoryPath));
+        emit scanError(getLastErrorCode(), getLastErrorMessage());
+        return false;
+    }
+
+    m_isDirectoryScanActive = true;
+    m_isScanning = true; // General flag
+    m_currentDirectoryPath = directoryPath;
+    m_recursiveScan = recursive;
+    m_scanQueue.clear();
+    m_processedFilesCount = 0;
+    m_threatsFoundInDirectory = 0;
+
+    emit directoryScanStarted(m_currentDirectoryPath);
+
+    QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
+    if (m_recursiveScan) {
+        flags |= QDirIterator::Subdirectories;
+    }
+
+    QDirIterator it(directoryPath, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot, flags);
+    while (it.hasNext()) {
+        m_scanQueue.enqueue(it.next());
+    }
+    m_totalFilesToScan = m_scanQueue.size();
+
+    if (m_totalFilesToScan == 0) {
+        m_isDirectoryScanActive = false;
+        m_isScanning = false;
+        emit directoryScanFinished(m_currentDirectoryPath, 0, 0);
+        return true; // No files to scan
+    }
+
+    // Start processing the queue
+    QMetaObject::invokeMethod(this, "processNextFileInQueue", Qt::QueuedConnection);
+    return true;
+}
+
+void BasicScanner::processNextFileInQueue()
+{
+    if (!m_isDirectoryScanActive || m_scanQueue.isEmpty()) {
+        bool wasSingleFileScan = (m_totalFilesToScan == 1 && m_processedFilesCount == 1 && !m_currentDirectoryPath.isEmpty() && m_scanQueue.isEmpty());
+
+        if (wasSingleFileScan && m_isScanning) { // Check m_isScanning to ensure it was the scanFile context
+             // The old scanResultsReady is now effectively handled by fileProcessed for the single file.
+             // We can emit the original scanResultsReady here if strict backward compatibility for its exact signature is needed.
+             // For now, assuming the new fileProcessed is sufficient for UI updates.
+        }
+        
+        if (m_isDirectoryScanActive) { // Ensure this is for a directory scan or the adapted single file scan
+             emit directoryScanFinished(m_currentDirectoryPath, m_processedFilesCount, m_threatsFoundInDirectory);
+        }
+        m_isDirectoryScanActive = false;
+        m_isScanning = false; // Reset general flag
+        return;
+    }
+
+    QString filePath = m_scanQueue.dequeue();
+    m_processedFilesCount++;
+
+    QString resultString;
+    bool isMalicious = false;
     
-    m_isScanning = true;
+    // Perform the actual scan for the current file
+    ScannerErrorCode fileScanError = performSingleFileScan(filePath, resultString, isMalicious);
+
+    if (isMalicious) {
+        m_threatsFoundInDirectory++;
+    }
+
+    int progress = 0;
+    if (m_totalFilesToScan > 0) {
+        progress = static_cast<int>((static_cast<double>(m_processedFilesCount) / m_totalFilesToScan) * 100.0);
+    }
     
+    // Determine result category string for fileProcessed signal
+    QString resultCategory;
+    if (fileScanError == ScannerErrorCode::NoError) {
+        resultCategory = QString::fromUtf8(isMalicious ? StandardText::MALICIOUS : StandardText::CLEAN);
+    } else if (fileScanError == ScannerErrorCode::MaliciousFileDetected) { // This case is covered by isMalicious
+         resultCategory = QString::fromUtf8(StandardText::MALICIOUS);
+    }
+    else {
+        resultCategory = tr("ERROR: %1").arg(getDefaultErrorMessage(fileScanError));
+    }
+
+
+    emit fileProcessed(filePath, resultCategory, isMalicious, progress);
+    
+    // If it was a single file scan initiated via scanFile(), also emit the original signal for compatibility
+    if (m_totalFilesToScan == 1 && m_processedFilesCount == 1 && m_isScanning && !m_currentDirectoryPath.isEmpty() && m_scanQueue.isEmpty()) {
+        // The resultString from performSingleFileScan contains the detailed report
+        emit scanResultsReady(resultString, isMalicious);
+    }
+
+
+    if (m_isDirectoryScanActive && !m_scanQueue.isEmpty()) {
+        QMetaObject::invokeMethod(this, "processNextFileInQueue", Qt::QueuedConnection);
+    } else if (m_isDirectoryScanActive && m_scanQueue.isEmpty()) { // All files processed
+        emit directoryScanFinished(m_currentDirectoryPath, m_processedFilesCount, m_threatsFoundInDirectory);
+        m_isDirectoryScanActive = false;
+        m_isScanning = false;
+    }
+}
+
+ScannerErrorCode BasicScanner::performSingleFileScan(const QString& filePath, QString& outResultString, bool& outIsMalicious)
+{
+    outIsMalicious = false;
+    QFileInfo currentFile(filePath);
+
+    if (!currentFile.exists() || !currentFile.isFile()) {
+        outResultString = tr("File not found or is not a file: %1").arg(filePath);
+        return ScannerErrorCode::FileNotFound;
+    }
+     if (!currentFile.isReadable()) {
+        outResultString = tr("File is not readable: %1").arg(filePath);
+        return ScannerErrorCode::FileNotReadable;
+    }
+
+
     // Calculate file hash
     ScannerErrorCode hashError = ScannerErrorCode::NoError;
-    QString fileHash = calculateSha256(m_selectedFile.filePath(), &hashError);
-    
-    qDebug() << "Calculated hash:" << fileHash;
-    
+    QString fileHash = calculateSha256(filePath, &hashError);
+
     if (fileHash.isEmpty()) {
-        m_isScanning = false;
-        // Error is already set by calculateSha256
-        m_results = tr("Failed to calculate hash for file: %1").arg(m_selectedFile.fileName());
-        emit scanResultsReady(m_results);
-        emit scanError(getLastErrorCode(), getLastErrorMessage());
-        return false;
+        // Error is set by calculateSha256
+        outResultString = tr("Failed to calculate hash for file: %1. Error: %2").arg(currentFile.fileName()).arg(getLastErrorMessage());
+        return getLastErrorCode(); // Return the error code set by calculateSha256
     }
-    
+
     // Check if hash exists in database
     ScannerErrorCode dbError = ScannerErrorCode::NoError;
     bool hashFound = checkHashInDatabase(fileHash, &dbError);
-    
-    qDebug() << "Hash found in database:" << hashFound;
-    qDebug() << "Database error:" << (dbError != ScannerErrorCode::NoError ? "Yes" : "No");
-    
+
     if (dbError != ScannerErrorCode::NoError) {
-        m_isScanning = false;
-        // Error is already set by checkHashInDatabase
-        m_results = tr("Error checking database: %1").arg(getLastErrorMessage());
-        emit scanResultsReady(m_results);
-        emit scanError(getLastErrorCode(), getLastErrorMessage());
-        return false;
+        // Error is set by checkHashInDatabase
+        outResultString = tr("Error checking database for file: %1. Error: %2").arg(currentFile.fileName()).arg(getLastErrorMessage());
+        return getLastErrorCode(); // Return the error code set by checkHashInDatabase
     }
-    
-    // Prepare results
-    m_results = tr(StandardText::FILE_LABEL).arg(m_selectedFile.fileName());
-    m_results += tr(StandardText::HASH_LABEL).arg(fileHash);
-    
+
+    // Prepare results string
+    outResultString = tr(StandardText::FILE_LABEL).arg(currentFile.fileName());
+    outResultString += tr(StandardText::HASH_LABEL).arg(fileHash);
+
     if (hashFound) {
-        m_results += tr(StandardText::STATUS_MALICIOUS);
-        emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected!"));
+        outResultString += tr(StandardText::STATUS_MALICIOUS);
+        outIsMalicious = true;
+        // Set last error specifically for malicious detection if not already an error
+        setLastError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected: %1").arg(currentFile.fileName()));
+        return ScannerErrorCode::MaliciousFileDetected; 
     } else {
-        m_results += tr(StandardText::STATUS_CLEAN);
+        outResultString += tr(StandardText::STATUS_CLEAN);
+        return ScannerErrorCode::NoError;
     }
-    
-    m_isScanning = false;
-    emit scanResultsReady(m_results);
-    return true;
 }
 
 /**
@@ -230,13 +362,34 @@ bool BasicScanner::isScanning() const
  */
 bool BasicScanner::cancelScan()
 {
-    if (!m_isScanning) {
+    if (!m_isScanning && !m_isDirectoryScanActive) {
         return false;
     }
     
-    m_isScanning = false;
-    m_results = tr(StandardText::SCAN_CANCELED);
-    emit scanResultsReady(m_results);
+    bool wasActive = m_isDirectoryScanActive;
+    m_isDirectoryScanActive = false; // Stop processing queue
+    m_isScanning = false; // Reset general flag
+    m_scanQueue.clear();
+    
+    m_results = tr(StandardText::SCAN_CANCELED); // For compatibility with old getResults()
+
+    if (wasActive) {
+        // Emit directoryScanFinished with -1 for threatsFound to indicate cancellation
+        emit directoryScanFinished(m_currentDirectoryPath, m_processedFilesCount, -1);
+    } else {
+        // If it was a single file scan (now also using the queue),
+        // we might need a specific signal or rely on the UI seeing no more fileProcessed signals.
+        // For now, the directoryScanFinished with -1 might be generic enough if scanFile also sets m_currentDirectoryPath.
+        // Let's ensure scanFile sets m_currentDirectoryPath. (Done in scanFile method)
+         if (!m_currentDirectoryPath.isEmpty()){ // Check if a path context was set
+            emit directoryScanFinished(m_currentDirectoryPath, m_processedFilesCount, -1);
+         }
+    }
+    // The old scanResultsReady for single file scan cancellation:
+    // emit scanResultsReady(m_results, false); // Emitting this might be confusing with new signals.
+                                            // Let's rely on directoryScanFinished.
+
+    qDebug() << "Scan canceled. Processed files:" << m_processedFilesCount << "out of" << m_totalFilesToScan;
     return true;
 }
 
@@ -439,8 +592,39 @@ QString BasicScanner::getDefaultErrorMessage(ScannerErrorCode code) const
             return tr("Database query failed");
         case ScannerErrorCode::InvalidInput:
             return tr("Invalid input provided");
-        case ScannerErrorCode::Unknown:
+        case ScannerErrorCode::UnknownError: // Changed from Unknown to UnknownError
         default:
             return tr("Unknown error");
+    }
+}
+
+/**
+ * @brief Processes a single file scan asynchronously
+ * 
+ * This method handles single file scanning directly without using the directory scan queue.
+ * It performs the actual scan and emits the appropriate signals.
+ * 
+ * @param filePath Path to the file to scan
+ */
+void BasicScanner::processSingleFile(const QString& filePath)
+{
+    QString resultString;
+    bool isMalicious = false;
+    
+    // Perform the actual scan
+    ScannerErrorCode errorCode = performSingleFileScan(filePath, resultString, isMalicious);
+    
+    // Store results for getResults() compatibility
+    m_results = resultString;
+    
+    // Reset scanning flag
+    m_isScanning = false;
+    
+    // Emit results
+    if (errorCode == ScannerErrorCode::NoError || errorCode == ScannerErrorCode::MaliciousFileDetected) {
+        emit scanResultsReady(resultString, isMalicious);
+    } else {
+        // Emit error signal for other error types
+        emit scanError(errorCode, getLastErrorMessage());
     }
 }
