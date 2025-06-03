@@ -41,15 +41,17 @@ public:
     SanitizationResult sanitizeFile(const std::string& inputPath, 
                                   const std::string& outputPath, 
                                   const CdrConfiguration& config,
-                                  FileType fileType); // Added fileType parameter
-
-    // File-specific sanitization methods
+                                  FileType fileType); // Added fileType parameter    // File-specific sanitization methods
     SanitizationResult sanitizeOfficeFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizePdfFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeHtmlFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeArchiveFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeScriptFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeImageFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
+
+    // Information methods
+    std::vector<std::string> getAvailableSanitizers() const;
+    std::vector<std::string> getSupportedFileTypes() const;
 
 private:
     std::vector<std::unique_ptr<FileSanitizer>> sanitizers_;

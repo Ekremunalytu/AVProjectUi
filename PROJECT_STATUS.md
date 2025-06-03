@@ -16,7 +16,7 @@ AVProjectUi, öncelikli olarak Windows 10 ve Windows 11 (x64) platformlarını h
     -   macOS için Xcode SDK ve libc++ ayarları yapılmıştır.
     -   C++17 standardı zorunlu kılınmıştır.
     -   Qt çeviri fonksiyonları (`tr()`) devre dışı bırakılarak varsayılan dil İngilizce olarak ayarlanmıştır.
--   **Qt Entegrasyonu:** Qt 6 (spesifik olarak 6.10.0) ile tam entegrasyon sağlanmıştır. (`CMakeLists.txt`)
+-   **Qt Entegrasyonu:** Qt 6 (spesifik olarak 6.9) ile tam entegrasyon sağlanmıştır. (`CMakeLists.txt`)
     -   Gerekli modüller: `Core`, `Widgets`, `Sql`, `Network`, `Test`.
     -   Otomatik `moc`, `uic`, `rcc` işlemleri etkinleştirilmiştir.
 -   **Test Altyapısı:** `CTest` entegrasyonu ile birim testleri ve entegrasyon testleri için altyapı kurulmuştur. (`tests/CMakeLists.txt`, `tests/TestDataFactory.h`)

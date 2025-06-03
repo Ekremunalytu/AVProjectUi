@@ -21,7 +21,7 @@ Bu belge, AVProjectUi projesinin geliştirilmesi, derlenmesi ve çalıştırılm
     -   **macOS:** Clang (Xcode Command Line Tools ile birlikte gelir)
     -   **Genel:** C++17 standardını destekleyen herhangi bir derleyici.
 -   **CMake:** Sürüm 3.19 veya üstü.
--   **Qt Framework:** Sürüm 6.2 veya üstü (Proje şu anda `/Volumes/Crucial/QT/6.10.0/macos` yolundaki Qt 6.10.0 sürümünü kullanmaktadır). Gerekli Qt Modülleri:
+-   **Qt Framework:** Sürüm 6.9. Proje bu sürümü kullanmaktadır. Gerekli Qt Modülleri:
     -   `Core`
     -   `Widgets`
     -   `Sql` (SQLite veritabanı işlemleri için)
@@ -47,7 +47,7 @@ Bu belge, AVProjectUi projesinin geliştirilmesi, derlenmesi ve çalıştırılm
 1.  **C++ Derleyicisi ve CMake Kurulumu:**
     -   **Windows:** Visual Studio (C++ geliştirme araçları ile) ve CMake'i kurun.
     -   **macOS:** Xcode Command Line Tools (`xcode-select --install`) ve CMake'i (örn: Homebrew ile `brew install cmake`) kurun.
-2.  **Qt Framework Kurulumu:** Qt Online Installer kullanarak belirtilen sürümü ve gerekli modülleri kurun. `CMAKE_PREFIX_PATH` ortam değişkenini veya CMake yapılandırmasında Qt kurulum yolunu doğru şekilde ayarlayın. Mevcut macOS geliştirme ortamında bu yol `/Volumes/Crucial/QT/6.10.0/macos` olarak ayarlanmıştır.
+2.  **Qt Framework Kurulumu:** Qt Online Installer kullanarak Qt 6.9 sürümünü ve gerekli modülleri kurun. `CMAKE_PREFIX_PATH` ortam değişkenini veya CMake yapılandırmasında Qt kurulum yolunu doğru şekilde ayarlayın.
 3.  **Depoyu Klonlama:**
     ```bash
     git clone <repository_url>
