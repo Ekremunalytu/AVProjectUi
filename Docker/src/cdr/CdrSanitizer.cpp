@@ -800,8 +800,7 @@ SanitizationResult ScriptAnalyzer::sanitize(const std::string& inputPath,
     SanitizationResult result;
     result.inputPath = inputPath;
     result.outputPath = outputPath; 
-    result.originalSize = FileSanitizer::getFileSize(inputPath);
-    result.fileType = FileType::SCRIPT_FILE;    if (config.securityLevel >= CdrConfiguration::SecurityLevel::STRICT) { 
+    result.originalSize = FileSanitizer::getFileSize(inputPath);    result.fileType = FileType::SCRIPT_FILE;    if (config.securityLevel >= CdrConfiguration::SecurityLevel::VERY_HIGH) { 
         result.success = false;
         result.errorMessage = "Script file quarantined due to strict security policy.";
         result.threatsDetected.push_back("SCRIPT_FILE_TYPE");
@@ -1273,6 +1272,153 @@ bool ImageSanitizer::containsExcessiveMetadata(const std::string& filePath) {
     return detectImageMetadata(filePath);
 }
 
+// ImageSanitizer private method implementations
+bool ImageSanitizer::stripMetadata(const std::string& inputPath, const std::string& outputPath) {
+    try {
+        // For real implementation, would use image processing library like ExifTool, ImageMagick, etc.
+        // For now, basic copy without metadata stripping
+        if (!fs::exists(inputPath)) {
+            return false;
+        }
+        
+        // Real implementation would:
+        // 1. Read image data without metadata sections
+        // 2. Create new image file with just pixel data
+        // 3. Preserve quality while removing EXIF/XMP/IPTC data
+        
+        return copyFile(inputPath, outputPath);
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
+bool ImageSanitizer::sanitizeSVG(const std::string& svgContent, std::string& sanitized) {
+    try {
+        sanitized = svgContent;
+        
+        // Remove script tags from SVG
+        std::regex scriptRegex(R"(<script[^>]*>.*?</script>)", std::regex_constants::icase);
+        sanitized = std::regex_replace(sanitized, scriptRegex, "<!-- script removed -->");
+        
+        // Remove event handlers
+        std::regex eventRegex(R"(\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))", std::regex_constants::icase);
+        sanitized = std::regex_replace(sanitized, eventRegex, "");
+        
+        // Remove javascript: URLs
+        std::regex jsUrlRegex(R"((?:href|xlink:href)\s*=\s*["']?\s*javascript:[^"'>\s]+["']?)", std::regex_constants::icase);
+        sanitized = std::regex_replace(sanitized, jsUrlRegex, "");
+        
+        // Remove foreign object elements that could contain HTML/scripts
+        std::regex foreignObjectRegex(R"(<foreignObject[^>]*>.*?</foreignObject>)", std::regex_constants::icase);
+        sanitized = std::regex_replace(sanitized, foreignObjectRegex, "<!-- foreign object removed -->");
+        
+        return sanitized != svgContent; // Return true if changes were made
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
+bool ImageSanitizer::checkSteganography(const std::string& filePath) {
+    try {
+        std::ifstream file(filePath, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        // Basic steganography detection - look for suspicious patterns
+        // Real implementation would use more sophisticated algorithms
+        
+        // Check file size vs expected size for image dimensions
+        auto fileSize = fs::file_size(filePath);
+        
+        // Read image header to get basic info
+        std::vector<char> header(512);
+        file.read(header.data(), 512);
+        
+        std::string headerStr(header.begin(), header.end());
+        
+        // Look for suspicious trailing data after image end markers
+        if (headerStr.find("JPEG") != std::string::npos || headerStr.find("\xFF\xD8") != std::string::npos) {
+            // For JPEG, check for data after FFD9 end marker
+            file.seekg(-100, std::ios::end);
+            std::vector<char> tail(100);
+            file.read(tail.data(), 100);
+            
+            std::string tailStr(tail.begin(), tail.end());
+            // Look for executable signatures or suspicious strings in tail
+            if (tailStr.find("MZ") != std::string::npos || 
+                tailStr.find("PK") != std::string::npos ||
+                tailStr.find("#!/") != std::string::npos) {
+                return true; // Suspicious trailing data
+            }
+        }
+        
+        // Check for unusual file size ratios that might indicate hidden data
+        if (fileSize > 10 * 1024 * 1024) { // Files over 10MB are suspicious for basic images
+            return true;
+        }
+        
+        return false;
+    } catch (const std::exception& e) {
+        return false; // Assume safe if can't analyze
+    }
+}
+
+bool ImageSanitizer::validateImageStructure(const std::string& filePath) {
+    try {
+        std::ifstream file(filePath, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        // Read file header to validate basic image structure
+        std::vector<char> header(32);
+        file.read(header.data(), 32);
+        
+        std::string headerStr(header.begin(), header.end());
+        
+        // Check for valid image signatures
+        // JPEG
+        if (headerStr.substr(0, 2) == "\xFF\xD8") {
+            return true;
+        }
+        
+        // PNG
+        if (headerStr.substr(0, 8) == "\x89PNG\x0D\x0A\x1A\x0A") {
+            return true;
+        }
+        
+        // GIF
+        if (headerStr.substr(0, 6) == "GIF87a" || headerStr.substr(0, 6) == "GIF89a") {
+            return true;
+        }
+        
+        // BMP
+        if (headerStr.substr(0, 2) == "BM") {
+            return true;
+        }
+        
+        // TIFF
+        if (headerStr.substr(0, 4) == "II*\x00" || headerStr.substr(0, 4) == "MM\x00*") {
+            return true;
+        }
+        
+        // WebP
+        if (headerStr.substr(8, 4) == "WEBP") {
+            return true;
+        }
+        
+        // SVG (XML-based)
+        if (headerStr.find("<?xml") != std::string::npos || headerStr.find("<svg") != std::string::npos) {
+            return true;
+        }
+        
+        return false; // Unknown or invalid format
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
 
 // === CdrSanitizer (Manager Class) Implementation ===
 CdrSanitizer::CdrSanitizer() {
@@ -1295,104 +1441,99 @@ void CdrSanitizer::registerSanitizer(std::unique_ptr<FileSanitizer> sanitizer) {
 SanitizationResult CdrSanitizer::sanitizeFile(const std::string& inputPath, 
                                             const std::string& outputPath, 
                                             const CdrConfiguration& config,
-                                            FileType fileType) { // Added fileType parameter
+                                            FileType fileType) {
     SanitizationResult result;
     result.inputPath = inputPath;
     result.outputPath = outputPath;
-    result.originalPath = inputPath; // Default to inputPath
-    result.sanitizedPath = outputPath; // Default to outputPath
+    result.originalPath = inputPath;
+    result.sanitizedPath = outputPath;
     result.fileType = fileType;
-    // result.originalSize = 0; // Initialize, will be set if file exists
-    // result.sanitizedSize = 0; // Initialize
-    // result.success = false; // Default to false
 
-    // Basic file existence check
+    // Validate input file exists
     if (!fs::exists(inputPath)) {
         result.success = false;
         result.errorMessage = "Input file does not exist: " + inputPath;
         return result;
     }
-    result.originalSize = FileSanitizer::getFileSize(inputPath); // Set original size here
 
-    // Placeholder for actual sanitization logic based on fileType
-    // For now, find the appropriate sanitizer and call its sanitize method.
+    // Validate file type before processing
+    if (fileType == FileType::NOT_SET || fileType == FileType::UNKNOWN_FILE) {
+        // Try to detect file type if not provided or unknown
+        FileType detectedType = detectFileTypeInternal(inputPath);
+        if (detectedType == FileType::UNKNOWN_FILE && !config.allowUnknownTypes) {
+            result.success = false;
+            result.errorMessage = "Unknown file type not allowed by configuration";
+            result.requiresQuarantine = true;
+            result.quarantineReason = "Unknown file type";
+            return result;
+        }
+        fileType = detectedType;
+        result.fileType = fileType;
+    }
+
+    // Validate output directory exists or can be created
+    fs::Path outputPathObj(outputPath);
+    if (!outputPathObj.parent_path().empty() && !fs::exists(outputPathObj.parent_path())) {
+        try {
+            fs::create_directories(outputPathObj.parent_path());
+        } catch (const fs::FilesystemError& e) {
+            result.success = false;
+            result.errorMessage = "Cannot create output directory: " + std::string(e.what());
+            return result;
+        }
+    }
+
+    result.originalSize = FileSanitizer::getFileSize(inputPath);
+
+    // Check file size limits
+    if (result.originalSize > config.maxFileSizeMB * 1024 * 1024) {
+        result.success = false;
+        result.errorMessage = "File size exceeds maximum allowed size";
+        result.requiresQuarantine = true;
+        result.quarantineReason = "File too large";
+        return result;
+    }
+
+    // Find appropriate sanitizer and validate it can handle the file type
     bool handled = false;
     for (const auto& sanitizer : sanitizers_) {
-        if (sanitizer->canHandle(fileType)) {
-            // Call the specific sanitizer's method.
-            // This assumes the individual sanitizers (OfficeSanitizer, PdfSanitizer, etc.)
-            // have a public 'sanitize' method that takes inputPath, outputPath, and config.
-            // The individual sanitize methods should populate the result structure.
-            SanitizationResult specificResult = sanitizer->sanitize(inputPath, outputPath, config);
-            // Copy over the specific result. Be careful about overwriting common fields if they were already set.
-            result = specificResult; // This will overwrite fields like inputPath, outputPath, etc.
-                                     // Ensure specific sanitizers correctly populate all necessary fields.
-            // Ensure common fields are preserved or correctly set by specific sanitizers
-            result.inputPath = inputPath; 
-            result.outputPath = outputPath;
-            result.originalPath = inputPath;
-            result.fileType = fileType; // Ensure fileType is correctly set
-            if (fs::exists(inputPath)) { // Re-check existence for originalSize
-                 result.originalSize = FileSanitizer::getFileSize(inputPath);
+        if (sanitizer && sanitizer->canHandle(fileType)) {
+            try {
+                result = sanitizer->sanitize(inputPath, outputPath, config);
+                handled = true;
+                break;
+            } catch (const std::exception& e) {
+                result.success = false;
+                result.errorMessage = "Sanitization failed: " + std::string(e.what());
+                result.requiresQuarantine = true;
+                result.quarantineReason = "Sanitization error";
+                return result;
             }
-            if (result.success && fs::exists(result.sanitizedPath)) {
-                 result.sanitizedSize = FileSanitizer::getFileSize(result.sanitizedPath);
-                 result.md5Hash = FileSanitizer::calculateMD5(result.sanitizedPath); // Use static call
-            } else if (result.success && result.sanitizedPath.empty() && fs::exists(inputPath)) {
-                // Case: "copied as is" or no modification, output might be same as input
-                // or sanitizedPath might not be explicitly set by a simple sanitizer.
-                // If outputPath was different, this might need adjustment.
-                // For now, if sanitizedPath is empty but success is true, assume input is the 'output'.
-                result.sanitizedPath = inputPath;
-                result.sanitizedSize = result.originalSize;
-                result.md5Hash = FileSanitizer::calculateMD5(inputPath);
-            }
-
-
-            handled = true;
-            break;
         }
     }
 
     if (!handled) {
-        // If no specific sanitizer handles this file type, decide on default behavior.
-        // For example, copy if allowed by config, or mark as unsupported.
-        if (config.allowUnknownTypes) {
-            std::cout << "No specific sanitizer for " << getFileTypeName(fileType) << ", copying file: " << inputPath << std::endl;
-            try {
-                if (inputPath != outputPath) {
-                     fs::copy(inputPath, outputPath);
-                }
-                result.sanitizedPath = outputPath;
-                result.sanitizedSize = FileSanitizer::getFileSize(outputPath);
-                result.md5Hash = FileSanitizer::calculateMD5(outputPath); // Use static call
-                result.success = true;
-                result.actionsPerformed.push_back("File copied (unknown type, allowed by policy)");
-                result.sanitizationDetails = "File type is unknown but allowed; copied without modification.";
-            } catch (const fs::FilesystemError& fs_err) {
-                result.success = false;
-                result.errorMessage = "Filesystem error copying unknown file type: " + std::string(fs_err.what());
-            }
-        } else {
-            result.success = false;
-            result.errorMessage = "Unsupported file type for sanitization: " + getFileTypeName(fileType);
-            result.actionsPerformed.push_back("BLOCKED_UNSUPPORTED_TYPE");
-            result.requiresQuarantine = true; // Potentially quarantine unsupported types
-            result.quarantineReason = "Unsupported file type and not allowed by policy.";
-        }
+        result.success = false;
+        result.errorMessage = "No sanitizer available for file type: " + getFileTypeName(fileType);
+        result.requiresQuarantine = true;
+        result.quarantineReason = "Unsupported file type";
     }
-    
-    // Simulate threat detection and quarantine for specific types if needed for testing (example from before)
-    // This logic should ideally be within the specific sanitizers or based on their results.
-    if (fileType == FileType::SCRIPT_FILE && config.securityLevel >= CdrConfiguration::SecurityLevel::HIGH && !result.requiresQuarantine) {
-        // This is an example override or additional check.
-        // If the ScriptAnalyzer already decided on quarantine, this might be redundant or conflicting.
-        // For now, let's assume this is an additional policy layer.
-        // However, it's better if ScriptAnalyzer itself handles this based on config.securityLevel.
-        // result.threatsDetected.push_back("POTENTIAL_SCRIPT_EXECUTION_HIGH_SECURITY"); // More specific
-        // result.requiresQuarantine = true;
-        // result.quarantineReason = "Script file detected at high security level, policy dictates quarantine.";
-    // result.success = true; // Quarantine can be a 'successful' outcome of a policy.
+
+    // Additional security checks based on configuration
+    if (result.success && config.securityLevel >= CdrConfiguration::SecurityLevel::HIGH) {
+        if (fileType == FileType::SCRIPT_FILE && config.blockAllScripts) {
+            result.success = false;
+            result.errorMessage = "Script files blocked by high security policy";
+            result.requiresQuarantine = true;
+            result.quarantineReason = "Script file blocked by policy";
+        }
+        
+        if (fileType == FileType::EXECUTABLE_FILE && config.blockExecutables) {
+            result.success = false;
+            result.errorMessage = "Executable files blocked by security policy";
+            result.requiresQuarantine = true;
+            result.quarantineReason = "Executable file blocked";
+        }
     }
 
     return result;

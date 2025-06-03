@@ -2,9 +2,15 @@
 #define FILESANITIZER_H
 
 #include "CdrTypes.h"
+#include "FilesystemCompat.h"
 #include <string>
 #include <vector>
 #include <memory>
+#include <fstream>
+#include <iostream>
+
+// Use CDR filesystem compatibility layer
+namespace fs = CDR::FileSystem;
 
 namespace CDR {
 
@@ -42,6 +48,29 @@ public:
      */
     virtual std::vector<std::string> getDetectableThreats() const = 0;
 
+    /**
+     * @brief Validate file before sanitization.
+     * @param filePath Path to the file to validate
+     * @param config Configuration settings
+     * @return true if file is valid for sanitization, false otherwise
+     */
+    virtual bool validateFile(const std::string& filePath, const CdrConfiguration& config) const {
+        // Default implementation - can be overridden by derived classes
+        if (filePath.empty() || !fs::exists(filePath)) return false;
+        
+        try {
+            auto fileSize = fs::file_size(filePath);
+            if (fileSize > static_cast<size_t>(config.maxFileSizeMB * 1024 * 1024)) return false;
+            if (fileSize == 0) return false; // Empty files
+            
+            // Check file readability
+            std::ifstream file(filePath, std::ios::binary);
+            return file.good();
+        } catch (...) {
+            return false;
+        }
+    }
+
     // Public utility methods
     static std::string calculateMD5(const std::string& filePath);
     static long long getFileSize(const std::string& filePath);
@@ -51,6 +80,36 @@ protected:
     static bool copyFile(const std::string& src, const std::string& dst);
     static std::string readFileContent(const std::string& filePath);
     static bool writeFileContent(const std::string& filePath, const std::string& content);
+    
+    /**
+     * @brief Validate output path and create directories if needed.
+     * @param outputPath Path where output should be written
+     * @return true if output path is valid and accessible, false otherwise
+     */
+    static bool validateOutputPath(const std::string& outputPath) {
+        if (outputPath.empty()) return false;
+        
+        try {
+            fs::Path pathObj(outputPath);
+            if (!pathObj.parent_path().empty() && !fs::exists(pathObj.parent_path())) {
+                fs::create_directories(pathObj.parent_path());
+            }
+            
+            // Test write permissions by creating a temporary file
+            std::string testFile = outputPath + ".tmp_test";
+            std::ofstream test(testFile);
+            bool canWrite = test.good();
+            test.close();
+            
+            if (canWrite) {
+                fs::remove(testFile); // Clean up test file
+            }
+            
+            return canWrite;
+        } catch (...) {
+            return false;
+        }
+    }
 };
 
 /**

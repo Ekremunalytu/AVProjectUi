@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <map>
+#include <mutex>
 
 // Forward declaration if DockerManager is used by CdrSanitizer, otherwise remove
 // namespace Docker {
@@ -38,10 +40,36 @@ public:
     ~CdrSanitizer();
 
     void registerSanitizer(std::unique_ptr<FileSanitizer> sanitizer);
+    
+    /**
+     * @brief Sanitize a file with proper validation and error handling.
+     * @param inputPath Path to input file
+     * @param outputPath Path for sanitized output
+     * @param config Sanitization configuration
+     * @param fileType Detected file type
+     * @return SanitizationResult with detailed results
+     */
     SanitizationResult sanitizeFile(const std::string& inputPath, 
                                   const std::string& outputPath, 
                                   const CdrConfiguration& config,
-                                  FileType fileType); // Added fileType parameter    // File-specific sanitization methods
+                                  FileType fileType);
+    
+    /**
+     * @brief Validate file before sanitization.
+     * @param filePath Path to file to validate
+     * @param config Configuration to use for validation
+     * @return true if file is valid for sanitization
+     */
+    bool validateFile(const std::string& filePath, const CdrConfiguration& config) const;
+    
+    /**
+     * @brief Detect and validate file type.
+     * @param filePath Path to file
+     * @return Detected FileType, UNKNOWN_FILE if cannot be determined
+     */
+    static FileType detectAndValidateFileType(const std::string& filePath);
+
+    // File-specific sanitization methods with validation
     SanitizationResult sanitizeOfficeFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizePdfFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeHtmlFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
@@ -52,12 +80,34 @@ public:
     // Information methods
     std::vector<std::string> getAvailableSanitizers() const;
     std::vector<std::string> getSupportedFileTypes() const;
+    
+    /**
+     * @brief Get sanitizer statistics.
+     * @return Map of sanitizer names to usage statistics
+     */
+    std::map<std::string, size_t> getSanitizerStats() const;
 
 private:
     std::vector<std::unique_ptr<FileSanitizer>> sanitizers_;
-    // Potentially add other members like statistics, logging, etc.
-    // SanitizationStats stats_; // Example if you add stats
+    mutable std::mutex stats_mutex_;
+    std::map<std::string, size_t> sanitizer_usage_stats_;
+    
+    /**
+     * @brief Find appropriate sanitizer for file type.
+     * @param fileType Type of file to sanitize
+     * @return Pointer to sanitizer or nullptr if none available
+     */
+    FileSanitizer* findSanitizerForType(FileType fileType) const;
+    
+    /**
+     * @brief Update usage statistics.
+     * @param sanitizerName Name of sanitizer used
+     */    void updateStats(const std::string& sanitizerName);
 };
+
+// Helper functions for file content detection
+bool detectPdfJavaScript(const std::string& filePath);
+bool detectOfficeMacros(const std::string& filePath);
 
 } // namespace CDR
 

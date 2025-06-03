@@ -15,6 +15,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <array>
 
 namespace CDR {
 
@@ -80,30 +81,52 @@ namespace CDR {
         std::string quarantinePath;      // Quarantine path (if suspicious)
         std::string fileName;            // File name
         std::string fileExtension;       // File extension
-        long long originalSize;          // Original file size
-        long long sanitizedSize;         // Sanitized file size
+        long long originalSize = 0;      // Original file size (initialized)
+        long long sanitizedSize = 0;     // Sanitized file size (initialized)
         std::string md5Original;         // Original MD5 hash value
         std::string md5Sanitized;        // Sanitized MD5 hash value
         std::string status;              // Status (clean, sanitized, quarantined, failed, deleted)
-        double threatScore;              // Threat score (0.0-1.0)
+        double threatScore = 0.0;        // Threat score (0.0-1.0) (initialized)
         std::vector<std::string> threatsFound; // Types of threats found
         std::vector<std::string> removedElements; // Removed active elements
-        std::chrono::system_clock::time_point processTime; // Processing time
+        std::chrono::system_clock::time_point processTime = std::chrono::system_clock::now(); // Processing time (initialized)
         std::string processingLog;       // Processing log
         std::string rawScanOutput;       // Raw output from the container scan
         bool isSafe = true;              // Indicates if this specific file is safe
         bool isDeleted = false;          // Indicates if this specific file was deleted
+
+        /**
+         * @brief Get a summary of file processing results.
+         * @return Human-readable summary
+         */
+        std::string getSummary() const {
+            std::string summary = fileName + " (" + std::to_string(originalSize) + " bytes): " + status;
+            if (!isSafe) {
+                summary += " - Threat Score: " + std::to_string(threatScore);
+            }
+            if (threatsFound.size() > 0) {
+                summary += " - Threats: " + std::to_string(threatsFound.size());
+            }
+            return summary;
+        }
+
+        /**
+         * @brief Validate file info structure.
+         * @return true if all required fields are properly set
+         */
+        bool isValid() const {
+            return !originalPath.empty() && !fileName.empty() && !status.empty() && originalSize >= 0;
+        }
     };
 
-    // CDR Manager class
-    class CdrManager {
+    // CDR Manager class - inherits from Docker::DockerManager
+    class CdrManager : public Docker::DockerManager {
     private:
-        std::unique_ptr<Docker::DockerManager> dockerManager;
-        std::string cdrContainerImage;       // Docker image to be used for CDR operations
-        std::string sandboxContainerImage;   // Docker image to be used for Sandbox operations
-        std::map<std::string, CdrAnalysisResult> activeAnalyses; // Active analyses
-        mutable std::mutex analysesMutex;    // Mutex for thread-safe access to activeAnalyses
-        mutable std::mutex containerMutex_;  // Mutex for thread-safe container operations
+        std::string cdrContainerImage;
+        std::string sandboxContainerImage;
+        std::map<std::string, CdrAnalysisResult> activeAnalyses;
+        mutable std::mutex analysesMutex;
+        mutable std::mutex containerMutex_;
         std::map<std::string, std::thread> activeAnalysesThreads_;
         std::atomic<bool> keepThreadsJoined_;
 
@@ -111,26 +134,28 @@ namespace CDR {
         std::string generateAnalysisId() const;
         std::string prepareCdrContainer(const CdrConfiguration& config);
         std::string prepareSandboxContainer();
-        void copyFileToContainer(const std::string& containerId,
-                                const std::string& hostPath,
-                                const std::string& containerPath);
-        void copyFileFromContainer(const std::string& containerId,
-                                  const std::string& containerPath,
-                                  const std::string& hostPath);
         std::vector<SanitizedFileInfo> parseSanitizationResults(const std::string& resultsPath);
         bool scanFileForActiveContent(const std::string& filePath,
                                     std::vector<std::string>& threats);
         bool removeActiveContent(const std::string& inputPath,
                                const std::string& outputPath,
                                const std::vector<std::string>& elementsToRemove);
-        static FileType detectFileTypeByContent(const std::string& filePath); // Made static
-        static bool validateExecutableFile(const std::string& filePath); // Made static
+        static bool validateExecutableFile(const std::string& filePath);
+        void copyFileToContainer(const std::string& containerId, 
+                               const std::string& hostPath, 
+                               const std::string& containerPath);
+        void copyFileFromContainer(const std::string& containerId, 
+                                 const std::string& containerPath, 
+                                 const std::string& hostPath);
 
     public:
         // Constructor & Destructor
         CdrManager();
         explicit CdrManager(std::unique_ptr<Docker::DockerManager> dockerMgr);
         ~CdrManager();
+
+        // Override detectFileTypeByContent as public method
+        static FileType detectFileTypeByContent(const std::string& filePath);
 
         // Basic CDR operations (Content Detection & Remediation)
         std::string startAnalysis(const std::string& directoryPath,

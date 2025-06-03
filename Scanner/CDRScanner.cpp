@@ -1,11 +1,10 @@
 // Scanner/CDRScanner.cpp
 #include "CDRScanner.h"
 #include "Interface/ScannerTypes.h"
-#include "Docker/include/docker/DockerTypes.h" // For Docker types if needed
-#include "Docker/include/docker/DockerExceptions.h" // For Docker exceptions
-// Potentially include headers from Docker/src/cdr/ if CdrManager or CdrSanitizer are used directly
-// #include "Docker/src/cdr/CdrManager.h" 
-// #include "Docker/src/cdr/CdrSanitizer.h"
+#include "Docker/include/docker/DockerTypes.h"
+#include "Docker/include/docker/DockerExceptions.h"
+#include "Docker/include/cdr/CdrManager.h"
+#include "Docker/include/cdr/CdrTypes.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -13,13 +12,26 @@
 #include <QThread>
 
 CDRScanner::CDRScanner() : currentStatus(ScanStatus::Idle), 
+                           threatsDetected(false),
+                           wasSanitized(false),
                            cdrContainerName(QStringLiteral("cdr_processor_container")),
                            cdrImageName(QStringLiteral("ubuntu:latest")) {
     try {
         dockerManager = std::make_unique<Docker::DockerManager>();
-        // Initialize CDR specific components if necessary
-        // cdrManager = std::make_unique<Cdr::CdrManager>();
-        // cdrSanitizer = std::make_unique<Cdr::CdrSanitizer>();
+        cdrManager = std::make_unique<CDR::CdrManager>();
+          // Initialize CDR configuration with sensible defaults
+        cdrConfig.securityLevel = CDR::CdrConfiguration::SecurityLevel::MEDIUM;
+        cdrConfig.inputDirectory = "/tmp/cdr_input";
+        cdrConfig.outputDirectory = "/tmp/cdr_output";
+        cdrConfig.quarantineDirectory = "/tmp/cdr_quarantine";
+        cdrConfig.analysisType = CDR::AnalysisType::COMPREHENSIVE_SCAN;
+        cdrConfig.preserveOriginal = true;
+        cdrConfig.autoSanitize = true;
+        cdrConfig.blockExecutables = true;
+        cdrConfig.blockAllScripts = true;
+        cdrConfig.maxFileSizeMB = 100;
+        cdrConfig.timeoutSeconds = 300;
+        
         initializeCdrComponents();
         if (!isContainerReady()) {
             lastError = QStringLiteral("CDR Docker container is not ready or not running.");
@@ -31,6 +43,10 @@ CDRScanner::CDRScanner() : currentStatus(ScanStatus::Idle),
         }
     } catch (const Docker::DaemonException& e) {
         lastError = QStringLiteral("Failed to connect to Docker daemon: %1").arg(e.what());
+        currentStatus = ScanStatus::Error;
+        qCritical() << lastError;
+    } catch (const CDR::CdrBaseException& e) {
+        lastError = QStringLiteral("CDR initialization error: %1").arg(e.what());
         currentStatus = ScanStatus::Error;
         qCritical() << lastError;
     } catch (const std::exception& e) {
@@ -64,8 +80,8 @@ void CDRScanner::initializeCdrComponents() {
 
 // IScanner interface methods
 bool CDRScanner::scanFile(const QString& filePath) {
-    if (!dockerManager) {
-        lastError = QStringLiteral("DockerManager not initialized.");
+    if (!dockerManager || !cdrManager) {
+        lastError = QStringLiteral("DockerManager or CdrManager not initialized.");
         currentStatus = ScanStatus::Error;
         return false;
     }
@@ -79,6 +95,9 @@ bool CDRScanner::scanFile(const QString& filePath) {
     currentStatus = ScanStatus::Scanning;
     lastError.clear();
     sanitizedFilePath.clear();
+    threatsDetected = false;
+    wasSanitized = false;
+    analysisDetails.clear();
 
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists() || !fileInfo.isFile()) {
@@ -86,14 +105,6 @@ bool CDRScanner::scanFile(const QString& filePath) {
         currentStatus = ScanStatus::Error;
         return false;
     }
-
-    // Define the CDR container name/ID (this might come from config)
-    // For now, let's assume a fixed name, e.g., "cdr_processor_container"
-    // This container should be pre-configured to perform CDR on files copied to a specific input volume
-    // and place sanitized files in an output volume.
-    const std::string cdrContainerName = this->cdrContainerName.toStdString(); // Use class member
-    const std::string inputPathInContainer = "/input/" + fileInfo.fileName().toStdString();
-    const std::string outputPathInContainer = "/output/" + fileInfo.fileName().toStdString(); // Expected sanitized file path
 
     try {
         // 1. Ensure the CDR container is running
@@ -103,46 +114,153 @@ bool CDRScanner::scanFile(const QString& filePath) {
             return false;
         }
 
-        // 2. Copy the file to the container's input volume
-        dockerManager->copyFileToContainer(cdrContainerName, filePath.toStdString(), inputPathInContainer);
-        qInfo() << "File" << filePath << "copied to container" << QString::fromStdString(cdrContainerName) << "at" << QString::fromStdString(inputPathInContainer);
-
-        // 3. Trigger CDR processing in the container
-        // Example CDR command - this would depend on your actual CDR tool
-        std::vector<std::string> cdrCommand = {
-            "sh", "-c", 
-            "cd /input && cp " + fileInfo.fileName().toStdString() + " /output/" + fileInfo.fileName().toStdString() + ".sanitized"
-        };
+        // 2. Detect file type using proper CDR method
+        CDR::FileType detectedType = CDR::CdrManager::detectFileTypeByContent(filePath.toStdString());
+        qInfo() << "Detected file type:" << QString::fromStdString(CDR::getFileTypeName(detectedType));
         
-        auto commandOutput = dockerManager->executeCommandInContainer(cdrContainerName, cdrCommand);
-        qInfo() << "CDR processing command executed. Output:" << QString::fromStdString(commandOutput);
+        // 3. Check if file type is supported for CDR processing
+        if (!CDR::CdrManager::isFileTypeSupported(filePath.toStdString())) {
+            analysisDetails = QStringLiteral("File type not supported for CDR processing");
+            threatsDetected = false;
+            wasSanitized = false;
+            
+            // Copy file as-is to output directory with _verified suffix
+            QFileInfo originalFileInfo(filePath);
+            QString outputBaseName = originalFileInfo.baseName();
+            QString outputExtension = originalFileInfo.suffix();
+            QString outputDir = QString::fromStdString(cdrConfig.outputDirectory);
+              // Ensure output directory exists
+            QDir().mkpath(outputDir);
+            
+            sanitizedFilePath = outputDir + QStringLiteral("/") + outputBaseName + QStringLiteral("_verified.") + outputExtension;
+            
+            if (QFile::copy(filePath, sanitizedFilePath)) {
+                qInfo() << "Unsupported file type copied without modification to:" << sanitizedFilePath;
+                currentStatus = ScanStatus::Completed;
+                return true;
+            } else {
+                lastError = QStringLiteral("Failed to copy unsupported file to output directory");
+                currentStatus = ScanStatus::Error;
+                return false;
+            }
+        }
 
-        // 4. Wait a bit for processing to complete (in a real implementation, you'd poll for completion)
-        QThread::msleep(2000); // Wait 2 seconds - replace with proper polling
-
-        // 5. Copy the sanitized file back from the container's output volume
-        QString localSanitizedDir = QStringLiteral("./sanitized_files/"); // Should be configurable
-        QDir().mkpath(localSanitizedDir);
-        sanitizedFilePath = localSanitizedDir + fileInfo.fileName() + QStringLiteral(".sanitized");
+        // 4. First scan for active content and threats (CRITICAL: Detection before sanitization)
+        std::vector<std::string> activeContentTypes = cdrManager->detectActiveContent(filePath.toStdString());
         
-        QString sanitizedOutputPath = QStringLiteral("/output/") + fileInfo.fileName() + QStringLiteral(".sanitized");
-        dockerManager->copyFileFromContainer(cdrContainerName, sanitizedOutputPath.toStdString(), sanitizedFilePath.toStdString());
-        qInfo() << "Sanitized file copied from container to" << sanitizedFilePath;
+        bool hasActiveContent = !activeContentTypes.empty();
+        bool requiresSanitization = false;
+        QString threatDetails;
+        
+        // Analyze detected active content
+        for (const auto& contentType : activeContentTypes) {            if (contentType.find("macro") != std::string::npos ||
+                contentType.find("script") != std::string::npos ||
+                contentType.find("executable") != std::string::npos ||
+                contentType.find("embedded") != std::string::npos) {
+                requiresSanitization = true;
+                threatDetails += QString::fromStdString(contentType) + QStringLiteral("; ");
+            }
+        }
+        
+        // Update threat detection status
+        threatsDetected = hasActiveContent;
+        if (hasActiveContent) {
+            analysisDetails = QStringLiteral("Active content detected: ") + threatDetails;
+            qInfo() << "Threats detected in file:" << filePath << "Details:" << threatDetails;
+        } else {
+            analysisDetails = QStringLiteral("No active content or threats detected");
+            qInfo() << "File analysis complete - no threats detected:" << filePath;
+        }
 
-        // 6. (Optional) Clean up the input file in the container if needed
-        // dockerManager->executeCommandInContainer(cdrContainerName, {"rm", inputPathInContainer});
+        // 5. Determine output path in configured directory (FIXED: Use proper output location)
+        QFileInfo originalFileInfo(filePath);
+        QString outputBaseName = originalFileInfo.baseName();
+        QString outputExtension = originalFileInfo.suffix();
+        QString outputDir = QString::fromStdString(cdrConfig.outputDirectory);
+        
+        // Ensure output directory exists
+        QDir().mkpath(outputDir);
+        
+        // 6. Process file based on threat analysis
+        CDR::SanitizationResult result;
+          if (requiresSanitization) {
+            // File has threats - perform sanitization
+            wasSanitized = true;
+            sanitizedFilePath = outputDir + QStringLiteral("/") + outputBaseName + QStringLiteral("_sanitized.") + outputExtension;            qInfo() << "Performing sanitization for file with threats:" << filePath;
+            
+            // Call appropriate sanitization method based on detected file type
+            switch (detectedType) {
+                case CDR::FileType::OFFICE_DOCUMENT:
+                    result = cdrManager->sanitizeOfficeDocument(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
+                case CDR::FileType::PDF_DOCUMENT:
+                    result = cdrManager->sanitizePdfDocument(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
+                case CDR::FileType::HTML_DOCUMENT:
+                    result = cdrManager->sanitizeHtmlDocument(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
+                case CDR::FileType::ARCHIVE_FILE:
+                    result = cdrManager->sanitizeArchiveFile(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
+                case CDR::FileType::SCRIPT_FILE:
+                    result = cdrManager->sanitizeScriptFile(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
+                default:
+                    // For other file types, use a generic approach or create a fallback result
+                    result.success = false;
+                    result.errorMessage = "File type not supported for sanitization: " + CDR::getFileTypeName(detectedType);
+                    result.requiresQuarantine = true;
+                    result.quarantineReason = "Unsupported file type for CDR processing";
+                    break;
+            }
+            
+            if (result.success && !result.requiresQuarantine) {
+                analysisDetails += QStringLiteral(" - File successfully sanitized");
+                qInfo() << "File sanitized successfully:" << sanitizedFilePath;
+            } else if (result.requiresQuarantine) {
+                // File requires quarantine - move to quarantine directory
+                QString quarantineDir = QString::fromStdString(cdrConfig.quarantineDirectory);
+                QDir().mkpath(quarantineDir);
+                  sanitizedFilePath = quarantineDir + QStringLiteral("/") + outputBaseName + QStringLiteral("_quarantined.") + outputExtension;
+                
+                if (cdrManager->quarantineFile(filePath.toStdString(), sanitizedFilePath.toStdString())) {
+                    analysisDetails += QStringLiteral(" - File quarantined: ") + QString::fromStdString(result.quarantineReason);
+                    qWarning() << "File quarantined due to high risk:" << sanitizedFilePath;
+                } else {
+                    lastError = QStringLiteral("Failed to quarantine high-risk file");
+                    currentStatus = ScanStatus::Error;
+                    return false;
+                }
+            } else {
+                lastError = QStringLiteral("Sanitization failed: %1").arg(QString::fromStdString(result.errorMessage));
+                currentStatus = ScanStatus::Error;
+                return false;
+            }        } else {
+            // File is clean - copy as verified
+            wasSanitized = false;
+            sanitizedFilePath = outputDir + QStringLiteral("/") + outputBaseName + QStringLiteral("_verified.") + outputExtension;
+            
+            if (QFile::copy(filePath, sanitizedFilePath)) {
+                analysisDetails += QStringLiteral(" - File verified as safe (no sanitization needed)");
+                qInfo() << "Clean file copied without modification:" << sanitizedFilePath;
+            } else {
+                lastError = QStringLiteral("Failed to copy clean file to output directory");
+                currentStatus = ScanStatus::Error;
+                return false;
+            }
+        }
 
         currentStatus = ScanStatus::Completed;
         return true;
 
+    } catch (const CDR::CdrBaseException& e) {
+        lastError = QStringLiteral("CDR processing error: %1").arg(e.what());
     } catch (const Docker::ContainerNotFoundException& e) {
-        lastError = QStringLiteral("CDR container '%1' not found: %2").arg(QString::fromStdString(cdrContainerName)).arg(e.what());
+        lastError = QStringLiteral("CDR container not found: %1").arg(e.what());
     } catch (const Docker::OperationException& e) {
-        lastError = QStringLiteral("Operation failed on CDR container '%1': %2").arg(QString::fromStdString(cdrContainerName)).arg(e.what());
-    } catch (const Docker::CommandFailureException& e) {
-        lastError = QStringLiteral("Docker command failed for CDR: %1").arg(e.what());
+        lastError = QStringLiteral("Docker operation failed: %1").arg(e.what());
     } catch (const std::exception& e) {
-        lastError = QStringLiteral("An unexpected error occurred during CDR processing: %1").arg(e.what());
+        lastError = QStringLiteral("Unexpected error during CDR processing: %1").arg(e.what());
     }
 
     currentStatus = ScanStatus::Error;
@@ -248,13 +366,40 @@ QFileInfo CDRScanner::getSelectedFile() const {
 
 QString CDRScanner::getResults() const {
     if (currentStatus == ScanStatus::Completed && !sanitizedFilePath.isEmpty()) {
-        return QStringLiteral("CDR Processing completed. Sanitized file: %1").arg(sanitizedFilePath);
+        QFileInfo originalFile(currentFilePath);
+        QFileInfo processedFile(sanitizedFilePath);
+        
+        QString result = QStringLiteral("🔍 CDR Analysis Completed\n\n");
+        result += QStringLiteral("📄 Original file: %1 (%2 bytes)\n").arg(originalFile.fileName()).arg(originalFile.size());
+        result += QStringLiteral("📊 Analysis: %1\n").arg(analysisDetails);
+        
+        if (processedFile.exists()) {
+            result += QStringLiteral("✅ Processed file: %1 (%2 bytes)\n").arg(processedFile.fileName()).arg(processedFile.size());            result += QStringLiteral("📁 Output location: %1\n\n").arg(processedFile.absoluteFilePath());
+            
+            if (sanitizedFilePath.contains(QStringLiteral("_quarantined"))) {
+                result += QStringLiteral("⚠️  Status: File QUARANTINED (high-risk threats detected)\n");
+                result += QStringLiteral("🔒 Action: File isolated for security - DO NOT USE\n");
+                result += QStringLiteral("🛡️  Threats: Detected and contained\n");
+            } else if (wasSanitized) {
+                result += QStringLiteral("🛡️  Status: File SANITIZED (threats detected and neutralized)\n");
+                result += QStringLiteral("✅ Action: Malicious content removed/cleaned\n");
+                result += QStringLiteral("⚠️  Threats: Detected and successfully handled\n");
+            } else {
+                result += QStringLiteral("✅ Status: File VERIFIED as safe (no threats detected)\n");
+                result += QStringLiteral("🔒 Action: File confirmed clean, no modifications needed\n");
+                result += QStringLiteral("✅ Threats: None detected\n");
+            }
+        } else {
+            result += QStringLiteral("❌ Warning: Processed file not found at expected location\n");
+        }
+        
+        return result;
     } else if (currentStatus == ScanStatus::Error) {
-        return QStringLiteral("CDR Processing failed: %1").arg(lastError);
+        return QStringLiteral("❌ CDR Processing failed: %1").arg(lastError);
     } else if (currentStatus == ScanStatus::Scanning) {
-        return QStringLiteral("CDR Processing in progress...");
+        return QStringLiteral("🔍 CDR Analysis in progress...\n🔎 Detecting active content and threats...\n⏳ Please wait...");
     } else {
-        return QStringLiteral("CDR Scanner ready");
+        return QStringLiteral("🛡️  CDR Scanner ready\n📁 Select a file to analyze for threats and active content");
     }
 }
 

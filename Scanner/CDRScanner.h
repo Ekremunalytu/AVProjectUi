@@ -9,11 +9,9 @@
 #include <memory> // For std::unique_ptr
 #include <QFileInfo>
 
-// Forward declarations for CDR specific classes if their headers are not included directly
-// namespace Cdr {
-// class CdrManager; 
-// class CdrSanitizer;
-// }
+// Include CDR specific headers
+#include "Docker/include/cdr/CdrManager.h"
+#include "Docker/include/cdr/CdrTypes.h"
 
 class CDRScanner : public IDockerScanner {
 public:
@@ -36,22 +34,36 @@ public:
     // IDockerScanner interface methods
     bool submitToContainer(const QString& containerName) override;
     bool isContainerReady() const override;
-    QString getContainerStatus() const override;
-
-    // CDRScanner specific methods
-    QString getSanitizedFilePath() const; // Example method to get the path of the sanitized file
+    QString getContainerStatus() const override;    // CDRScanner specific methods
+    QString getSanitizedFilePath() const; // Get the path of the processed file
+    bool getThreatsDetected() const { return threatsDetected; }
+    bool getWasSanitized() const { return wasSanitized; }
+    QString getAnalysisDetails() const { return analysisDetails; }
+    
+    // CDR configuration methods
+    void setCdrConfiguration(const CDR::CdrConfiguration& config) { cdrConfig = config; }
+    CDR::CdrConfiguration getCdrConfiguration() const { return cdrConfig; }
+    void setOutputDirectory(const QString& outputDir) { cdrConfig.outputDirectory = outputDir.toStdString(); }
+    void setQuarantineDirectory(const QString& quarantineDir) { cdrConfig.quarantineDirectory = quarantineDir.toStdString(); }
 
 private:
     std::unique_ptr<Docker::DockerManager> dockerManager;
-    // std::unique_ptr<Cdr::CdrManager> cdrManager; // If CdrManager is used
-    // std::unique_ptr<Cdr::CdrSanitizer> cdrSanitizer; // If CdrSanitizer is used
+    std::unique_ptr<CDR::CdrManager> cdrManager; // CDR manager for proper CDR operations
     
     QString currentFilePath;
     QString lastError;
-        ScanStatus currentStatus;
+    ScanStatus currentStatus;
     QString sanitizedFilePath; // Store path to the sanitized file
     QString cdrContainerName;
     QString cdrImageName;
+    
+    // CDR configuration
+    CDR::CdrConfiguration cdrConfig;
+    
+    // CDR analysis results
+    bool threatsDetected = false;
+    bool wasSanitized = false;
+    QString analysisDetails;
     
     // Helper methods
     void initializeCdrComponents();

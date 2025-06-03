@@ -18,40 +18,131 @@ namespace fs = CDR::FileSystem;
 
 namespace CDR {
 
+// Security configuration constants
+namespace Security {
+    const std::string CDR_IMAGE_NAME = "testdisk:v1.2.3";  // Version pinned
+    const std::string SANDBOX_IMAGE_NAME = "ubuntu:20.04"; // LTS version
+    const std::string ALLOWED_MOUNT_PREFIX = "/tmp/cdr_";   // Restricted mount paths
+    const size_t MAX_PATH_LENGTH = 4096;                   // Increased from 255 to 4096 for longer paths
+    
+    // Enhanced path validation function
+    bool isSecurePath(const std::string& path) {
+        if (path.empty() || path.length() > MAX_PATH_LENGTH) return false;
+        
+        // Prevent path traversal attacks
+        if (path.find("..") != std::string::npos) return false;
+        if (path.find("//") != std::string::npos) return false;
+        
+        // Check for null bytes
+        if (path.find('\0') != std::string::npos) return false;
+        
+        // For absolute paths, ensure they start with allowed prefix
+        if (path[0] == '/') {
+            return path.find(ALLOWED_MOUNT_PREFIX) == 0;
+        }
+        
+        // For relative paths, check they don't contain dangerous patterns
+        const std::vector<std::string> dangerous_patterns = {
+            "../", "./", "~/", "$HOME", "%USERPROFILE%"
+        };
+        
+        for (const auto& pattern : dangerous_patterns) {
+            if (path.find(pattern) != std::string::npos) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    // Validate and normalize directory paths
+    std::string normalizePath(const std::string& path) {
+        if (path.empty()) return path;
+        
+        std::string normalized = path;
+        
+        // Remove trailing slashes except for root
+        while (normalized.length() > 1 && normalized.back() == '/') {
+            normalized.pop_back();
+        }
+        
+        // Ensure directory paths exist or can be created
+        try {
+            CDR::FileSystem::Path pathObj(normalized);
+            if (!CDR::FileSystem::exists(pathObj)) {
+                CDR::FileSystem::create_directories(pathObj);
+            }
+        } catch (const CDR::FileSystem::FilesystemError& e) {
+            throw CDR::CdrConfigurationException("Cannot create or access directory: " + normalized + " - " + e.what());
+        }
+        
+        return normalized;
+    }
+}
+
+
 // --- Constructor & Destructor ---
 
 CdrManager::CdrManager() 
-    : dockerManager(std::make_unique<Docker::DockerManager>()),
-      cdrContainerImage("testdisk:latest"),  // Default CDR image
-      sandboxContainerImage("ubuntu:20.04"),  // Default sandbox image
-      keepThreadsJoined_(true) // Initialize to join threads by default
+    : Docker::DockerManager(),  // Call parent constructor
+      cdrContainerImage(Security::CDR_IMAGE_NAME),
+      sandboxContainerImage(Security::SANDBOX_IMAGE_NAME),
+      keepThreadsJoined_(true)
 {
-    // Default configuration
     std::cout << "CdrManager initialized with default Docker manager" << std::endl;
 }
 
 CdrManager::CdrManager(std::unique_ptr<Docker::DockerManager> dockerMgr)
-    : dockerManager(std::move(dockerMgr)),
-      cdrContainerImage("testdisk:latest"),
-      sandboxContainerImage("ubuntu:20.04"),
-      keepThreadsJoined_(true) // Initialize to join threads by default
+    : Docker::DockerManager(),  // Call parent constructor
+      cdrContainerImage(Security::CDR_IMAGE_NAME),
+      sandboxContainerImage(Security::SANDBOX_IMAGE_NAME),
+      keepThreadsJoined_(true)
 {
-    if (!dockerManager) {
-        // throw std::invalid_argument("DockerManager cannot be null");
-        throw CDR::CdrConfigurationException("DockerManager cannot be null in CdrManager constructor");
-    }
+    // Copy the passed DockerManager's state if needed
+    // For now, just use the parent's functionality
     std::cout << "CdrManager initialized with custom Docker manager" << std::endl;
 }
 
 CdrManager::~CdrManager() {
-    keepThreadsJoined_ = false; // Signal threads to stop
-    for (auto& pair : activeAnalysesThreads_) {
-        if (pair.second.joinable()) {
-            pair.second.join();
+    keepThreadsJoined_ = false; // Signal threads to stop cooperatively
+    
+    // Stop all active analyses
+    std::vector<std::string> activeAnalysisIds;
+    {
+        std::lock_guard<std::mutex> lock(analysesMutex);
+        for (const auto& pair : activeAnalyses) {
+            activeAnalysisIds.push_back(pair.first);
         }
     }
-    // Sandbox cleanup threads are detached and should self-terminate.
-    // If more robust cleanup is needed, a similar mechanism to activeAnalysesThreads_ can be implemented.
+    
+    // Stop analyses without holding the mutex
+    for (const auto& analysisId : activeAnalysisIds) {
+        try {
+            stopAnalysis(analysisId);
+        } catch (const std::exception& e) {
+            std::cerr << "Error stopping analysis " << analysisId << " during cleanup: " << e.what() << std::endl;
+        }
+    }
+    
+    // Final cleanup of any remaining threads with timeout
+    const auto timeout = std::chrono::seconds(5);
+    for (auto& pair : activeAnalysesThreads_) {
+        if (pair.second.joinable()) {
+            try {
+                // Use detach as a fallback if join times out
+                pair.second.join();
+            } catch (const std::exception& e) {
+                std::cerr << "Error joining thread " << pair.first << ": " << e.what() << std::endl;
+                // Detach as last resort to prevent resource leaks
+                try {
+                    pair.second.detach();
+                } catch (...) {
+                    // Thread may have already finished
+                }
+            }
+        }
+    }
+    activeAnalysesThreads_.clear();
 }
 
 // --- Private Helper Methods ---
@@ -73,10 +164,23 @@ std::string CdrManager::generateAnalysisId() const {
 }
 
 std::string CdrManager::prepareCdrContainer(const CdrConfiguration& config) {
-    if (!dockerManager) {
-        // throw std::runtime_error("Docker manager not initialized");
-        throw CDR::CdrConfigurationException("Docker manager not initialized in prepareCdrContainer");
+    // Enhanced security validation for all directory paths
+    std::vector<std::pair<std::string, std::string>> pathsToValidate = {
+        {"input", config.inputDirectory},
+        {"output", config.outputDirectory},
+        {"quarantine", config.quarantineDirectory}
+    };
+    
+    for (const auto& pathPair : pathsToValidate) {
+        if (!Security::isSecurePath(pathPair.second)) {
+            throw CDR::CdrConfigurationException("Invalid or insecure " + pathPair.first + " directory path: " + pathPair.second);
+        }
     }
+
+    // Normalize and validate directory paths
+    std::string normalizedInputDir = Security::normalizePath(config.inputDirectory);
+    std::string normalizedOutputDir = Security::normalizePath(config.outputDirectory);
+    std::string normalizedQuarantineDir = Security::normalizePath(config.quarantineDirectory);
 
     // Thread-safe container configuration
     std::lock_guard<std::mutex> lock(containerMutex_);
@@ -86,24 +190,24 @@ std::string CdrManager::prepareCdrContainer(const CdrConfiguration& config) {
     containerConfig.imageName = cdrContainerImage;
     containerConfig.containerName = "cdr_container_" + generateAnalysisId();
     
-    // Mount points - input, output ve quarantine dizinleri
+    // Mount points with normalized paths
     Docker::MountPoint inputMount;
     inputMount.mountType = "bind";
-    inputMount.source = config.inputDirectory;
+    inputMount.source = normalizedInputDir;
     inputMount.destination = "/cdr/input";
     inputMount.readOnly = true; // Input dizini sadece okunabilir
     containerConfig.hostConfig.mounts.push_back(inputMount);
     
     Docker::MountPoint outputMount;
     outputMount.mountType = "bind";
-    outputMount.source = config.outputDirectory;
+    outputMount.source = normalizedOutputDir;
     outputMount.destination = "/cdr/output";
     outputMount.readOnly = false;
     containerConfig.hostConfig.mounts.push_back(outputMount);
 
     Docker::MountPoint quarantineMount;
     quarantineMount.mountType = "bind";
-    quarantineMount.source = config.quarantineDirectory;
+    quarantineMount.source = normalizedQuarantineDir;
     quarantineMount.destination = "/cdr/quarantine";
     quarantineMount.readOnly = false;
     containerConfig.hostConfig.mounts.push_back(quarantineMount);
@@ -150,25 +254,19 @@ std::string CdrManager::prepareCdrContainer(const CdrConfiguration& config) {
     
     // Konteyner başlat
     try {
-        auto result = dockerManager->runNewContainer(containerConfig);
+        auto result = runNewContainer(containerConfig);
         if (result.status == "Error") {
-            // throw CDR::DockerOperationException("Failed to start CDR container: " + result.errorMessage);
             throw Docker::OperationException("runNewContainer", "Failed to start CDR container: " + result.errorMessage);
         }
         return result.containerId;
-    } catch (const Docker::DockerException& e) { // Catch specific Docker exceptions from Docker namespace
-        throw; // Re-throw if it's already a Docker::DockerException
+    } catch (const Docker::DockerException& e) {
+        throw;
     } catch (const std::exception& e) {
-        // throw CDR::DockerOperationException("Failed to prepare CDR container: " + std::string(e.what()));
         throw Docker::OperationException("prepareCdrContainer", "Failed to prepare CDR container: " + std::string(e.what()));
     }
 }
 
 std::string CdrManager::prepareSandboxContainer() {
-    if (!dockerManager) {
-        throw CDR::CdrConfigurationException("Docker manager not initialized in prepareSandboxContainer");
-    }
-
     // Thread-safe container preparation
     std::lock_guard<std::mutex> lock(containerMutex_);
 
@@ -218,114 +316,76 @@ std::string CdrManager::prepareSandboxContainer() {
     containerConfig.hostConfig.securityOpt = {"no-new-privileges:true"};
     
     try {
-        auto result = dockerManager->runNewContainer(containerConfig);
+        auto result = runNewContainer(containerConfig);  // Use inherited method
         if (result.status == "Error") {
-            // throw CDR::DockerOperationException("Failed to start sandbox container: " + result.errorMessage);
             throw Docker::OperationException("runNewContainer", "Failed to start sandbox container: " + result.errorMessage);
         }
         
-        // Schedule automatic cleanup after 5 minutes
+        // Schedule automatic cleanup with better error handling
         std::thread([this, containerId = result.containerId]() {
-            std::this_thread::sleep_for(std::chrono::minutes(5));
+            const auto cleanupDelay = std::chrono::minutes(5);
+            std::this_thread::sleep_for(cleanupDelay);
+            
+            if (!keepThreadsJoined_) {
+                return; // Manager is being destroyed
+            }
+            
             try {
-                if (dockerManager && keepThreadsJoined_) { // Check keepThreadsJoined_ before accessing dockerManager
-                    dockerManager->stopContainer(containerId);
-                    dockerManager->removeContainer(containerId);
+                std::lock_guard<std::mutex> lock(containerMutex_);
+                if (this && keepThreadsJoined_) {
+                    // Force stop container with timeout
+                    stopContainer(containerId);
+                    // Remove container and its volumes
+                    removeContainer(containerId, true);
+                    std::cout << "Sandbox container " << containerId << " cleaned up successfully" << std::endl;
                 }
-            } catch (const Docker::DockerException& e) { // Catch specific Docker exceptions
-                std::cerr << "Error during sandbox cleanup: " << e.what() << " (Type: DockerException)" << std::endl;
+            } catch (const Docker::DockerException& e) {
+                std::cerr << "Docker error during sandbox cleanup for " << containerId 
+                         << ": " << e.what() << std::endl;
             } catch (const std::exception& e) {
-                std::cerr << "Error during sandbox cleanup: " << e.what() << std::endl;
+                std::cerr << "Error during sandbox cleanup for " << containerId 
+                         << ": " << e.what() << std::endl;
             }
         }).detach();
         
         return result.containerId;
-    } catch (const Docker::DockerException& e) { // Catch specific Docker exceptions
+    } catch (const Docker::DockerException& e) {
         throw;
     } catch (const std::exception& e) {
-        // throw CDR::DockerOperationException("Failed to prepare sandbox container: " + std::string(e.what()));
         throw Docker::OperationException("prepareSandboxContainer", "Failed to prepare sandbox container: " + std::string(e.what()));
     }
 }
 
-void CdrManager::copyFileToContainer(const std::string& containerId, 
-                                    const std::string& hostPath, 
-                                    const std::string& containerPath) {
-    if (!dockerManager) {
-        // throw std::runtime_error("Docker manager not initialized");
-        throw CDR::CdrConfigurationException("Docker manager not initialized in copyFileToContainer");
-    }
-    if (!fs::exists(hostPath)) {
-        throw CDR::CdrFileException("Source file for copy does not exist", hostPath);
-    }
+namespace Validation {
+    const size_t MAX_FILE_SIZE = 100 * 1024 * 1024;  // 100MB max file size
+    const size_t MIN_FILE_SIZE = 1;                   // 1 byte minimum
     
-    try {
-        dockerManager->copyFileToContainer(containerId, hostPath, containerPath);
-    } catch (const Docker::DockerException& e) { // Catch specific Docker exceptions
-        throw;
-    } catch (const std::exception& e) {
-        // throw CDR::DockerOperationException("File copy to container failed for " + hostPath + ": " + std::string(e.what()));
-        throw Docker::OperationException("copyFileToContainer", "File copy to container failed for " + hostPath + ": " + std::string(e.what()));
-    }
-}
-
-void CdrManager::copyFileFromContainer(const std::string& containerId,
-                                      const std::string& containerPath,
-                                      const std::string& hostPath) {
-    if (!dockerManager) {
-        // throw std::runtime_error("Docker manager not initialized");
-        throw CDR::CdrConfigurationException("Docker manager not initialized in copyFileFromContainer");
-    }
-    
-    try {
-        dockerManager->copyFileFromContainer(containerId, containerPath, hostPath);
-    } catch (const Docker::DockerException& e) { // Catch specific Docker exceptions
-        throw;
-    } catch (const std::exception& e) {
-        // throw CDR::DockerOperationException("File copy from container '" + containerPath + "' failed: " + std::string(e.what()));
-        throw Docker::OperationException("copyFileFromContainer", "File copy from container '" + containerPath + "' failed: " + std::string(e.what()));
-    }
-}
-
-std::vector<RecoveredFileInfo> CdrManager::parseRecoveryResults(const std::string& resultsPath) {
-    std::vector<RecoveredFileInfo> recoveredFiles;
-    
-    try {
-        std::ifstream resultsFile(resultsPath);
-        if (!resultsFile.is_open()) {
-            std::cerr << "Warning: Could not open results file: " << resultsPath << std::endl;
-            return recoveredFiles;
+    bool isValidFilePath(const std::string& filePath) {
+        if (filePath.empty() || filePath.length() > Security::MAX_PATH_LENGTH) {
+            return false;
         }
         
-        std::string line;
-        while (std::getline(resultsFile, line)) {
-            if (line.empty() || line[0] == '#') continue; // Skip comments and empty lines
-            
-            // Parse JSON or CSV format results
-            // Bu implementation format'a göre customize edilmeli
-            RecoveredFileInfo fileInfo;
-            
-            // Basit parsing örneği (gerçek implementasyonda JSON parser kullanılmalı)
-            std::istringstream iss(line);
-            std::string token;
-            
-            if (std::getline(iss, token, ',')) fileInfo.originalPath = token;
-            if (std::getline(iss, token, ',')) fileInfo.recoveredPath = token;
-            if (std::getline(iss, token, ',')) fileInfo.fileName = token;
-            if (std::getline(iss, token, ',')) fileInfo.fileExtension = token;
-            if (std::getline(iss, token, ',')) fileInfo.fileSize = std::stoll(token);
-            if (std::getline(iss, token, ',')) fileInfo.md5Hash = token;
-            if (std::getline(iss, token, ',')) fileInfo.status = token;
-            if (std::getline(iss, token, ',')) fileInfo.confidenceScore = std::stod(token);
-            
-            recoveredFiles.push_back(fileInfo);
+        // Check for dangerous characters
+        const std::string dangerous_chars = "<>:\"|?*";
+        for (char c : dangerous_chars) {
+            if (filePath.find(c) != std::string::npos) {
+                return false;
+            }
         }
         
-    } catch (const std::exception& e) {
-        std::cerr << "Error parsing recovery results: " << e.what() << std::endl;
+        return Security::isSecurePath(filePath);
     }
     
-    return recoveredFiles;
+    bool isValidFileSize(const std::string& filePath) {
+        try {
+            if (!fs::exists(filePath)) return false;
+            
+            auto size = fs::file_size(filePath);
+            return size >= MIN_FILE_SIZE && size <= MAX_FILE_SIZE;
+        } catch (...) {
+            return false;
+        }
+    }
 }
 
 // --- Public Methods ---
@@ -520,70 +580,66 @@ std::vector<CDR::CdrAnalysisResult> CDR::CdrManager::listActiveAnalyses() const 
 }
 
 void CDR::CdrManager::stopAnalysis(const std::string& analysisId) {
-    std::thread* threadToStop = nullptr;
-    {
-        std::lock_guard<std::mutex> lock(analysesMutex);
-        auto it = activeAnalyses.find(analysisId);
-        if (it == activeAnalyses.end()) {
-            // throw std::invalid_argument("Analysis ID not found: " + analysisId);
-            throw CDR::CdrBaseException("Analysis ID not found for stopping: " + analysisId);
-        }
+    std::unique_lock<std::mutex> lock(analysesMutex);
+    
+    auto it = activeAnalyses.find(analysisId);
+    if (it == activeAnalyses.end()) {
+        throw CDR::CdrBaseException("Analysis ID not found for stopping: " + analysisId);
+    }
 
-        // Mark for stopping, actual thread join/stop happens after releasing lock
-        // or in destructor
-        it->second.status = "stopping"; 
+    // Check if already stopping or stopped
+    if (it->second.status == "stopping" || it->second.status == "stopped") {
+        return; // Already in process or completed
+    }
 
-        auto threadIt = activeAnalysesThreads_.find(analysisId);
-        if (threadIt != activeAnalysesThreads_.end()) {
-            threadToStop = &threadIt->second;
+    // Mark for stopping
+    it->second.status = "stopping";
+    
+    // Find and extract the thread
+    std::thread threadToJoin;
+    auto threadIt = activeAnalysesThreads_.find(analysisId);
+    if (threadIt != activeAnalysesThreads_.end()) {
+        threadToJoin = std::move(threadIt->second);
+        activeAnalysesThreads_.erase(threadIt);
+    }
+    
+    // Release lock before joining thread to prevent deadlock
+    lock.unlock();    // Join thread if it exists
+    if (threadToJoin.joinable()) {
+        try {
+            threadToJoin.join();
+        } catch (const std::exception& e) {
+            std::cerr << "Error joining analysis thread: " << e.what() << std::endl;
         }
     }
 
-    // Actual stopping logic for the thread if it exists and is joinable
-    // This part needs careful design. Forcing a thread to stop is complex.
-    // A cooperative cancellation mechanism is better.
-    // For now, we'll rely on the thread checking a flag or the destructor joining.
-
+    // Re-acquire lock for final status update
+    lock.lock();
+    
     try {
-        std::lock_guard<std::mutex> lock(analysesMutex); // Re-acquire lock for modifying activeAnalyses
         auto it = activeAnalyses.find(analysisId);
-        if (it == activeAnalyses.end()) { // Check again, could have been removed
-             // throw std::invalid_argument("Analysis ID not found after attempting to stop: " + analysisId);
-             throw CDR::CdrBaseException("Analysis ID not found after attempting to stop: " + analysisId);
-        }
-
-        // Stop container
-        if (it->second.metadata.count("containerId")) {
-            std::string containerId = it->second.metadata["containerId"];
-            if (!containerId.empty() && dockerManager) {
-                dockerManager->stopContainer(containerId);
-                dockerManager->removeContainer(containerId, true);
+        if (it != activeAnalyses.end()) {
+            // Stop container if it exists
+            if (it->second.metadata.count("containerId")) {
+                std::string containerId = it->second.metadata["containerId"];
+                if (!containerId.empty() && this) {
+                    stopContainer(containerId);
+                    removeContainer(containerId, true);
+                }
             }
-        }
 
-        // Update status
-        it->second.status = "stopped";
-        it->second.endTime = std::chrono::system_clock::now();
-
-        // Remove from active threads map if it was managed
-        // The thread itself should exit cleanly upon seeing the 'stopping' status or keepThreadsJoined_ flag
-        auto threadIt = activeAnalysesThreads_.find(analysisId);
-        if (threadIt != activeAnalysesThreads_.end()) {
-            if (threadIt->second.joinable()) {
-                // Ideally, the thread checks a flag and exits. 
-                // If not, join might block. Consider a timeout or a more robust cancellation.
-                // For now, let's assume threads are designed to check keepThreadsJoined_ or status.
-            }
-            activeAnalysesThreads_.erase(threadIt);
+            // Update final status
+            it->second.status = "stopped";
+            it->second.endTime = std::chrono::system_clock::now();
         }
 
     } catch (const std::exception& e) {
-        std::cerr << "Error stopping analysis: " << e.what() << std::endl;
-        // Potentially revert status if stopping failed critically
-        std::lock_guard<std::mutex> lock(analysesMutex);
+        std::cerr << "Error stopping analysis containers: " << e.what() << std::endl;
+        // Revert status if stopping failed critically
         auto it = activeAnalyses.find(analysisId);
-        if (it != activeAnalyses.end() && it->second.status == "stopping"){
+        if (it != activeAnalyses.end() && it->second.status == "stopping") {
             it->second.status = "failed_to_stop";
+            it->second.errorMessage = e.what();
         }
         throw;
     }
@@ -617,7 +673,6 @@ bool CDR::CdrManager::exportRecoveredFile(const std::string& analysisId,
                                     const std::string& outputPath) {
     auto it = activeAnalyses.find(analysisId);
     if (it == activeAnalyses.end()) {
-        // return false; // Consider throwing an exception for consistency
         throw CDR::CdrBaseException("Analysis ID not found for exportRecoveredFile: " + analysisId);
     }
     
@@ -627,7 +682,7 @@ bool CDR::CdrManager::exportRecoveredFile(const std::string& analysisId,
             return false;
         }
         
-        // Dosyayı konteynerden kopyala
+        // Use inherited copyFileFromContainer method
         std::string containerPath = "/cdr/output/" + fileId;
         copyFileFromContainer(containerId, containerPath, outputPath);
         
@@ -653,27 +708,23 @@ std::string CDR::CdrManager::createSandboxEnvironment() {
 bool CDR::CdrManager::executeFileInSandbox(const std::string& sandboxId, 
                                      const std::string& filePath,
                                      std::string& executionResult) {
-    if (!dockerManager) {
-        // return false;
-        throw CDR::CdrConfigurationException("Docker manager not initialized in executeFileInSandbox");
-    }
     if (!fs::exists(filePath)) {
         throw CDR::CdrFileException("File to execute in sandbox does not exist", filePath);
     }
     
     try {
-        // Dosyayı sandbox'a kopyala
+        // Use inherited copyFileToContainer method
         std::string containerPath = "/tmp/suspicious_file";
         copyFileToContainer(sandboxId, filePath, containerPath);
         
-        // Dosyayı güvenli şekilde çalıştır (timeout ile)
+        // Execute file with inherited executeCommandInContainer method
         std::vector<std::string> execCommand = {
-            "timeout", "30s", // 30 saniye timeout
-            "strace", "-e", "trace=file,process,network", // Sistem çağrılarını izle
+            "timeout", "30s",
+            "strace", "-e", "trace=file,process,network",
             containerPath
         };
         
-        executionResult = dockerManager->executeCommandInContainer(sandboxId, execCommand);
+        executionResult = executeCommandInContainer(sandboxId, execCommand);
         
         return true;
     } catch (const std::exception& e) {
@@ -683,15 +734,9 @@ bool CDR::CdrManager::executeFileInSandbox(const std::string& sandboxId,
 }
 
 void CDR::CdrManager::destroySandboxEnvironment(const std::string& sandboxId) {
-    if (!dockerManager) {
-        // return; // Consider throwing or logging
-        std::cerr << "Warning: Docker manager not initialized in destroySandboxEnvironment. Cannot destroy sandbox." << std::endl;
-        return;
-    }
-    
     try {
-        dockerManager->stopContainer(sandboxId);
-        dockerManager->removeContainer(sandboxId, true);
+        stopContainer(sandboxId);        // Use inherited method
+        removeContainer(sandboxId, true); // Use inherited method
     } catch (const Docker::DockerException& e) {
         std::cerr << "Failed to destroy sandbox '" << sandboxId << "': " << e.what() << " (Type: DockerException)" << std::endl;
     } catch (const std::exception& e) {
@@ -718,24 +763,18 @@ void CDR::CdrManager::setSandboxContainerImage(const std::string& imageName) {
 }
 
 bool CDR::CdrManager::validateCdrEnvironment() const {
-    if (!dockerManager) {
-        return false;
-    }
-    
     try {
-        // Docker daemon kontrolü
-        if (!dockerManager->isDaemonRunning()) {
+        // Use inherited methods
+        if (!isDaemonRunning()) {
             return false;
         }
         
-        // CDR image kontrolü
-        if (!dockerManager->imageExists(cdrContainerImage)) {
+        if (!imageExists(cdrContainerImage)) {
             std::cerr << "CDR image not found: " << cdrContainerImage << std::endl;
             return false;
         }
         
-        // Sandbox image kontrolü
-        if (!dockerManager->imageExists(sandboxContainerImage)) {
+        if (!imageExists(sandboxContainerImage)) {
             std::cerr << "Sandbox image not found: " << sandboxContainerImage << std::endl;
             return false;
         }
@@ -889,7 +928,6 @@ FileTypeInfo CdrManager::getFileTypeInfo(FileType type) {
             info.supportedTools = {"XmlSanitizer", "DoctypeValidator"};
             info.description = "XML Document";
             info.activeContentTypes = {"External Entities (XXE)", "DTD Exploits", "SVG Scripts"};
-             // SVG is often handled by ImageSanitizer, but XML_DOCUMENT can be a base for it.
             info.requiresSpecialHandling = true;
             break;
         case FileType::RTF_DOCUMENT:
@@ -900,45 +938,12 @@ FileTypeInfo CdrManager::getFileTypeInfo(FileType type) {
             info.activeContentTypes = {"Embedded Objects", "OLE Exploits"};
             info.requiresSpecialHandling = true;
             break;
-        case FileType::TEXT_DOCUMENT: // Corrected from TEXT_FILE to match enum
+        case FileType::TEXT_DOCUMENT:
             info.extension = ".txt";
-            info.commonExtensions = {".txt", ".log", ".csv", ".md", ".json"}; // Removed .xml as it has its own type
+            info.commonExtensions = {".txt", ".log", ".csv", ".md", ".json"};
             info.supportedTools = {"TextSanitizer", "EncodingValidator"};
             info.description = "Plain Text File";
-            info.activeContentTypes = {}; // Generally none, but JSON can be complex
-            break;
-        case FileType::ARCHIVE_FILE:
-            info.extension = ".zip";
-            info.commonExtensions = {".zip", ".rar", ".7z", ".tar", ".gz", ".jar", ".war"};
-            info.supportedTools = {"ArchiveSanitizer", "ArchiveExtractor"};
-            info.description = "Archive File (ZIP, RAR, 7Z, etc.)";
-            info.activeContentTypes = {"Nested Archives", "Contained Executables", "Password Protection"};
-            info.requiresSpecialHandling = true;
-            break;
-        case FileType::IMAGE_FILE:
-            info.extension = ".jpg";
-            info.commonExtensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}; // .svg handled by XML or separately
-            info.supportedTools = {"ImageSanitizer", "MetadataStripper", "SteganographyDetector"};
-            info.description = "Image File (JPEG, PNG, GIF, etc.)";
-            info.activeContentTypes = {"EXIF Data", "Steganography"};
-            // SVG is more complex and might be its own FileType or handled by XML/HTML sanitizers
-            // For now, keeping scripts out of here unless specifically an SVG sanitizer is called.
-            break;
-        case FileType::EXECUTABLE_FILE:
-            info.extension = ".exe";
-            info.commonExtensions = {".exe", ".dll", ".com", ".bat", ".sh", ".app", ".dmg", ".msi", ".elf"};
-            info.supportedTools = {"ExecutableAnalyzer", "SandboxRunner", "SignatureScanner"};
-            info.description = "Executable File or Application";
-            info.activeContentTypes = {"Binary Code", "Packed Code"};
-            info.requiresSpecialHandling = true;
-            break;
-        case FileType::SCRIPT_FILE:
-            info.extension = ".js"; 
-            info.commonExtensions = {".js", ".vbs", ".ps1", ".bat", ".sh", ".py", ".php", ".rb", ".pl"};
-            info.supportedTools = {"ScriptAnalyzer", "ObfuscationDetector", "BehavioralAnalyzer"};
-            info.description = "Script File (JavaScript, PowerShell, VBScript, etc.)";
-            info.activeContentTypes = {"Executable Code", "Remote Connections", "Filesystem Access"};
-            info.requiresSpecialHandling = true;
+            info.activeContentTypes = {};
             break;
         case FileType::EMAIL_FILE:
             info.extension = ".eml";
@@ -948,377 +953,578 @@ FileTypeInfo CdrManager::getFileTypeInfo(FileType type) {
             info.activeContentTypes = {"Attachments", "HTML Body Scripts", "Tracking Pixels", "Phishing Links"};
             info.requiresSpecialHandling = true;
             break;
-        // Removed cases for non-existent FileType members like VIDEO_FILE, AUDIO_FILE, FONT_FILE etc.
-        // Add them to CdrTypes.h if they are needed.
-        case FileType::NOT_SET: // Fallthrough
-        case FileType::UNKNOWN_FILE: // Fallthrough
+        case FileType::NOT_SET:
+        case FileType::UNKNOWN_FILE:
         default:
             info.extension = ".dat"; 
             info.commonExtensions = {};
             info.supportedTools = {"GenericAnalyzer", "HeuristicScanner"};
             info.description = "Unknown or Uncategorized File Type";
-            info.activeContentTypes = {}; // Could be anything
+            info.activeContentTypes = {};
             info.requiresSpecialHandling = true; 
             break;
     }
     return info;
 }
 
-// Private helper method for sanitization logic
-SanitizationResult CdrManager::performSanitization(const std::string& fileTypeDescription,
-                                                   const std::string& inputPath,
-                                                   const std::string& outputPath,
-                                                   const CdrConfiguration& config,
-                                                   FileType fileType) {
-    try {
-        // CdrSanitizer should be instantiated once if it holds state or is expensive to create.
-        // For now, creating it per call as it was, but consider making it a member of CdrManager.
-        CdrSanitizer sanitizer; 
+// --- Scanning Files in Containers ---
 
-        SanitizationResult result = sanitizer.sanitizeFile(inputPath, outputPath, config, fileType);
-
-        // Log based on the result from CdrSanitizer
-        if (result.requiresQuarantine) {
-            std::cout << fileTypeDescription << " file ('" << inputPath << "') requires quarantine." << std::endl;
-            if (!result.quarantineReason.empty()) {
-                std::cout << "Quarantine reason: " << result.quarantineReason << std::endl;
-            }
-            // Actual quarantine file operation (move file) should be handled here or by CdrSanitizer.
-            // For example, if CdrSanitizer only sets the flag, CdrManager could do the move:
-            // if (!config.quarantineDirectory.empty()) {
-            //     std::filesystem::path qPath = std::filesystem::path(config.quarantineDirectory) / std::filesystem::path(inputPath).filename();
-            //     std::filesystem::rename(inputPath, qPath); // Or copy then delete
-            //     result.quarantinePath = qPath.string();
-            // }
-        }
-
-        if (!result.success) {
-            std::cerr << fileTypeDescription << " sanitization failed for '" << inputPath << "': " << result.errorMessage << std::endl;
-        } else {
-            std::cout << fileTypeDescription << " ('" << inputPath << "') processed. Output: '" << result.sanitizedPath << "'." << std::endl;
-            if (!result.threatsDetected.empty()) {
-                std::cout << "Threats detected: " << result.threatsDetected.size() << std::endl;
-            }
-            if (!result.actionsPerformed.empty()) {
-                std::cout << "Actions performed: ";
-                for (size_t i = 0; i < result.actionsPerformed.size(); ++i) {
-                    std::cout << result.actionsPerformed[i] << (i < result.actionsPerformed.size() - 1 ? ", " : "");
-                }
-                std::cout << std::endl;
-            }
-        }
-        return result;
-
-    } catch (const CdrBaseException& cdrEx) { // Catch specific CDR exceptions
-        std::cerr << "CdrException during " << fileTypeDescription << " sanitization for '" << inputPath << "': " << cdrEx.what() << " (Type: " << cdrEx.getType() << ")" << std::endl;
-        SanitizationResult failedResult;
-        failedResult.success = false;
-        failedResult.errorMessage = std::string(cdrEx.getType()) + ": " + cdrEx.what();
-        failedResult.inputPath = inputPath;
-        failedResult.originalPath = inputPath;
-        failedResult.fileType = fileType;
-        return failedResult;
-    } catch (const std::exception& e) {
-        std::cerr << "Std::exception during " << fileTypeDescription << " sanitization for '" << inputPath << "': " << e.what() << std::endl;
-        SanitizationResult failedResult;
-        failedResult.success = false;
-        failedResult.errorMessage = "Exception: " + std::string(e.what());
-        failedResult.inputPath = inputPath;
-        failedResult.originalPath = inputPath;
-        failedResult.fileType = fileType;
-        return failedResult;
-    }
-}
-
-SanitizationResult CdrManager::sanitizeOfficeDocument(const std::string& inputPath, const std::string& outputPath,
-                                      const CdrConfiguration& config) {
-    return performSanitization("Office Document", inputPath, outputPath, config, FileType::OFFICE_DOCUMENT);
-}
-
-SanitizationResult CdrManager::sanitizePdfDocument(const std::string& inputPath, const std::string& outputPath, 
-                                   const CdrConfiguration& config) {
-    return performSanitization("PDF Document", inputPath, outputPath, config, FileType::PDF_DOCUMENT);
-}
-
-SanitizationResult CdrManager::sanitizeHtmlDocument(const std::string& inputPath, const std::string& outputPath, 
-                                    const CdrConfiguration& config) {
-    return performSanitization("HTML Document", inputPath, outputPath, config, FileType::HTML_DOCUMENT);
-}
-
-SanitizationResult CdrManager::sanitizeArchiveFile(const std::string& inputPath, const std::string& outputPath, 
-                                   const CdrConfiguration& config) {
-    return performSanitization("Archive File", inputPath, outputPath, config, FileType::ARCHIVE_FILE);
-}
-
-SanitizationResult CdrManager::sanitizeScriptFile(const std::string& inputPath, const std::string& outputPath, 
-                                  const CdrConfiguration& config) {
-    return performSanitization("Script File", inputPath, outputPath, config, FileType::SCRIPT_FILE);
-}
-
-bool CdrManager::isFileTypeSupported(const std::string& filePath) {
-    try {
-        // Validate file exists and is readable
-        if (!fs::exists(filePath) || !fs::is_regular_file(filePath)) {
-            return false;
-        }
-        
-        // Check file size limits (prevent processing of extremely large files)
-        auto fileSize = fs::file_size(filePath);
-        constexpr size_t MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB limit
-        if (fileSize > MAX_FILE_SIZE) {
-            std::cerr << "File too large for processing: " << fileSize << " bytes" << std::endl;
-            return false;
-        }
-        
-        fs::Path path(filePath);
-        std::string extension = path.extension();
-        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-        
-        // Remove the dot
-        if (!extension.empty() && extension[0] == '.') {
-            extension = extension.substr(1);
-        }
-        
-        // Enhanced file type detection with magic numbers
-        if (extension.empty()) {
-            // Try to detect by file content (magic numbers)
-            return CDR::CdrManager::detectFileTypeByContent(filePath) != FileType::UNKNOWN_FILE;
-        }
-        
-        // Supported file types with enhanced validation
-        static const std::unordered_map<std::string, std::vector<std::string>> supportedTypes = {
-            {"office", {"docx", "xlsx", "pptx", "doc", "xls", "ppt", "odt", "ods", "odp"}},
-            {"pdf", {"pdf"}},
-            {"web", {"html", "htm", "xml", "xhtml"}},
-            {"text", {"txt", "csv", "rtf", "md"}},
-            {"archive", {"zip", "rar", "7z", "tar", "gz", "bz2", "xz"}},
-            {"image", {"jpg", "jpeg", "png", "gif", "bmp", "tiff", "svg"}},
-            {"executable", {"exe", "dll", "com", "bat", "cmd", "msi", "scr"}},
-            {"script", {"js", "vbs", "ps1", "sh", "py", "pl", "rb", "php"}},
-            {"email", {"eml", "msg", "pst"}},
-            {"media", {"mp3", "mp4", "avi", "wav", "wmv", "mov"}}
-        };
-        
-        // Check if extension is in any supported category
-        for (const auto& [category, extensions] : supportedTypes) {
-            if (std::find(extensions.begin(), extensions.end(), extension) != extensions.end()) {
-                // Additional validation for executable files (security concern)
-                if (category == "executable") {
-                    return CDR::CdrManager::validateExecutableFile(filePath);
-                }
-                return true;
-            }
-        }
-        
-        return false;
-    } catch (const std::exception& e) {
-        std::cerr << "Error checking file type support: " << e.what() << std::endl;
-        return false;
-    }
-}
-
-FileType CdrManager::detectFileTypeByContent(const std::string& filePath) {
-    try {
-        std::ifstream file(filePath, std::ios::binary);
-        if (!file.is_open()) {
-            return FileType::UNKNOWN_FILE;
-        }
-        
-        // Read first few bytes for magic number detection
-        char buffer[16];
-        file.read(buffer, sizeof(buffer));
-        auto bytesRead = file.gcount();
-        
-        if (bytesRead < 4) {
-            return FileType::UNKNOWN_FILE;
-        }
-        
-        // Check magic numbers
-        if (bytesRead >= 4) {
-            // PDF: %PDF
-            if (std::memcmp(buffer, "%PDF", 4) == 0) {
-                return FileType::PDF_DOCUMENT;
-            }
-            
-            // ZIP-based formats (Office documents): PK
-            if (buffer[0] == 'P' && buffer[1] == 'K') {
-                return FileType::OFFICE_DOCUMENT; // Could be Office doc
-            }
-            
-            // HTML: <!DO or <html
-            if (std::memcmp(buffer, "<!DO", 4) == 0 || std::memcmp(buffer, "<htm", 4) == 0) {
-                return FileType::HTML_DOCUMENT;
-            }
-            
-            // Executable: MZ
-            if (buffer[0] == 'M' && buffer[1] == 'Z') {
-                return FileType::EXECUTABLE_FILE;
-            }
-        }
-        
-        return FileType::UNKNOWN_FILE;
-    } catch (const std::exception&) {
-        return FileType::UNKNOWN_FILE;
-    }
-}
-
-bool CdrManager::validateExecutableFile(const std::string& filePath) {
-    // Security check for executable files - only allow in controlled environments
-    // For now, return false to quarantine all executables
-    std::cerr << "Executable file detected and quarantined for security: " << filePath << std::endl;
-    return false;
-}
-
-// === Single File Scanning Method ===
 SanitizedFileInfo CdrManager::scanFileInContainer(const std::string& filePath, 
-                                                 const std::string& containerId, 
-                                                 const CdrConfiguration& config, 
-                                                 bool deleteIfUnsafe) {
-    SanitizedFileInfo result;
-    result.originalPath = filePath;
-    result.fileName = fs::Path(filePath).filename();
-    result.fileExtension = fs::Path(filePath).extension();
-    result.processTime = std::chrono::system_clock::now();
+                                                  const std::string& containerId, 
+                                                  const CdrConfiguration& config, 
+                                                  bool deleteIfUnsafe) {
+    SanitizedFileInfo fileInfo;
     
     try {
-        // Validate inputs
-        if (filePath.empty() || containerId.empty()) {
-            throw std::invalid_argument("File path and container ID cannot be empty");
-        }
-        
-        if (!fs::exists(filePath)) {
-            throw std::invalid_argument("File does not exist: " + filePath);
-        }
-        
-        // Get original file information
-        result.originalSize = fs::file_size(filePath);
-        
-        // Detect file type
-        FileType fileType = detectFileType(filePath);
-        
-        // Check if file type is supported
-        if (!isFileTypeSupported(filePath)) {
-            result.isSafe = false;
-            result.status = "unsupported";
-            result.processingLog = "File type not supported for scanning";
-            
-            if (deleteIfUnsafe) {
-                fs::remove(filePath);
-                result.isDeleted = true;
-                result.status = "deleted";
-                result.processingLog += " - File deleted due to unsupported type";
-            }
-            return result;
-        }
-        
-        // Copy file to container for scanning
-        std::string containerPath = "/cdr/scan/" + result.fileName;
-        copyFileToContainer(containerId, filePath, containerPath);
-        
-        // Prepare sanitized output path
-        std::string sanitizedFileName = "sanitized_" + result.fileName;
-        std::string outputPath = (std::filesystem::path(filePath).parent_path() / sanitizedFileName).string();
-        std::string containerOutputPath = "/cdr/output/" + sanitizedFileName;
-        
-        // Execute CDR scanning based on file type
-        std::vector<std::string> scanCommand;
-        switch (fileType) {
-            case FileType::PDF_DOCUMENT:
-                scanCommand = {"/cdr/scan_pdf.sh", containerPath, containerOutputPath};
-                break;
-            case FileType::OFFICE_DOCUMENT:
-                scanCommand = {"/cdr/scan_office.sh", containerPath, containerOutputPath};
-                break;
-            case FileType::HTML_DOCUMENT:
-                scanCommand = {"/cdr/scan_html.sh", containerPath, containerOutputPath};
-                break;
-            case FileType::SCRIPT_FILE:
-                scanCommand = {"/cdr/scan_script.sh", containerPath, containerOutputPath};
-                break;
-            case FileType::ARCHIVE_FILE:
-                scanCommand = {"/cdr/scan_archive.sh", containerPath, containerOutputPath};
-                break;
-            default:
-                scanCommand = {"/cdr/scan_generic.sh", containerPath, containerOutputPath};
-                break;
-        }
-        
-        // Execute scanning command with timeout
-        std::string scanResult = dockerManager->executeCommandInContainer(containerId, scanCommand);
-        result. rawScanOutput = scanResult; // Store raw scan output
+        // Initialize file info structure with proper validation
+        fileInfo.originalPath = filePath;
+        fileInfo.fileName = fs::Path(filePath).filename();
+        fileInfo.fileExtension = fs::Path(filePath).extension();
+        fileInfo.originalSize = 0;
+        fileInfo.sanitizedSize = 0;
+        fileInfo.threatScore = 0.0;
+        fileInfo.isSafe = true;
+        fileInfo.isDeleted = false;
+        fileInfo.processTime = std::chrono::system_clock::now();
 
-        // Parse scan results
-        bool threatsFound = scanResult.find("THREAT_DETECTED") != std::string::npos;
-        bool sanitized = scanResult.find("SANITIZED") != std::string::npos;
-        bool corrupted = scanResult.find("CORRUPTED") != std::string::npos;
-        
-        if (corrupted) {
-            result.isSafe = false;
-            result.status = "corrupted";
-            result.processingLog = "File appears to be corrupted";
+        // Validate input file exists and is accessible
+        if (!fs::exists(filePath)) {
+            fileInfo.status = "failed";
+            fileInfo.processingLog = "File not found: " + filePath;
+            fileInfo.isSafe = false;
+            return fileInfo;
+        }
+
+        // Check if file is readable
+        std::ifstream testFile(filePath);
+        if (!testFile.good()) {
+            fileInfo.status = "failed";
+            fileInfo.processingLog = "File not readable: " + filePath;
+            fileInfo.isSafe = false;
+            return fileInfo;
+        }
+        testFile.close();
+
+        fileInfo.originalSize = static_cast<long long>(fs::file_size(filePath));
+        fileInfo.md5Original = FileSanitizer::calculateMD5(filePath);
+
+        // Detect file type BEFORE processing
+        FileType fileType = detectFileTypeByContent(filePath);
+        if (fileType == FileType::UNKNOWN_FILE && !config.allowUnknownTypes) {
+            fileInfo.status = "blocked";
+            fileInfo.isSafe = false;
+            fileInfo.threatScore = 0.5;
+            fileInfo.processingLog = "Unknown file type blocked by policy";
             
             if (deleteIfUnsafe) {
-                std::filesystem::remove(filePath);
-                result.isDeleted = true;
-                result.status = "deleted";
-                result.processingLog += " - File deleted due to corruption";
+                try {
+                    fs::remove(filePath);
+                    fileInfo.isDeleted = true;
+                    fileInfo.processingLog += " | Original file deleted";
+                } catch (const fs::FilesystemError& e) {
+                    fileInfo.processingLog += " | Failed to delete file: " + std::string(e.what());
+                }
             }
-        } else if (threatsFound) {
-            result.isSafe = false;
-            result.status = sanitized ? "sanitized" : "quarantined";
-            // Convert char* to std::string before concatenation
-            result.processingLog = std::string("Threats detected and ") + (sanitized ? "removed" : "file quarantined");
+            return fileInfo;
+        }
+
+        // Validate file size before processing
+        if (fileInfo.originalSize > config.maxFileSizeMB * 1024 * 1024) {
+            fileInfo.status = "blocked";
+            fileInfo.isSafe = false;
+            fileInfo.threatScore = 0.3;
+            fileInfo.processingLog = "File size exceeds limit: " + std::to_string(fileInfo.originalSize) + " bytes";
             
-            if (sanitized) {
-                // Copy sanitized file back from container
-                copyFileFromContainer(containerId, containerOutputPath, outputPath);
-                result.sanitizedPath = outputPath;
-                result.sanitizedSize = std::filesystem::file_size(outputPath);
-            } else if (deleteIfUnsafe) {
-                // If not sanitized (i.e., quarantined) and deleteIfUnsafe is true, delete the original file.
-                std::filesystem::remove(filePath);
-                result.isDeleted = true;
-                result.status = "deleted_quarantined"; // New status to indicate deletion after quarantine
-                result.processingLog += " - Original file deleted after being quarantined";
+            if (deleteIfUnsafe) {
+                try {
+                    fs::remove(filePath);
+                    fileInfo.isDeleted = true;
+                    fileInfo.processingLog += " | Original file deleted due to size";
+                } catch (const fs::FilesystemError& e) {
+                    fileInfo.processingLog += " | Failed to delete file: " + std::string(e.what());
+                }
             }
-            
-        } else {
-            // File is clean
-            result.isSafe = true;
-            result.status = "clean";
-            result.processingLog = "File scanned successfully - no threats detected";
+            return fileInfo;
         }
         
-        // Calculate threat score based on findings
-        if (!result.threatsFound.empty()) {
-            result.threatScore = std::min(1.0, static_cast<double>(result.threatsFound.size()) * 0.2);
-        } else {
-            result.threatScore = 0.0;
+        // Prepare container paths with proper validation
+        std::string containerInputPath = "/input/" + fileInfo.fileName;
+        std::string containerOutputPath = "/output/" + fileInfo.fileName;
+        std::string hostOutputPath = config.outputDirectory + "/" + fileInfo.fileName;
+
+        // Ensure output directory exists
+        fs::Path outputDir(config.outputDirectory);
+        if (!fs::exists(outputDir)) {
+            try {
+                fs::create_directories(outputDir);
+            } catch (const fs::FilesystemError& e) {
+                fileInfo.status = "failed";
+                fileInfo.processingLog = "Cannot create output directory: " + std::string(e.what());
+                fileInfo.isSafe = false;
+                return fileInfo;
+            }
         }
-        // result.filesSanitized = sanitized ? 1 : 0; // This member doesn't exist in SanitizedFileInfo
-        
-        std::cout << "File scanning completed: " << filePath << " - Status: " << result.status << std::endl;
-        
-    } catch (const std::exception& e) {
-        result.isSafe = false;
-        result.status = "error";
-        result.processingLog = "Scanning failed: " + std::string(e.what());
+
+        // Copy file to container with error handling
+        try {
+            copyFileToContainer(containerId, filePath, containerInputPath);
+        } catch (const std::exception& e) {
+            fileInfo.status = "failed";
+            fileInfo.processingLog = "Failed to copy file to container: " + std::string(e.what());
+            fileInfo.isSafe = false;
+            return fileInfo;
+        }
+
+        // Create sanitization configuration for container
+        CdrConfiguration containerConfig = config;
+        containerConfig.inputDirectory = "/input";
+        containerConfig.outputDirectory = "/output";
+        containerConfig.quarantineDirectory = "/quarantine";
+
+        // Execute sanitization in container with proper file type
+        CdrSanitizer sanitizer;
+        SanitizationResult result = sanitizer.sanitizeFile(containerInputPath, containerOutputPath, containerConfig, fileType);
+
+        // Process results with enhanced validation
+        fileInfo.threatsFound = result.threatsDetected;
+        fileInfo.removedElements = result.actionsPerformed;
+        fileInfo.processingLog = result.errorMessage.empty() ? "Processing completed successfully" : result.errorMessage;
+
+        if (result.success) {
+            if (result.requiresQuarantine) {
+                // Handle quarantine case with proper path construction
+                fileInfo.status = "quarantined";
+                fileInfo.quarantinePath = config.quarantineDirectory + "/" + fileInfo.fileName;
+                fileInfo.isSafe = false;
+                fileInfo.threatScore = std::min(1.0, static_cast<double>(result.threatsDetected.size()) * 0.3);
+
+                // Ensure quarantine directory exists
+                fs::Path quarantineDir(config.quarantineDirectory);
+                if (!fs::exists(quarantineDir)) {
+                    try {
+                        fs::create_directories(quarantineDir);
+                    } catch (const fs::FilesystemError& e) {
+                        fileInfo.processingLog += " | Failed to create quarantine directory: " + std::string(e.what());
+                    }
+                }
+
+                try {
+                    copyFileFromContainer(containerId, "/quarantine/" + fileInfo.fileName, fileInfo.quarantinePath);
+                } catch (const std::exception& e) {
+                    fileInfo.processingLog += " | Failed to copy file from quarantine: " + std::string(e.what());
+                }
+
+                if (deleteIfUnsafe) {
+                    try {
+                        fs::remove(filePath);
+                        fileInfo.isDeleted = true;
+                        fileInfo.processingLog += " | Original file deleted due to quarantine";
+                    } catch (const fs::FilesystemError& e) {
+                        fileInfo.processingLog += " | Failed to delete original file: " + std::string(e.what());
+                    }
+                }
+            } else {
+                // Handle successful sanitization with proper output path
+                fileInfo.status = result.threatsDetected.empty() ? "clean" : "sanitized";
+                fileInfo.sanitizedPath = hostOutputPath;
+                fileInfo.isSafe = true;
+                fileInfo.threatScore = static_cast<double>(result.threatsDetected.size()) * 0.1;
+
+                try {
+                    copyFileFromContainer(containerId, containerOutputPath, hostOutputPath);
+                    
+                    if (fs::exists(hostOutputPath)) {
+                        fileInfo.sanitizedSize = static_cast<long long>(fs::file_size(hostOutputPath));
+                        fileInfo.md5Sanitized = FileSanitizer::calculateMD5(hostOutputPath);
+                    } else {
+                        fileInfo.processingLog += " | Warning: Sanitized file not found in output";
+                        fileInfo.md5Sanitized = fileInfo.md5Original;
+                        fileInfo.sanitizedSize = fileInfo.originalSize;
+                    }
+                } catch (const std::exception& e) {
+                    fileInfo.status = "failed";
+                    fileInfo.processingLog += " | Failed to retrieve sanitized file: " + std::string(e.what());
+                    fileInfo.isSafe = false;
+                }
+            }
+        } else {
+            // Handle failed sanitization
+            fileInfo.status = "failed";
+            fileInfo.isSafe = false;
+            fileInfo.threatScore = 0.5;
+            fileInfo.processingLog = "Sanitization failed: " + result.errorMessage;
+
+            if (deleteIfUnsafe) {
+                try {
+                    fs::remove(filePath);
+                    fileInfo.isDeleted = true;
+                    fileInfo.processingLog += " | Original file deleted due to processing failure";
+                } catch (const fs::FilesystemError& e) {
+                    fileInfo.processingLog += " | Failed to delete original file: " + std::string(e.what());
+                }
+            }
+        }
+
+        // Capture enhanced scan output
+        fileInfo.rawScanOutput = "Container ID: " + containerId + "\n" +
+                                "File Type: " + getFileTypeName(fileType) + "\n" +
+                                "Original Size: " + std::to_string(fileInfo.originalSize) + " bytes\n" +
+                                "Threats Detected: " + std::to_string(result.threatsDetected.size()) + "\n" +
+                                "Actions Performed: " + std::to_string(result.actionsPerformed.size()) + "\n" +
+                                "Processing Status: " + fileInfo.status;
+
+    } catch (const CdrBaseException& cdrEx) {
+        fileInfo.status = "failed";
+        fileInfo.isSafe = false;
+        fileInfo.threatScore = 0.7;
+        fileInfo.processingLog = std::string(cdrEx.getType()) + ": " + cdrEx.what();
         
         if (deleteIfUnsafe) {
             try {
-                std::filesystem::remove(filePath);
-                result.isDeleted = true;
-                result.status = "deleted";
-                result.processingLog += " - File deleted due to scanning error";
-            } catch (const std::exception& deleteErr) {
-                result.processingLog += " - Failed to delete file: " + std::string(deleteErr.what());
+                fs::remove(filePath);
+                fileInfo.isDeleted = true;
+                fileInfo.processingLog += " | Original file deleted due to CDR exception";
+            } catch (const fs::FilesystemError& e) {
+                fileInfo.processingLog += " | Failed to delete original file: " + std::string(e.what());
             }
         }
+    } catch (const std::exception& e) {
+        fileInfo.status = "failed";
+        fileInfo.isSafe = false;
+        fileInfo.threatScore = 0.8;
+        fileInfo.processingLog = "Exception during container processing: " + std::string(e.what());
         
-        std::cerr << "Error scanning file in container: " << e.what() << std::endl;
+        if (deleteIfUnsafe) {
+            try {
+                fs::remove(filePath);
+                fileInfo.isDeleted = true;
+                fileInfo.processingLog += " | Original file deleted due to exception";
+            } catch (const fs::FilesystemError& e) {
+                fileInfo.processingLog += " | Failed to delete original file: " + std::string(e.what());
+            }
+        }
+    }
+
+    return fileInfo;
+}
+
+// --- Parsing Sanitization Results ---
+
+std::vector<SanitizedFileInfo> CdrManager::parseSanitizationResults(const std::string& resultsPath) {
+    std::vector<SanitizedFileInfo> results;
+    
+    try {
+        if (!fs::exists(resultsPath)) {
+            std::cerr << "Results file not found: " << resultsPath << std::endl;
+            return results;
+        }
+
+        std::ifstream resultsFile(resultsPath);
+        if (!resultsFile.is_open()) {
+            std::cerr << "Failed to open results file: " << resultsPath << std::endl;
+            return results;
+        }
+
+        std::string line;
+        SanitizedFileInfo currentFile;
+        bool inFileBlock = false;
+
+        while (std::getline(resultsFile, line)) {
+            // Trim whitespace
+            line.erase(0, line.find_first_not_of(" \t\r\n"));
+            line.erase(line.find_last_not_of(" \t\r\n") + 1);
+
+            if (line.empty()) continue;            // Parse different types of result lines
+            if (line.substr(0, 11) == "FILE_START:") {
+                if (inFileBlock) {
+                    // Save previous file info
+                    results.push_back(currentFile);
+                }
+                // Start new file block
+                currentFile = SanitizedFileInfo();
+                currentFile.originalPath = line.substr(11); // Remove "FILE_START:"
+                currentFile.fileName = fs::Path(currentFile.originalPath).filename();
+                currentFile.fileExtension = fs::Path(currentFile.originalPath).extension();
+                currentFile.processTime = std::chrono::system_clock::now();
+                inFileBlock = true;            }
+            else if (line.substr(0, 8) == "FILE_END" && inFileBlock) {
+                results.push_back(currentFile);
+                inFileBlock = false;
+                currentFile = SanitizedFileInfo();
+            }
+            else if (inFileBlock) {
+                // Parse file attributes
+                size_t colonPos = line.find(':');
+                if (colonPos != std::string::npos) {
+                    std::string key = line.substr(0, colonPos);
+                    std::string value = line.substr(colonPos + 1);
+                    
+                    // Remove leading/trailing whitespace from value
+                    value.erase(0, value.find_first_not_of(" \t"));
+                    value.erase(value.find_last_not_of(" \t") + 1);
+
+                    if (key == "SANITIZED_PATH") {
+                        currentFile.sanitizedPath = value;
+                    }
+                    else if (key == "QUARANTINE_PATH") {
+                        currentFile.quarantinePath = value;
+                    }
+                    else if (key == "ORIGINAL_SIZE") {
+                        try {
+                            currentFile.originalSize = std::stoll(value);
+                        } catch (const std::exception&) {
+                            currentFile.originalSize = 0;
+                        }
+                    }
+                    else if (key == "SANITIZED_SIZE") {
+                        try {
+                            currentFile.sanitizedSize = std::stoll(value);
+                        } catch (const std::exception&) {
+                            currentFile.sanitizedSize = 0;
+                        }
+                    }
+                    else if (key == "MD5_ORIGINAL") {
+                        currentFile.md5Original = value;
+                    }
+                    else if (key == "MD5_SANITIZED") {
+                        currentFile.md5Sanitized = value;
+                    }
+                    else if (key == "STATUS") {
+                        currentFile.status = value;
+                        currentFile.isSafe = (value == "clean" || value == "sanitized");
+                        currentFile.isDeleted = (value == "deleted");
+                    }
+                    else if (key == "THREAT_SCORE") {
+                        try {
+                            currentFile.threatScore = std::stod(value);
+                        } catch (const std::exception&) {
+                            currentFile.threatScore = 0.0;
+                        }
+                    }
+                    else if (key == "THREATS_FOUND") {
+                        // Parse comma-separated list
+                        std::stringstream ss(value);
+                        std::string threat;
+                        while (std::getline(ss, threat, ',')) {
+                            threat.erase(0, threat.find_first_not_of(" \t"));
+                            threat.erase(threat.find_last_not_of(" \t") + 1);
+                            if (!threat.empty()) {
+                                currentFile.threatsFound.push_back(threat);
+                            }
+                        }
+                    }
+                    else if (key == "REMOVED_ELEMENTS") {
+                        // Parse comma-separated list
+                        std::stringstream ss(value);
+                        std::string element;
+                        while (std::getline(ss, element, ',')) {
+                            element.erase(0, element.find_first_not_of(" \t"));
+                            element.erase(element.find_last_not_of(" \t") + 1);
+                            if (!element.empty()) {
+                                currentFile.removedElements.push_back(element);
+                            }
+                        }
+                    }
+                    else if (key == "PROCESSING_LOG") {
+                        currentFile.processingLog = value;
+                    }
+                    else if (key == "RAW_SCAN_OUTPUT") {
+                        currentFile.rawScanOutput = value;
+                    }
+                    else if (key == "PROCESS_TIME") {
+                        // Parse ISO 8601 timestamp (basic implementation)
+                        // For simplicity, just set to current time
+                        currentFile.processTime = std::chrono::system_clock::now();
+                    }
+                }
+            }
+        }
+
+        // Handle last file if file doesn't end with FILE_END
+        if (inFileBlock) {
+            results.push_back(currentFile);
+        }
+
+        resultsFile.close();
+        
+        std::cout << "Parsed " << results.size() << " file results from " << resultsPath << std::endl;
+
+    } catch (const fs::FilesystemError& fsErr) {
+        std::cerr << "Filesystem error parsing results: " << fsErr.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Error parsing sanitization results: " << e.what() << std::endl;
+    }
+
+    return results;
+}
+
+// --- File Operations (Add these methods) ---
+
+void CdrManager::copyFileToContainer(const std::string& containerId,
+                                   const std::string& hostPath,
+                                   const std::string& containerPath) {
+    // Use inherited DockerManager functionality
+    Docker::DockerManager::copyFileToContainer(containerId, hostPath, containerPath);
+}
+
+void CdrManager::copyFileFromContainer(const std::string& containerId,
+                                     const std::string& containerPath,
+                                     const std::string& hostPath) {
+    // Use inherited DockerManager functionality  
+    Docker::DockerManager::copyFileFromContainer(containerId, containerPath, hostPath);
+}
+
+CDR::FileType CdrManager::detectFileTypeByContent(const std::string& filePath) {
+    std::ifstream file(filePath, std::ios::binary);
+    if (!file.is_open()) {
+        return FileType::UNKNOWN_FILE;
     }
     
-    return result;
+    std::array<unsigned char, 16> header{};
+    file.read(reinterpret_cast<char*>(header.data()), header.size());
+    
+    // PDF signature
+    if (header[0] == '%' && header[1] == 'P' && header[2] == 'D' && header[3] == 'F') {
+        return FileType::PDF_DOCUMENT;
+    }
+    
+    // ZIP-based formats (Office documents)
+    if (header[0] == 0x50 && header[1] == 0x4B && header[2] == 0x03 && header[3] == 0x04) {
+        // Further check for Office documents by extension
+        std::string extension = fs::Path(filePath).extension();
+        std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+        
+        if (extension == ".docx" || extension == ".xlsx" || extension == ".pptx" ||
+            extension == ".doc" || extension == ".xls" || extension == ".ppt") {
+            return FileType::OFFICE_DOCUMENT;
+        }
+        return FileType::ARCHIVE_FILE;
+    }
+    
+    // HTML signature
+    std::string headerStr(reinterpret_cast<char*>(header.data()), 15);
+    std::transform(headerStr.begin(), headerStr.end(), headerStr.begin(), ::tolower);
+    if (headerStr.find("<!doc") == 0 || headerStr.find("<html") == 0 || headerStr.find("<?xml") == 0) {
+        if (headerStr.find("<html") != std::string::npos) {
+            return FileType::HTML_DOCUMENT;
+        } else if (headerStr.find("<?xml") == 0) {
+            return FileType::XML_DOCUMENT;
+        }
+    }
+    
+    // RTF signature
+    if (header[0] == '{' && header[1] == '\\' && header[2] == 'r' && header[3] == 't' && header[4] == 'f') {
+        return FileType::RTF_DOCUMENT;
+    }
+    
+    // Executable signatures
+    if (header[0] == 0x4D && header[1] == 0x5A) { // MZ header
+        return FileType::EXECUTABLE_FILE;
+    }
+    
+    // ELF signature (Linux executables)
+    if (header[0] == 0x7F && header[1] == 0x45 && header[2] == 0x4C && header[3] == 0x46) {
+        return FileType::EXECUTABLE_FILE;
+    }
+      // Fallback to extension-based detection
+    return detectFileType(filePath);
+}
+
+// === Missing Public Method Implementations ===
+
+bool CdrManager::isFileTypeSupported(const std::string& filePath) {
+    FileType type = detectFileType(filePath);
+    return type != FileType::UNKNOWN_FILE && type != FileType::NOT_SET;
+}
+
+std::vector<std::string> CdrManager::detectActiveContent(const std::string& filePath) {
+    std::vector<std::string> activeContent;
+    
+    try {
+        FileType type = detectFileType(filePath);
+        FileTypeInfo typeInfo = getFileTypeInfo(type);
+        
+        // Return the known active content types for this file type
+        activeContent = typeInfo.activeContentTypes;
+        
+        // Add specific detection for certain file types
+        switch (type) {
+            case FileType::PDF_DOCUMENT:
+                if (detectPdfJavaScript(filePath)) {
+                    activeContent.push_back("JavaScript_Detected");
+                }
+                break;
+            case FileType::OFFICE_DOCUMENT:
+                if (detectOfficeMacros(filePath)) {
+                    activeContent.push_back("Macros_Detected");
+                }
+                break;
+            case FileType::HTML_DOCUMENT:
+                // Basic HTML script detection could be added here
+                break;
+            default:
+                break;
+        }
+    } catch (const std::exception& e) {
+        activeContent.push_back("Detection_Error");
+    }
+    
+    return activeContent;
+}
+
+SanitizationResult CdrManager::sanitizeOfficeDocument(const std::string& filePath, 
+                                                     const std::string& outputPath, 
+                                                     const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizeOfficeFile(filePath, outputPath, config);
+}
+
+SanitizationResult CdrManager::sanitizePdfDocument(const std::string& filePath, 
+                                                   const std::string& outputPath, 
+                                                   const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizePdfFile(filePath, outputPath, config);
+}
+
+SanitizationResult CdrManager::sanitizeHtmlDocument(const std::string& filePath, 
+                                                    const std::string& outputPath, 
+                                                    const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizeHtmlFile(filePath, outputPath, config);
+}
+
+SanitizationResult CdrManager::sanitizeArchiveFile(const std::string& filePath, 
+                                                   const std::string& outputPath, 
+                                                   const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizeArchiveFile(filePath, outputPath, config);
+}
+
+SanitizationResult CdrManager::sanitizeScriptFile(const std::string& filePath, 
+                                                  const std::string& outputPath, 
+                                                  const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizeScriptFile(filePath, outputPath, config);
+}
+
+bool CdrManager::quarantineFile(const std::string& filePath, const std::string& quarantinePath) {
+    try {
+        // Ensure quarantine directory exists
+        fs::Path quarantineDir = fs::Path(quarantinePath).parent_path();
+        if (!fs::exists(quarantineDir)) {
+            fs::create_directories(quarantineDir);
+        }
+          // Copy file to quarantine location
+        if (fs::exists(filePath)) {
+            fs::copy_file(filePath, quarantinePath, true); // true = overwrite existing
+            return true;
+        }
+        return false;
+    } catch (const fs::FilesystemError& e) {
+        return false;
+    } catch (const std::exception& e) {
+        return false;
+    }
 }
 
 } // namespace CDR

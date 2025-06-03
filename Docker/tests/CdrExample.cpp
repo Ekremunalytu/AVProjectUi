@@ -11,13 +11,38 @@ void testCdrSanitizer() {
         CDR::CdrSanitizer sanitizer;
         std::cout << "✓ CDR Sanitizer successfully created" << std::endl;
         
-        // Test configuration
+        // Test configuration with proper validation
         CDR::CdrConfiguration config;
         config.securityLevel = CDR::CdrConfiguration::SecurityLevel::MEDIUM;
         config.analysisType = CDR::AnalysisType::COMPREHENSIVE_SCAN;
         config.inputDirectory = "/tmp/test_input";
         config.outputDirectory = "/tmp/test_output";
         config.quarantineDirectory = "/tmp/test_quarantine";
+        
+        // Validate configuration before use
+        if (config.inputDirectory.empty() || config.outputDirectory.empty() || config.quarantineDirectory.empty()) {
+            std::cout << "✗ Error: Configuration directories cannot be empty" << std::endl;
+            return;
+        }
+        
+        // Test file type detection before sanitization
+        std::string testFile = "/tmp/test_input/sample.pdf";
+        if (std::filesystem::exists(testFile)) {
+            CDR::FileType detectedType = CDR::CdrManager::detectFileType(testFile);
+            std::cout << "✓ File type detected: " << CDR::getFileTypeName(detectedType) << std::endl;
+            
+            // Only sanitize if file type is supported
+            if (detectedType != CDR::FileType::UNKNOWN_FILE) {
+                auto result = sanitizer.sanitizeFile(testFile, config.outputDirectory + "/sanitized_sample.pdf", config, detectedType);
+                if (result.success) {
+                    std::cout << "✓ File sanitized successfully" << std::endl;
+                } else {
+                    std::cout << "✗ Sanitization failed: " << result.errorMessage << std::endl;
+                }
+            } else {
+                std::cout << "⚠ File type not supported for sanitization" << std::endl;
+            }
+        }
         
         // Get available sanitizers
         auto sanitizers = sanitizer.getAvailableSanitizers();
