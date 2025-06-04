@@ -280,9 +280,13 @@ bool VirusTotalManager::submitToRemoteService(const QString& apiKey) {
                         qInfo() << "File successfully uploaded. Analysis ID:" << analysisId;
                         m_lastAnalysisId = analysisId;
                         m_lastSubmissionStatus = VTErrorCodes::SUBMITTED_SUCCESSFULLY;
-                        
-                        // Start polling for results - first attempt after 5 seconds
+                          // Start polling for results - first attempt after 5 seconds
                         m_isScanning = true; // Keep scanning flag on during polling
+                        
+                        // Initialize polling parameters for the new analysis
+                        m_currentPollingAnalysisId = analysisId;
+                        m_pollingAttempt = 0;
+                        
                         startPollingForResults(analysisId);
                     } else {
                         qWarning() << "Error: Expected 'data.id' or 'data.type' not found in response.";
@@ -580,20 +584,19 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
                     }
                 }
             }
-            
-            // Tamamlanma durumundan bağımsız olarak UI'yi güncellemek için sonuçları yayınla
+              // Tamamlanma durumundan bağımsız olarak UI'yi güncellemek için sonuçları yayınla
             emit analysisResultsReady(m_lastResults);
             
             // Tamamlanmadıysa ve maksimum denemeye ulaşılmadıysa polling'e devam et
-            if (!isCompleted) {
+            if (!isCompleted && this->m_pollingAttempt < 5) {
                 // Aynı analysisId için polling'e devam etmek üzere özyinelemeli çağrı
-                // m_pollingAttempt bir sonraki mantıksal deneme için zaten artırılmış olacak
-                // (startPollingForResults'ın bir sonraki çağrısında)
                 startPollingForResults(analysisId);
             } else {
-                // Tamamlandığında tarama bayrağını ve polling durumunu sıfırla
+                // Tamamlandığında veya maksimum deneme sayısına ulaşıldığında tarama bayrağını sıfırla
                 m_isScanning = false;
-                // m_pollingAttempt bir sonraki yeni taramada submitToRemoteService içinde sıfırlanacak
+                if (!isCompleted) {
+                    qDebug() << "Max polling attempts reached for analysis" << analysisId;
+                }
             }
         });
     } else {

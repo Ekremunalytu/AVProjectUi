@@ -1507,6 +1507,48 @@ SanitizationResult CdrManager::sanitizeScriptFile(const std::string& filePath,
     return sanitizer.sanitizeScriptFile(filePath, outputPath, config);
 }
 
+SanitizationResult CdrManager::performSanitization(const std::string& fileTypeDescription,
+                                                   const std::string& inputPath,
+                                                   const std::string& outputPath,
+                                                   const CdrConfiguration& config,
+                                                   FileType fileType) {
+    std::cout << "[CdrManager] Performing sanitization for " << fileTypeDescription 
+              << ": " << inputPath << " -> " << outputPath << std::endl;
+    
+    try {
+        // Create a CdrSanitizer instance and use it to sanitize the file
+        CdrSanitizer sanitizer;
+        return sanitizer.sanitizeFile(inputPath, outputPath, config, fileType);
+        
+    } catch (const std::exception& e) {
+        SanitizationResult result;
+        result.success = false;
+        result.errorMessage = "Sanitization failed: " + std::string(e.what());
+        result.inputPath = inputPath;
+        result.outputPath = outputPath;
+        result.fileType = fileType;
+        std::cerr << "[CdrManager] Sanitization error: " << e.what() << std::endl;
+        return result;
+    }
+}
+
+bool CdrManager::sanitizeFile(const std::string& inputPath, const std::string& outputPath,
+                              const CdrConfiguration& config) {
+    try {
+        // Detect file type first
+        FileType fileType = detectFileType(inputPath);
+        
+        // Use the performSanitization helper method
+        SanitizationResult result = performSanitization("Generic File", inputPath, outputPath, config, fileType);
+        
+        // Return true if sanitization was successful
+        return result.success;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception during file sanitization for '" << inputPath << "': " << e.what() << std::endl;
+        return false;
+    }
+}
+
 bool CdrManager::quarantineFile(const std::string& filePath, const std::string& quarantinePath) {
     try {
         // Ensure quarantine directory exists

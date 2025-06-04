@@ -15,6 +15,11 @@
 #include <QColor>
 #include <QHeaderView>
 #include <QFileDialog> // Added for file dialog
+#include <QStandardPaths>
+#include <QProgressDialog>
+#include <QThread>
+#include <QTimer>
+#include <QCoreApplication>
 
 using namespace Qt::StringLiterals;
 
@@ -68,7 +73,9 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     m_basicScanner(std::make_unique<BasicScanner>(this, DatabaseService::getInstance().getDbManager())),
     m_virusTotalManager(std::make_unique<VirusTotalManager>()),
     m_cdrScanner(std::make_unique<CDRScanner>()), // Initialize CDRScanner
-    m_networkMonitor(new NetworkMonitor(this)) // Instantiate NetworkMonitor
+    m_networkMonitor(new NetworkMonitor(this)), // Instantiate NetworkMonitor    m_dockerManager(std::make_unique<Docker::DockerManager>()), // Initialize DockerManager
+    m_cdrManager(std::make_unique<CDR::CdrManager>()), // Initialize CdrManager
+    m_sandboxManager(std::make_unique<Sandbox::SandboxManager>()) // Initialize SandboxManager
 {
     ui->setupUi(this);
     
@@ -287,27 +294,171 @@ void DashboardWidget::onCdrScanButtonClicked() {
 
     ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s)); // Default text color
     ui->cdrResultsTextEdit->append(tr("Selected file: %1").arg(filePath));
-    ui->cdrResultsTextEdit->append(tr("Initiating CDR process..."));
-
-    if (m_cdrScanner) {
-        bool success = m_cdrScanner->scanFile(filePath);
-        if (success) {
+    ui->cdrResultsTextEdit->append(tr("Initiating CDR analysis..."));    if (m_cdrManager) {
+        // Perform detailed CDR analysis
+        ui->cdrResultsTextEdit->append(tr("🔍 Analyzing file structure..."));
+        
+        CDR::CdrConfiguration config;
+        config.analysisType = CDR::AnalysisType::COMPREHENSIVE_SCAN;
+        config.autoSanitize = true;
+        config.preserveOriginal = false;
+          // Create temporary directories for CDR processing
+        QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+        QString timestamp = QString::number(QDateTime::currentMSecsSinceEpoch());
+        QString inputDir = tempDir + u"/cdr_dashboard_input_"_s + timestamp;
+        QString outputDir = tempDir + u"/cdr_dashboard_output_"_s + timestamp;
+        QString quarantineDir = tempDir + u"/cdr_dashboard_quarantine_"_s + timestamp;
+        
+        // Create the directories
+        if (!QDir().mkpath(inputDir)) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary input directory"));
+            return;
+        }
+        if (!QDir().mkpath(outputDir)) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary output directory"));
+            return;
+        }
+        if (!QDir().mkpath(quarantineDir)) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary quarantine directory"));
+            return;
+        }
+          // Set the CDR configuration directories
+        config.inputDirectory = inputDir.toStdString();
+        config.outputDirectory = outputDir.toStdString();
+        config.quarantineDirectory = quarantineDir.toStdString();
+          // Copy the selected file to the input directory for analysis
+        QString selectedFileName = QFileInfo(filePath).fileName();
+        QString inputFilePath = inputDir + u"/"_s + selectedFileName;
+        
+        if (!QFile::copy(filePath, inputFilePath)) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->cdrResultsTextEdit->append(tr("❌ Failed to copy file to input directory"));
+            return;
+        }
+        
+        ui->cdrResultsTextEdit->append(tr("📂 File prepared for analysis: %1").arg(selectedFileName));
+          try {
+            // Start analysis on the input directory
+            std::string analysisId = m_cdrManager->startAnalysis(
+                inputDir.toStdString(),
+                config
+            );
+            
+            ui->cdrResultsTextEdit->append(tr("🔄 Analysis started with ID: %1").arg(QString::fromStdString(analysisId)));
+            
+            // Poll for analysis completion (simplified approach)
+            int maxAttempts = 30; // 30 seconds timeout
+            int attempts = 0;
+            CDR::CdrAnalysisResult result;
+            
+            while (attempts < maxAttempts) {
+                result = m_cdrManager->getAnalysisStatus(analysisId);
+                
+                if (result.status == "completed" || result.status == "failed") {
+                    break;
+                }
+                
+                // Update progress
+                if (attempts % 5 == 0) { // Update every 5 seconds
+                    ui->cdrResultsTextEdit->append(tr("⏳ Analysis in progress... (%1%)").arg(result.progressPercentage));
+                }
+                
+                QThread::msleep(1000); // Wait 1 second
+                QCoreApplication::processEvents(); // Keep UI responsive
+                attempts++;
+            }
+              if (attempts >= maxAttempts) {
+                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                ui->cdrResultsTextEdit->append(tr("⏰ Analysis timed out"));
+                return;
+            }
+            
+            // Analysis completed, process results
+            if (result.status == "completed" && result.isSafe) {
             ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s)); // Green for success
-            ui->cdrResultsTextEdit->append(tr("CDR process completed successfully."));
-            ui->cdrResultsTextEdit->append(tr("Sanitized file saved at: %1").arg(m_cdrScanner->getSanitizedFilePath()));
-            // Here you would typically display logs from the CDR process.
-            // For now, we're just showing the status.
-            // To show Docker logs, you would call a method like m_cdrScanner->getProcessLogs()
-            // which in turn would use m_dockerManager->getContainerLogs(...)
-            // Example: ui->cdrResultsTextEdit->append(m_cdrScanner->getProcessLogs());
+            ui->cdrResultsTextEdit->append(tr("✅ Analysis completed successfully"));
+            ui->cdrResultsTextEdit->append(u""_s);
+            
+            // Display analysis results
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+            ui->cdrResultsTextEdit->append(tr("📊 Analysis Results:"));
+            ui->cdrResultsTextEdit->append(tr("  • Files Scanned: %1").arg(result.totalFilesScanned));
+            ui->cdrResultsTextEdit->append(tr("  • Clean Files: %1").arg(result.cleanFiles.size()));
+            ui->cdrResultsTextEdit->append(tr("  • Threats Detected: %1").arg(result.threatsDetected));
+            ui->cdrResultsTextEdit->append(tr("  • Files Quarantined: %1").arg(result.filesQuarantined));
+            
+            if (result.threatsDetected > 0) {
+                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for threats
+                ui->cdrResultsTextEdit->append(u""_s);
+                ui->cdrResultsTextEdit->append(tr("⚠️  THREATS DETECTED:"));
+                  for (const auto& quarantinedFile : result.quarantinedFiles) {
+                    ui->cdrResultsTextEdit->append(tr("  🚨 Quarantined: %1").arg(QString::fromStdString(quarantinedFile)));
+                }
+                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                ui->cdrResultsTextEdit->append(u""_s);
+                
+                // Ask user what to do with threats
+                QMessageBox msgBox;
+                msgBox.setWindowTitle(tr("Threats Detected"));
+                msgBox.setText(tr("Malicious content has been detected in the file.\nWhat would you like to do?"));
+                msgBox.setIcon(QMessageBox::Warning);
+                
+                QPushButton *cleanButton = msgBox.addButton(tr("Clean & Sanitize"), QMessageBox::ActionRole);
+                QPushButton *deleteButton = msgBox.addButton(tr("Delete File"), QMessageBox::DestructiveRole);
+                QPushButton *ignoreButton = msgBox.addButton(tr("Ignore"), QMessageBox::RejectRole);
+                
+                msgBox.exec();
+                
+                if (msgBox.clickedButton() == cleanButton) {
+                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+                    ui->cdrResultsTextEdit->append(tr("🔧 Cleaning and sanitizing file..."));
+                    
+                    QString outputPath = filePath + QStringLiteral("_cleaned");
+                    bool sanitizeSuccess = m_cdrManager->sanitizeFile(
+                        filePath.toStdString(), 
+                        outputPath.toStdString(), 
+                        config
+                    );
+                    
+                    if (sanitizeSuccess) {
+                        ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+                        ui->cdrResultsTextEdit->append(tr("✅ File successfully cleaned!"));
+                        ui->cdrResultsTextEdit->append(tr("📁 Clean file saved to: %1").arg(outputPath));
+                    } else {
+                        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                        ui->cdrResultsTextEdit->append(tr("❌ Failed to clean file"));
+                    }
+                } else if (msgBox.clickedButton() == deleteButton) {
+                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                    ui->cdrResultsTextEdit->append(tr("🗑️  Deleting file..."));
+                    if (QFile::remove(filePath)) {
+                        ui->cdrResultsTextEdit->append(tr("✅ File successfully deleted"));
+                    } else {
+                        ui->cdrResultsTextEdit->append(tr("❌ Failed to delete file"));
+                    }
+                } else {
+                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+                    ui->cdrResultsTextEdit->append(tr("⚠️  User chose to ignore threats"));
+                }
+            } else {
+                ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+                ui->cdrResultsTextEdit->append(tr("✅ No threats detected - file is clean!"));
+            }
         } else {
             ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
-            ui->cdrResultsTextEdit->append(tr("CDR process failed."));
-            ui->cdrResultsTextEdit->append(tr("Error: %1").arg(m_cdrScanner->getLastError()));
+            ui->cdrResultsTextEdit->append(tr("❌ CDR analysis failed"));
+            ui->cdrResultsTextEdit->append(tr("Error: %1").arg(QString::fromStdString(result.errorMessage)));
+        }
+        } catch (const std::exception& e) {
+            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->cdrResultsTextEdit->append(tr("❌ CDR analysis error: %1").arg(QString::fromStdString(e.what())));
         }
     } else {
         ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
-        ui->cdrResultsTextEdit->append(tr("CDRScanner not initialized."));
+        ui->cdrResultsTextEdit->append(tr("❌ CDR Manager not initialized"));
     }
 }
 
@@ -337,10 +488,265 @@ void DashboardWidget::onSandboxScanButtonClicked() {
     ui->sandboxResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
     ui->sandboxResultsTextEdit->append(u"  "_s + QString::fromUtf8(DashboardText::SANDBOX_SCAN));
     ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // Open file dialog to select a file
+    QString filePath = QFileDialog::getOpenFileName(this, 
+                                                    tr("Select File for Sandbox Analysis"), 
+                                                    QDir::homePath(), 
+                                                    tr("Executable Files (*.exe *.dll *.bat *.ps1);;All Files (*.*)"));
+
+    if (filePath.isEmpty()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+        ui->sandboxResultsTextEdit->append(tr("File selection canceled."));
+        return;
+    }
+
     ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-    ui->sandboxResultsTextEdit->append(u"Preparing isolated sandbox environment..."_s);
-    ui->sandboxResultsTextEdit->append(u"Loading file for analysis..."_s);
-    ui->sandboxResultsTextEdit->append(u"Monitoring file behavior in sandbox..."_s);
+    ui->sandboxResultsTextEdit->append(tr("Selected file: %1").arg(filePath));
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    if (!m_sandboxManager) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->sandboxResultsTextEdit->append(tr("❌ Sandbox manager not initialized"));
+        return;
+    }
+    
+    // Check if Docker daemon is running
+    if (!m_sandboxManager->isDaemonRunning()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->sandboxResultsTextEdit->append(tr("❌ Docker daemon is not running"));
+        ui->sandboxResultsTextEdit->append(tr("Please start Docker Desktop and try again"));
+        return;
+    }
+    
+    // Step 1: Analyze file for threats in sandbox
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+    ui->sandboxResultsTextEdit->append(tr("🏗️  Creating isolated sandbox environment..."));
+    ui->sandboxResultsTextEdit->append(tr("🔍 Analyzing file for threats..."));
+    
+    // Use the comprehensive sandbox analysis
+    Sandbox::SandboxAnalysisResult analysisResult = m_sandboxManager->analyzeFileForThreats(
+        filePath.toStdString(), 
+        Sandbox::MonitoringLevel::STANDARD
+    );
+    
+    // Display analysis results
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+    ui->sandboxResultsTextEdit->append(tr("✅ Sandbox analysis completed"));
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // Display threat level
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+    ui->sandboxResultsTextEdit->append(tr("📋 SANDBOX ANALYSIS RESULTS:"));
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // Threat level display
+    QString threatLevelStr;
+    QColor threatColor;
+    switch (analysisResult.overallThreatLevel) {
+        case Sandbox::ThreatLevel::NONE:
+            threatLevelStr = tr("NONE (Safe)");
+            threatColor = QColor(u"#4CAF50"_s);
+            break;
+        case Sandbox::ThreatLevel::LOW:
+            threatLevelStr = tr("LOW");
+            threatColor = QColor(u"#FFEB3B"_s);
+            break;
+        case Sandbox::ThreatLevel::MEDIUM:
+            threatLevelStr = tr("MEDIUM");
+            threatColor = QColor(u"#FF9800"_s);
+            break;
+        case Sandbox::ThreatLevel::HIGH:
+            threatLevelStr = tr("HIGH");
+            threatColor = QColor(u"#FF5722"_s);
+            break;
+        case Sandbox::ThreatLevel::CRITICAL:
+            threatLevelStr = tr("CRITICAL");
+            threatColor = QColor(u"#F44336"_s);
+            break;
+        default:
+            threatLevelStr = tr("UNKNOWN");
+            threatColor = QColor(u"#9E9E9E"_s);
+    }
+    
+    ui->sandboxResultsTextEdit->setTextColor(threatColor);
+    ui->sandboxResultsTextEdit->append(tr("⚠️  THREAT LEVEL: %1").arg(threatLevelStr));
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // Display detected threats
+    if (!analysisResult.detectedThreats.empty()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->sandboxResultsTextEdit->append(tr("🚨 DETECTED THREATS (%1):").arg(analysisResult.detectedThreats.size()));
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        
+        for (const auto& threat : analysisResult.detectedThreats) {
+            QString threatTypeStr;
+            switch (threat.type) {
+                case Sandbox::ThreatType::MALWARE: threatTypeStr = tr("Malware"); break;
+                case Sandbox::ThreatType::VIRUS: threatTypeStr = tr("Virus"); break;
+                case Sandbox::ThreatType::TROJAN: threatTypeStr = tr("Trojan"); break;
+                case Sandbox::ThreatType::RANSOMWARE: threatTypeStr = tr("Ransomware"); break;
+                case Sandbox::ThreatType::SPYWARE: threatTypeStr = tr("Spyware"); break;
+                case Sandbox::ThreatType::ADWARE: threatTypeStr = tr("Adware"); break;
+                case Sandbox::ThreatType::POTENTIALLY_UNWANTED_PROGRAM: threatTypeStr = tr("PUP"); break;
+                case Sandbox::ThreatType::SUSPICIOUS_BEHAVIOR: threatTypeStr = tr("Suspicious Behavior"); break;
+                default: threatTypeStr = tr("Unknown");
+            }
+            
+            ui->sandboxResultsTextEdit->append(tr("  • %1: %2").arg(threatTypeStr, QString::fromStdString(threat.description)));
+            if (!threat.details.empty()) {
+                ui->sandboxResultsTextEdit->append(tr("    Details: %1").arg(QString::fromStdString(threat.details)));
+            }
+        }
+        ui->sandboxResultsTextEdit->append(u""_s);
+    } else {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->sandboxResultsTextEdit->append(tr("✅ No threats detected"));
+        ui->sandboxResultsTextEdit->append(u""_s);
+    }
+    
+    // Display behavioral analysis
+    if (!analysisResult.behaviorAnalysis.networkConnections.empty()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+        ui->sandboxResultsTextEdit->append(tr("🌐 NETWORK ACTIVITY (%1 connections):").arg(analysisResult.behaviorAnalysis.networkConnections.size()));
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        
+        for (const auto& conn : analysisResult.behaviorAnalysis.networkConnections) {
+            ui->sandboxResultsTextEdit->append(tr("  • %1:%2 (%3)").arg(
+                QString::fromStdString(conn.destinationHost),
+                QString::number(conn.destinationPort),
+                QString::fromStdString(conn.protocol)
+            ));
+        }
+        ui->sandboxResultsTextEdit->append(u""_s);
+    }
+    
+    // Display file system activity
+    if (!analysisResult.behaviorAnalysis.fileSystemActivity.empty()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#9C27B0"_s));
+        ui->sandboxResultsTextEdit->append(tr("📁 FILE SYSTEM ACTIVITY (%1 operations):").arg(analysisResult.behaviorAnalysis.fileSystemActivity.size()));
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        
+        int displayCount = 0;
+        for (const auto& fsActivity : analysisResult.behaviorAnalysis.fileSystemActivity) {
+            if (displayCount >= 10) { // Limit display to first 10
+                ui->sandboxResultsTextEdit->append(tr("  ... and %1 more operations").arg(analysisResult.behaviorAnalysis.fileSystemActivity.size() - displayCount));
+                break;
+            }
+            
+            QString operationStr;
+            switch (fsActivity.operation) {
+                case Sandbox::FileOperation::CREATE: operationStr = tr("CREATE"); break;
+                case Sandbox::FileOperation::MODIFY: operationStr = tr("MODIFY"); break;
+                case Sandbox::FileOperation::DELETE: operationStr = tr("DELETE"); break;
+                case Sandbox::FileOperation::READ: operationStr = tr("READ"); break;
+                case Sandbox::FileOperation::WRITE: operationStr = tr("WRITE"); break;
+                default: operationStr = tr("UNKNOWN");
+            }
+            
+            ui->sandboxResultsTextEdit->append(tr("  • %1: %2").arg(operationStr, QString::fromStdString(fsActivity.filePath)));
+            displayCount++;
+        }
+        ui->sandboxResultsTextEdit->append(u""_s);
+    }
+    
+    // Show execution summary
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#607D8B"_s));
+    ui->sandboxResultsTextEdit->append(tr("📊 EXECUTION SUMMARY:"));
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+    ui->sandboxResultsTextEdit->append(tr("  • Analysis Duration: %1 seconds").arg(analysisResult.executionDurationSeconds));
+    ui->sandboxResultsTextEdit->append(tr("  • Exit Code: %1").arg(analysisResult.processExitCode));
+    ui->sandboxResultsTextEdit->append(tr("  • Success: %1").arg(analysisResult.success ? tr("Yes") : tr("No")));
+    
+    if (!analysisResult.errorMessage.empty()) {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->sandboxResultsTextEdit->append(tr("  • Error: %1").arg(QString::fromStdString(analysisResult.errorMessage)));
+    }
+    ui->sandboxResultsTextEdit->append(u""_s);
+    
+    // If threats were detected, ask user what to do
+    if (analysisResult.overallThreatLevel != Sandbox::ThreatLevel::NONE && 
+        !analysisResult.detectedThreats.empty()) {
+        
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Threats Detected in Sandbox"));
+        msgBox.setText(tr("The sandbox analysis detected %1 threats.\nWhat would you like to do with this file?").arg(analysisResult.detectedThreats.size()));
+        msgBox.setIcon(QMessageBox::Warning);
+        
+        QPushButton *quarantineButton = msgBox.addButton(tr("Quarantine File"), QMessageBox::ActionRole);
+        QPushButton *deleteButton = msgBox.addButton(tr("Delete File"), QMessageBox::DestructiveRole);
+        QPushButton *allowButton = msgBox.addButton(tr("Allow (Ignore)"), QMessageBox::AcceptRole);
+        QPushButton *moreAnalysisButton = msgBox.addButton(tr("Deep Analysis"), QMessageBox::ActionRole);
+        
+        msgBox.exec();
+        
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
+        ui->sandboxResultsTextEdit->append(tr("🎯 USER ACTION:"));
+        
+        if (msgBox.clickedButton() == quarantineButton) {
+            ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF9800"_s));
+            ui->sandboxResultsTextEdit->append(tr("🔒 Quarantining file..."));
+              bool success = m_sandboxManager->processFileWithUserChoice(
+                filePath.toStdString(),
+                Sandbox::UserAction::QUARANTINE
+            );
+            
+            if (success) {
+                ui->sandboxResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+                ui->sandboxResultsTextEdit->append(tr("✅ File successfully quarantined"));
+            } else {
+                ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                ui->sandboxResultsTextEdit->append(tr("❌ Failed to quarantine file"));
+            }
+            
+        } else if (msgBox.clickedButton() == deleteButton) {
+            ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+            ui->sandboxResultsTextEdit->append(tr("🗑️  Deleting file..."));
+              bool success = m_sandboxManager->processFileWithUserChoice(
+                filePath.toStdString(),
+                Sandbox::UserAction::DELETE
+            );
+            
+            if (success) {
+                ui->sandboxResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+                ui->sandboxResultsTextEdit->append(tr("✅ File successfully deleted"));
+            } else {
+                ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+                ui->sandboxResultsTextEdit->append(tr("❌ Failed to delete file"));
+            }
+            
+        } else if (msgBox.clickedButton() == allowButton) {
+            ui->sandboxResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
+            ui->sandboxResultsTextEdit->append(tr("⚠️  File allowed despite threats"));
+            ui->sandboxResultsTextEdit->append(tr("   User chose to ignore sandbox warnings"));
+            
+        } else if (msgBox.clickedButton() == moreAnalysisButton) {
+            ui->sandboxResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
+            ui->sandboxResultsTextEdit->append(tr("🔬 Performing deep analysis..."));
+            
+            // Perform deep analysis
+            Sandbox::SandboxAnalysisResult deepResult = m_sandboxManager->analyzeFileForThreats(
+                filePath.toStdString(), 
+                Sandbox::MonitoringLevel::DEEP
+            );
+            
+            ui->sandboxResultsTextEdit->append(tr("📊 Deep analysis completed"));
+            ui->sandboxResultsTextEdit->append(tr("   Additional monitoring data collected"));
+            
+            // Display additional deep analysis results if different
+            if (deepResult.detectedThreats.size() != analysisResult.detectedThreats.size()) {
+                ui->sandboxResultsTextEdit->append(tr("   New threats found: %1").arg(deepResult.detectedThreats.size() - analysisResult.detectedThreats.size()));
+            }
+        }
+    } else {
+        ui->sandboxResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->sandboxResultsTextEdit->append(tr("✅ File appears safe based on sandbox analysis"));
+        ui->sandboxResultsTextEdit->append(tr("   No malicious behavior detected"));
+    }
+    
+    ui->sandboxResultsTextEdit->append(u""_s);
+    ui->sandboxResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
+    ui->sandboxResultsTextEdit->append(tr("=== Sandbox Analysis Complete ==="));
 }
 
 /**
@@ -744,14 +1150,20 @@ void DashboardWidget::handleVirusTotalResults(const QString& results) {
 
     // Check if the analysis is completed by looking at the status or presence of results
     QString analysisStatus = attributesObject.value(u"status"_s).toString();
-    bool hasResults = attributesObject.contains(u"results"_s) && attributesObject.value(u"results"_s).isObject();
-
-    if (!hasResults || analysisStatus == QLatin1String("queued")) {
+    bool hasResults = attributesObject.contains(u"results"_s) && attributesObject.value(u"results"_s).isObject();    if (!hasResults || analysisStatus == QLatin1String("queued")) {
         qWarning() << "VirusTotal analysis is not complete or results are not yet available. Status:" << analysisStatus;
         ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
+        
+        QString statusMessage;
+        if (analysisStatus == QLatin1String("queued")) {
+            statusMessage = tr("⏳ VirusTotal: Analiz kuyrukta bekliyor...");
+        } else {
+            statusMessage = QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING);
+        }
+        
+        if (!ui->basicScanResultsTextEdit->toPlainText().contains(statusMessage)) {
              ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
-             ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
+             ui->basicScanResultsTextEdit->append(statusMessage);
         }
         return;
     }

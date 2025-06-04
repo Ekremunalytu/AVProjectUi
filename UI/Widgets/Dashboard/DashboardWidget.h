@@ -9,6 +9,11 @@
 #include "Network/VirusTotal/VirusTotalManager.h"
 #include "Network/Monitor/NetworkMonitor.h" // Added include
 #include "Scanner/CDRScanner.h" // Added for CDRScanner
+#include "../../Docker/include/docker/DockerManager.h" // Added for Docker management
+#include "../../Docker/include/cdr/CdrManager.h" // Added for CDR management
+#include "../../Sandbox/SandboxManager.h" // Added for Sandbox management
+#include "../../Docker/include/docker/DockerTypes.h" // Added for Docker types
+#include "../../Docker/include/cdr/CdrTypes.h" // Added for CDR types
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DashboardWidget; }
@@ -108,7 +113,9 @@ private:
     std::unique_ptr<BasicScanner> m_basicScanner; ///< Scanner for basic file scanning
     std::unique_ptr<VirusTotalManager> m_virusTotalManager; ///< Manager for VirusTotal API integration
     std::unique_ptr<CDRScanner> m_cdrScanner; ///< Scanner for CDR operations
-    NetworkMonitor *m_networkMonitor; ///< Network monitor instance
+    NetworkMonitor *m_networkMonitor; ///< Network monitor instance    std::unique_ptr<Docker::DockerManager> m_dockerManager; ///< Docker container management
+    std::unique_ptr<CDR::CdrManager> m_cdrManager; ///< CDR analysis and sanitization management
+    std::unique_ptr<Sandbox::SandboxManager> m_sandboxManager; ///< Sandbox analysis and execution management
 };
 
 #endif // DASHBOARDWIDGET_H

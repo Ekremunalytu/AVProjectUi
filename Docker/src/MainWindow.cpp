@@ -390,18 +390,31 @@ void MainWindow::onStartCdrAnalysisButtonClicked()
 
         try {
             cdrStatusLabel->setText(tr("CDR Status: Preparing single file sanitization..."));
-            cdrResultsTextEdit->clear();
-
-            CDR::CdrConfiguration config; // Use default or allow user to configure
+            cdrResultsTextEdit->clear();            CDR::CdrConfiguration config; // Use default or allow user to configure
             config.securityLevel = CDR::CdrConfiguration::SecurityLevel::HIGH;
             config.autoSanitize = true;
 
             // Determine output path
             QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
             QString outputDir = tempDir + "/cdr_sanitized_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+            QString inputDir = tempDir + "/cdr_input_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+            QString quarantineDir = tempDir + "/cdr_quarantine_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+            
             if (!QDir().mkpath(outputDir)) {
                 throw std::runtime_error("Failed to create temporary output directory for sanitization.");
             }
+            if (!QDir().mkpath(inputDir)) {
+                throw std::runtime_error("Failed to create temporary input directory for sanitization.");
+            }
+            if (!QDir().mkpath(quarantineDir)) {
+                throw std::runtime_error("Failed to create temporary quarantine directory for sanitization.");
+            }
+            
+            // Set the required directories in configuration
+            config.inputDirectory = inputDir.toStdString();
+            config.outputDirectory = outputDir.toStdString();
+            config.quarantineDirectory = quarantineDir.toStdString();
+            
             tempDirPath_ = outputDir; // Store for cleanup
             QString outputFilePath = outputDir + "/" + selectedFileInfo.fileName();
 

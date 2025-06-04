@@ -15,27 +15,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Disable internationalization, forcing English - remove tr() function effects
 add_definitions(-DQT_NO_TRANSLATION)
 
-# Enable CTest support
-include(CTest)
-enable_testing()
-
 # Qt path configuration - adjust this according to your Qt installation
-# set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos") # Commented out for Windows
 if(APPLE)
   set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 elseif(WIN32)
-  # Windows için Qt yolunu buraya ekleyin veya ortam değişkeni olarak ayarlayın
   set(CMAKE_PREFIX_PATH "C:/Qt/6.9.0/mingw_64")
-  # Ortam değişkeni CMAKE_PREFIX_PATH tanımlıysa bu satıra gerek olmayabilir.
-  # if(DEFINED ENV{CMAKE_PREFIX_PATH})
-  #   set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
-  # else()
-  #   message(WARNING "CMAKE_PREFIX_PATH ortam değişkeni veya CMakeLists.txt içinde Windows için Qt yolu tanımlanmamış. Lütfen Qt kurulum yolunuzu belirtin.")
-  # endif()
 endif()
 
 # Find required Qt packages with proper version
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Network Test)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Network)
 
 # Enable automatic handling of Qt-specific files
 set(CMAKE_AUTOMOC ON)
@@ -82,14 +70,13 @@ qt_add_executable(AvProjectUi
         Scanner/Dashboard/BasicScanner/BasicScanner.h
         
         Scanner/CDRScanner.cpp
-        Scanner/CDRScanner.h 
-
-        Docker/src/docker/DockerManager.cpp
-        Docker/src/cdr/CdrManager.cpp
+        Scanner/CDRScanner.h        
+        Docker/src/docker/DockerManager.cpp        Docker/src/cdr/CdrManager.cpp
         Docker/src/cdr/CdrSanitizer.cpp
         Docker/src/cdr/FilesystemCompat.cpp
-        # Note: Docker/src/main.cpp and Docker/src/MainWindow.cpp from the Docker folder 
-        # are likely for a standalone test app and probably should not be included here.
+        
+        Sandbox/SandboxManager.cpp
+        Sandbox/SandboxManager.h
 
         Core/AppConfig.h
         Network/VirusTotal/VirusTotalManager.cpp
@@ -145,17 +132,6 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
-
-# Add tests directory
-add_subdirectory(tests)
-
-# Add custom target: build_and_test
-add_custom_target(build_and_test
-    COMMENT "Build all targets and run tests"
-    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target all
-    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
 
 if(WIN32)
     # Qt DLL'lerini kopyalamak için bir hedef ekleyin

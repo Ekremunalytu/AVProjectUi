@@ -1,8 +1,0 @@
-set(__QT_DEPLOY_TARGET_DashboardTest_FILE /Volumes/Crucial/AVProjectUi/build/tests/DashboardTest)
-set(__QT_DEPLOY_TARGET_DashboardTest_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_MainWindowTest_FILE /Volumes/Crucial/AVProjectUi/build/tests/MainWindowTest)
-set(__QT_DEPLOY_TARGET_MainWindowTest_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_DbManagerTest_FILE /Volumes/Crucial/AVProjectUi/build/tests/DbManagerTest)
-set(__QT_DEPLOY_TARGET_DbManagerTest_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_AvProjectUi_FILE /Volumes/Crucial/AVProjectUi/build/AvProjectUi.app/Contents/MacOS/AvProjectUi)
-set(__QT_DEPLOY_TARGET_AvProjectUi_TYPE EXECUTABLE)
