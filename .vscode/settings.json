@@ -5,5 +5,46 @@
         "random": "cpp",
         "chrono": "cpp",
         "functional": "cpp"
-    }
+    },
+    
+    // Documentation settings
+    "doxdocgen.c.triggerSequence": "/**",
+    "doxdocgen.cpp.triggerSequence": "/**",
+    "doxdocgen.generic.authorName": "AVProjectUi Team",
+    "doxdocgen.generic.authorEmail": "contact@avprojectui.com",
+    "doxdocgen.file.fileTemplate": "@file {name}",
+    "doxdocgen.file.versionTag": "@version 1.0",
+    
+    // Terminal settings for documentation
+    "terminal.integrated.env.osx": {
+        "PATH": "${env:PATH}:/usr/local/bin"
+    },
+    
+    // File explorer exclusions
+    "files.exclude": {
+        "**/cmake-build-*": true,
+        "**/build": true,
+        "**/.DS_Store": true,
+        "**/docs/html": false
+    },
+    
+    // Search exclusions
+    "search.exclude": {
+        "**/cmake-build-*": true,
+        "**/build": true,
+        "**/docs/html": true
+    },
+    
+    // Quick suggestions for documentation
+    "editor.quickSuggestions": {
+        "comments": true
+    },
+    
+    // Recommended extensions for this workspace
+    "extensions.recommendations": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools", 
+        "cschlosser.doxdocgen",
+        "ms-python.python"
+    ]
 }

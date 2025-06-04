@@ -165,12 +165,12 @@ private:
      */
     QString getDefaultErrorMessage(ScannerErrorCode code) const;
 
-    QFileInfo m_selectedFile;
-    QString m_results;
-    bool m_isScanning;
-    DbManager* m_dbManager; // Not owned by this class
-    ScannerErrorCode m_lastError;
-    QString m_lastErrorMessage;
+    QFileInfo m_selectedFile; ///< Information about the currently selected file
+    QString m_results; ///< Formatted results from the last scan operation
+    bool m_isScanning; ///< Flag indicating if a scan is currently in progress
+    DbManager* m_dbManager; ///< Pointer to database manager (not owned by this class)
+    ScannerErrorCode m_lastError; ///< Last error code that occurred during scanning
+    QString m_lastErrorMessage; ///< Human-readable message for the last error
 };
 
 #endif //BASICSCANNER_H

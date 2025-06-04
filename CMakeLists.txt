@@ -133,12 +133,57 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
+# Documentation targets
+find_program(DOXYGEN_EXECUTABLE doxygen)
+find_program(PYTHON_EXECUTABLE python3)
+
+if(DOXYGEN_EXECUTABLE)
+    # Generate documentation target
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+    
+    # Serve documentation target
+    if(PYTHON_EXECUTABLE)
+        add_custom_target(serve-docs
+            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/serve_docs.py
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Starting documentation server"
+            VERBATIM
+        )
+        
+        # Combined target: generate docs and serve them
+        add_custom_target(docs-serve
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
+            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/serve_docs.py
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+            COMMENT "Generating documentation and starting server"
+            VERBATIM
+        )
+    else()
+        message(WARNING "Python3 not found. Documentation server targets will not be available.")
+    endif()
+else()
+    message(WARNING "Doxygen not found. Documentation targets will not be available.")
+endif()
+
 if(WIN32)
-    # Qt DLL'lerini kopyalamak için bir hedef ekleyin
+    # Add a target to copy Qt DLLs
     add_custom_command(TARGET AvProjectUi POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_PREFIX_PATH}/bin # Qt bin klasörünün yolu
-        $<TARGET_FILE_DIR:AvProjectUi> # Hedef yürütülebilir dosyanın dizini
+        ${CMAKE_PREFIX_PATH}/bin # Qt bin folder path
+        $<TARGET_FILE_DIR:AvProjectUi> # Target executable directory
         COMMENT "Copying Qt DLLs to build directory"
     )
 endif()
+
+# Copy config.ini to executable directory for all platforms
+add_custom_command(TARGET AvProjectUi POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_SOURCE_DIR}/Core/config.ini
+    $<TARGET_FILE_DIR:AvProjectUi>/config.ini
+    COMMENT "Copying config.ini to executable directory"
+)

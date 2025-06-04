@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
         // Check Docker daemon status first
         checkDaemonStatus(dockerManager);
         
-        // Test dosya tarama işlevselliğini göster
+        // Show test file scanning functionality
         testFileScanning();
         
         // List containers

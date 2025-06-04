@@ -75,14 +75,22 @@ VirusTotalManager::VirusTotalManager(const QString& apiKey)
     
     // If no API key provided, load it from AppConfig
     if (m_apiKey.isEmpty()) {
+        qDebug() << "Loading VirusTotal API key from AppConfig...";
         m_apiKey = AppConfig::getInstance().getVirusTotalApiKey();
+        qDebug() << "Loaded API key length:" << m_apiKey.length();
     }
     
     // Log warning if API key looks invalid
     if (m_apiKey.isEmpty()) {
-        qWarning() << "VirusTotal API anahtarı ayarlanmamış! config.ini dosyasında [VirusTotal] bölümüne ApiKey ekleyin.";
+        qWarning() << "VirusTotal API key not set! Add ApiKey to [VirusTotal] section in config.ini file.";
+        qWarning() << "Expected config.ini format:";
+        qWarning() << "[VirusTotal]";
+        qWarning() << "ApiKey=your_64_character_api_key_here";
     } else if (m_apiKey.length() < 32) {
-        qWarning() << "VirusTotal API anahtarı geçersiz görünüyor! VirusTotal API anahtarları genellikle 64 karakter uzunluğundadır.";
+        qWarning() << "VirusTotal API key appears invalid! VirusTotal API keys are typically 64 characters long.";
+        qWarning() << "Current API key length:" << m_apiKey.length();
+    } else {
+        qDebug() << "VirusTotal API key loaded successfully. Length:" << m_apiKey.length();
     }
 }
 
@@ -527,14 +535,14 @@ QString VirusTotalManager::getAnalysisReport(const QString& analysisId) {
  * Will attempt up to 5 times with increasing delay between attempts.
  */
 void VirusTotalManager::startPollingForResults(const QString& analysisId) {
-    // Bu fonksiyon çağrılmadan önce m_currentPollingAnalysisId ve m_pollingAttempt'in
-    // submitToRemoteService gibi bir yerde yeni analiz için ayarlandığını varsayıyoruz.
-    // Örnek:
+    // We assume that m_currentPollingAnalysisId and m_pollingAttempt are set for new analysis
+    // before this function is called, such as in submitToRemoteService.
+    // Example:
     // this->m_currentPollingAnalysisId = analysisId;
     // this->m_pollingAttempt = 0;
 
-    // Eğer mevcut polling ID'si farklıysa veya yeni bir analiz başlatılıyorsa, deneme sayısını sıfırla.
-    // Bu, submitToRemoteService'de doğru başlatma yapıldıysa bir güvenlik önlemidir.
+    // If the current polling ID is different or a new analysis is starting, reset the attempt count.
+    // This is a safety measure if proper initialization was done in submitToRemoteService.
     if (this->m_currentPollingAnalysisId != analysisId) {
         this->m_currentPollingAnalysisId = analysisId;
         this->m_pollingAttempt = 0;
@@ -542,34 +550,39 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
     
     this->m_pollingAttempt++;
     
-    // Artan bekleme süresi ile gecikmeyi hesapla
+    // Calculate delay with reasonable wait times - prioritize user experience
     int delayMs;
     switch (this->m_pollingAttempt) {
-        case 1: delayMs = 5000; break;  // 5 saniye
-        case 2: delayMs = 10000; break; // 10 saniye
-        case 3: delayMs = 15000; break; // 15 saniye
-        case 4: delayMs = 20000; break; // 20 saniye
-        case 5: delayMs = 30000; break; // 30 saniye
-        default: delayMs = 30000; break; // 5 denemeden sonra (mevcut mantık 5'te durur)
+        case 1: delayMs = 5000; break;   // 5 seconds
+        case 2: delayMs = 10000; break;  // 10 seconds  
+        case 3: delayMs = 15000; break;  // 15 seconds
+        case 4: delayMs = 20000; break;  // 20 seconds
+        case 5: delayMs = 30000; break;  // 30 seconds
+        case 6: delayMs = 45000; break;  // 45 seconds
+        case 7: delayMs = 60000; break;  // 1 minute
+        case 8: delayMs = 90000; break;  // 1.5 minutes
+        default: delayMs = 120000; break; // 2 minutes for final attempts
     }
     
-    // Maksimum 5 polling denemesi
-    if (this->m_pollingAttempt <= 5) {
+    // Maximum 8 polling attempts (total ~6-7 minutes)
+    if (this->m_pollingAttempt <= 8) {
         qDebug() << "Polling for VirusTotal results: attempt" << this->m_pollingAttempt
-                 << "for analysis" << analysisId << "with delay" << (delayMs / 1000.0) << "seconds";
+                 << "of 8 for analysis" << analysisId << "with delay" << (delayMs / 1000.0) << "seconds";
         
         QTimer::singleShot(delayMs, this, [this, analysisId]() {
-            // Zayıf işaretçi deseni başka yerlerde yeterlidir
-            // Nesne yok edilirse bağlantı otomatik olarak kesilecektir
+            // Weak pointer pattern is sufficient elsewhere
+            // Connection will be automatically severed if object is destroyed
             
-            // Analiz raporunu al
+            // Get analysis report
             QString results = getAnalysisReport(analysisId);
             qDebug() << "Analysis results obtained in polling. Emitting signal.";
+            qDebug() << "Raw response (first 500 chars):" << results.left(500);
             m_lastResults = results;
             
-            // Analizin tamamlanıp tamamlanmadığını kontrol et
+            // Check if analysis is completed
             QJsonDocument jsonDoc = QJsonDocument::fromJson(results.toUtf8());
             bool isCompleted = false;
+            QString currentStatus = QLatin1String("unknown");
             
             if (!jsonDoc.isNull() && jsonDoc.isObject()) {
                 QJsonObject rootObj = jsonDoc.object();
@@ -578,35 +591,63 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
                     if (dataObj.contains(QLatin1String("attributes")) && dataObj[QLatin1String("attributes")].isObject()) {
                         QJsonObject attrsObj = dataObj[QLatin1String("attributes")].toObject();
                         if (attrsObj.contains(QLatin1String("status"))) {
-                            QString status = attrsObj[QLatin1String("status")].toString();
-                            isCompleted = (status == QLatin1String("completed"));
+                            currentStatus = attrsObj[QLatin1String("status")].toString();
+                            qDebug() << "VirusTotal analysis status:" << currentStatus;
+                            isCompleted = (currentStatus == QLatin1String("completed"));
+                            
+                            // Check if we have results even if status is not "completed"
+                            bool hasResults = attrsObj.contains(QLatin1String("results")) && attrsObj[QLatin1String("results")].isObject();
+                            if (hasResults) {
+                                qDebug() << "Results object found in response!";
+                                QJsonObject resultsObj = attrsObj[QLatin1String("results")].toObject();
+                                qDebug() << "Results object keys:" << resultsObj.keys();
+                                
+                                // If we have results but status is still "queued", consider it completed
+                                if (!isCompleted && !resultsObj.isEmpty()) {
+                                    qDebug() << "Found non-empty results even though status is" << currentStatus << "- treating as completed";
+                                    isCompleted = true;
+                                }
+                            }
+                            
+                            // Log additional info for debugging
+                            if (currentStatus == QLatin1String("queued")) {
+                                qDebug() << "Analysis still in queue - continuing to poll";
+                            } else if (currentStatus == QLatin1String("analysing")) {
+                                qDebug() << "Analysis in progress - continuing to poll";
+                            } else if (!isCompleted) {
+                                qDebug() << "Unknown status, treating as incomplete:" << currentStatus;
+                            }
                         }
                     }
                 }
+            } else {
+                qWarning() << "Failed to parse JSON response or response is not an object";
             }
-              // Tamamlanma durumundan bağımsız olarak UI'yi güncellemek için sonuçları yayınla
+              // Publish results to update UI regardless of completion status
             emit analysisResultsReady(m_lastResults);
             
-            // Tamamlanmadıysa ve maksimum denemeye ulaşılmadıysa polling'e devam et
-            if (!isCompleted && this->m_pollingAttempt < 5) {
-                // Aynı analysisId için polling'e devam etmek üzere özyinelemeli çağrı
+            // Continue polling if not completed and maximum attempts not reached
+            if (!isCompleted && this->m_pollingAttempt < 8) {
+                // Recursive call to continue polling for the same analysisId
                 startPollingForResults(analysisId);
             } else {
-                // Tamamlandığında veya maksimum deneme sayısına ulaşıldığında tarama bayrağını sıfırla
+                // Reset scanning flag when completed or maximum attempts reached
                 m_isScanning = false;
                 if (!isCompleted) {
-                    qDebug() << "Max polling attempts reached for analysis" << analysisId;
+                    qDebug() << "Polling timeout reached for analysis" << analysisId << "after ~6-7 minutes. Analysis may still be in progress.";
+                    // Emit final results so UI can show timeout message with retry option
+                    emit analysisResultsReady(m_lastResults);
                 }
             }
         });
     } else {
-        // Maksimum denemeye ulaşıldı, polling'i durdur
+        // Maximum attempts reached, stop polling
         qDebug() << "Max polling attempts reached for analysis" << analysisId;
         m_isScanning = false;
-        // m_pollingAttempt bir sonraki yeni taramada submitToRemoteService içinde sıfırlanacak
+        // m_pollingAttempt will be reset in submitToRemoteService for the next new scan
         
-        // En son alınan sonuçları yayınla. DashboardWidget "queued" veya eksik veriyi işlemeli.
-        // Ayrıştırma hatalarını önlemek için buraya JSON olmayan metin EKLEMEYİN.
+        // Publish the last obtained results. DashboardWidget should handle "queued" or missing data.
+        // DO NOT ADD non-JSON text here to prevent parsing errors.
         emit analysisResultsReady(m_lastResults);
     }
 }

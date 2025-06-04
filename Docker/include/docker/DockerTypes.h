@@ -1,3 +1,25 @@
+/**
+ * @file DockerTypes.h
+ * @brief Type definitions and data structures for Docker container management
+ * @author AVProjectUi Team
+ * @version 1.0
+ * @date 2024
+ * 
+ * @details This header defines all data structures, types, and configuration objects
+ * used throughout the Docker management system. It provides a comprehensive set of
+ * types for container lifecycle management, image operations, and resource configuration.
+ * 
+ * Key Components:
+ * - Container configuration and execution structures
+ * - Image metadata and information types
+ * - Mount point and volume configuration
+ * - Host configuration options for security and resource management
+ * - Execution result and status reporting structures
+ * 
+ * @note All types are designed to be lightweight and easily serializable
+ * @warning Proper validation should be performed on all configuration values
+ */
+
 #ifndef DOCKERTYPES_H
 #define DOCKERTYPES_H
 
@@ -8,80 +30,121 @@
 
 namespace Docker {
 
-    // Defines a mount point for a Docker container (bind, volume, or tmpfs).
+    /**
+     * @brief Defines a mount point for Docker container volume and bind mount operations
+     * 
+     * @details Specifies how host directories, volumes, or temporary filesystems
+     * are mounted into Docker containers. Supports bind mounts, named volumes,
+     * and tmpfs mounts with configurable read/write permissions.
+     */
     struct MountPoint {
-        std::string mountType;      // Type of mount, e.g., "bind", "volume".
-        std::string source;         // Path on host (for bind) or name of volume.
-        std::string destination;    // Path inside the container.
-        bool readOnly = false;      // If true, mount is read-only in container.
-        std::string tmpfsOptions;   // Options for tmpfs mounts
+        std::string mountType;      ///< Type of mount: "bind", "volume", or "tmpfs"
+        std::string source;         ///< Host path for bind mounts or volume name
+        std::string destination;    ///< Target path inside the container
+        bool readOnly = false;      ///< Mount as read-only if true
+        std::string tmpfsOptions;   ///< Options for tmpfs mounts (size, mode, etc.)
     };
 
-    // Specifies host-side configuration options for a Docker container.
+    /**
+     * @brief Host-side configuration options for Docker container security and resources
+     * 
+     * @details Comprehensive configuration structure for controlling container
+     * behavior, security settings, resource limits, and host integration options.
+     * Provides fine-grained control over container privileges and isolation.
+     */
     struct HostConfigurationOptions {
-        std::vector<MountPoint> mounts; // List of mount points.
+        std::vector<MountPoint> mounts; ///< List of mount points for volumes and bind mounts
 
-        bool autoremove = false;         // Automatically remove container when it exits.
-        bool privileged = false;        // Grant extended privileges to the container (use with caution).
-        bool readOnlyRootfs = false;    // Mount container's root filesystem as read-only.
+        bool autoremove = false;         ///< Automatically remove container when it exits
+        bool privileged = false;        ///< Grant extended privileges (use with extreme caution)
+        bool readOnlyRootfs = false;    ///< Mount container's root filesystem as read-only
 
-        std::vector<std::string> capDrop;           // List of Linux capabilities to drop.
-        std::vector<std::string> capAdd;            // List of Linux capabilities to add.
-        std::vector<std::string> securityOptions;   // Security options (e.g., AppArmor, Seccomp).
-        std::vector<std::string> securityOpt;       // Security options for compatibility
-        std::string networkMode;                    // Network mode (e.g., "none", "bridge")
-        int pidsLimit = 0;                          // Process limit (0 = no limit)
+        std::vector<std::string> capDrop;           ///< Linux capabilities to drop for security
+        std::vector<std::string> capAdd;            ///< Linux capabilities to add if needed
+        std::vector<std::string> securityOptions;   ///< Security options (AppArmor, Seccomp profiles)
+        std::vector<std::string> securityOpt;       ///< Additional security options for compatibility
+        std::string networkMode;                    ///< Network mode ("none", "bridge", "host", etc.)
+        int pidsLimit = 0;                          ///< Process limit (0 = unlimited)
 
-        long long memoryLimit = 0;      // Memory limit in bytes (0 = no limit).
-        long long cpuPeriod = 0;        // CPU CFS period in microseconds.
-        long long cpuQuota = 0;         // CPU CFS quota in microseconds.
+        long long memoryLimit = 0;      ///< Memory limit in bytes (0 = unlimited)
+        long long cpuPeriod = 0;        ///< CPU CFS period in microseconds
+        long long cpuQuota = 0;         ///< CPU CFS quota in microseconds
     };
 
-    // Configuration for running a new Docker container.
+    /**
+     * @brief Complete configuration for creating and running a Docker container
+     * 
+     * @details Encapsulates all parameters needed to create and execute a container,
+     * including image selection, command execution, environment setup, and host
+     * configuration options.
+     */
     struct ContainerRunConfiguration {
-        std::string imageName;          // Name or ID of the Docker image.
-        std::vector<std::string> command; // Command and arguments to run in container.
-        std::vector<std::string> environmentVariables; // Environment variables ("KEY=VALUE" format).
-        std::string containerName;      // Optional name for the container.
-        std::string userName;           // Optional username or UID to run as in container.
+        std::string imageName;          ///< Name or ID of the Docker image to use
+        std::vector<std::string> command; ///< Command and arguments to execute in container
+        std::vector<std::string> environmentVariables; ///< Environment variables in "KEY=VALUE" format
+        std::string containerName;      ///< Optional name for the container instance
+        std::string userName;           ///< Optional username or UID to run as in container
 
-        //bool attachStdOut = true;       // Attach to container's STDOUT.
-        //bool attachStdErr = true;       // Attach to container's STDERR.
+        //bool attachStdOut = true;       ///< Attach to container's STDOUT stream
+        //bool attachStdErr = true;       ///< Attach to container's STDERR stream
 
-        HostConfigurationOptions hostConfig; // Host-specific configurations.
+        HostConfigurationOptions hostConfig; ///< Host-specific configuration options
     };
 
-    // Represents the result of a Docker container execution.
+    /**
+     * @brief Result data from Docker container execution operations
+     * 
+     * @details Contains comprehensive information about container execution,
+     * including exit status, output logs, and any error conditions that occurred
+     * during the container lifecycle.
+     */
     struct ContainerExecutionResult {
-        std::string containerId;    // ID of the executed container.
-        int exitCode = -1;          // Exit code from the container's main process.
-        std::string logs;           // Combined STDOUT and STDERR from the container.
-        std::string status;         // Final status of the container (e.g., "exited").
-        std::string errorMessage;   // Error message if Docker operation failed.
+        std::string containerId;    ///< Unique identifier of the executed container
+        int exitCode = -1;          ///< Exit code from container's main process (-1 if not available)
+        std::string logs;           ///< Combined STDOUT and STDERR output from container
+        std::string status;         ///< Final status of the container ("exited", "running", etc.)
+        std::string errorMessage;   ///< Error message if Docker operation failed
     };
 
-    // Basic information about a Docker image.
+    /**
+     * @brief Basic metadata information for Docker images
+     * 
+     * @details Lightweight structure containing essential image identification
+     * information, suitable for listing and basic image management operations.
+     */
     struct ImageInfoBasic {
-        std::string id;                     // Unique ID of the image (SHA256 hash).
-        std::vector<std::string> repoTags;  // List of repository tags (e.g., "ubuntu:latest").
+        std::string id;                     ///< Unique SHA256 hash identifier of the image
+        std::vector<std::string> repoTags;  ///< Repository tags (e.g., "ubuntu:latest", "app:v1.0")
     };
     
-    // Detailed information about a Docker image.
+    /**
+     * @brief Detailed metadata and information for Docker images
+     * 
+     * @details Comprehensive image information including repository details,
+     * size information, and creation timestamps. Used for detailed image
+     * inspection and management operations.
+     */
     struct ImageInfo {
-        std::string id;                     // Unique ID of the image (SHA256 hash).
-        std::string repository;             // Repository name (e.g., "ubuntu").
-        std::string tag;                    // Tag name (e.g., "latest").
-        std::string size;                   // Size of the image in human-readable format.
-        std::string created;                // Creation timestamp.
+        std::string id;                     ///< Unique SHA256 hash identifier of the image
+        std::string repository;             ///< Repository name (e.g., "ubuntu", "myapp")
+        std::string tag;                    ///< Tag name (e.g., "latest", "v1.0", "stable")
+        std::string size;                   ///< Human-readable size format (e.g., "125MB")
+        std::string created;                ///< ISO 8601 creation timestamp
     };
 
-    // Basic information about a running or stopped Docker container.
+    /**
+     * @brief Information about Docker container instances
+     * 
+     * @details Contains metadata and status information for both running and
+     * stopped containers. Used for container monitoring, management, and
+     * lifecycle operations.
+     */
     struct ContainerInfo {
-        std::string containerId;            // Unique ID of the container.
-        std::string containerName;          // Name of the container.
-        std::string containerStatus;        // Current status (e.g., "running", "exited").
-        std::string containerImage;         // Image used by the container.
-        std::string containerCreationTime;  // Creation timestamp (often ISO 8601 string or Unix epoch).
+        std::string containerId;            ///< Unique identifier of the container
+        std::string containerName;          ///< Human-readable name assigned to container
+        std::string containerStatus;        ///< Current status ("running", "exited", "paused", etc.)
+        std::string containerImage;         ///< Image used to create this container
+        std::string containerCreationTime;  ///< ISO 8601 creation timestamp or Unix epoch
     };
 
 } // namespace Docker

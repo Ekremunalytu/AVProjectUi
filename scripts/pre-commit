@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# AVProjectUi Pre-commit Hook
+# This hook runs automatically before each commit
+
+echo "🔍 Starting pre-commit checks..."
+
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# 1. Large file check
+echo "📏 Checking for large files..."
+large_files_found=false
+git diff --cached --name-only | while read file; do
+    if [ -f "$file" ] && [[ "$file" =~ \.(cpp|h)$ ]]; then
+        lines=$(wc -l < "$file" 2>/dev/null || echo 0)
+        if [ "$lines" -gt 1500 ]; then
+            echo -e "${YELLOW}⚠️  Large file detected: $file ($lines lines)${NC}"
+            echo -e "${YELLOW}💡 Consider splitting this file into smaller modules${NC}"
+            large_files_found=true
+        fi
+    fi
+done
+
+# 2. TODO/FIXME check
+echo "📝 Checking for TODO/FIXME..."
+todo_count=$(git diff --cached | grep -c "TODO\|FIXME" || echo 0)
+if [ "$todo_count" -gt 0 ]; then
+    echo -e "${YELLOW}📋 Found $todo_count TODO/FIXME items${NC}"
+fi
+
+# 3. Debug print check
+echo "🐛 Checking for debug prints..."
+debug_prints=$(git diff --cached | grep -E "(cout|qDebug|printf)" | wc -l || echo 0)
+if [ "$debug_prints" -gt 0 ]; then
+    echo -e "${YELLOW}🖨️  Detected $debug_prints debug prints${NC}"
+    echo -e "${YELLOW}💡 Remember to remove debug prints before production${NC}"
+fi
+
+# 4. Include guard check
+echo "🛡️  Checking include guards..."
+git diff --cached --name-only | grep "\.h$" | while read header; do
+    if [ -f "$header" ]; then
+        if ! grep -q "#ifndef\|#pragma once" "$header"; then
+            echo -e "${RED}❌ Missing include guard: $header${NC}"
+        fi
+    fi
+done
+
+# 5. Memory leak potential check
+echo "💾 Checking memory management..."
+new_without_delete=$(git diff --cached | grep -c "new " || echo 0)
+delete_count=$(git diff --cached | grep -c "delete\|unique_ptr\|shared_ptr" || echo 0)
+if [ "$new_without_delete" -gt 0 ] && [ "$delete_count" -eq 0 ]; then
+    echo -e "${YELLOW}⚠️  'new' usage detected but no smart pointer usage found${NC}"
+    echo -e "${YELLOW}💡 Consider using smart pointers for memory leak prevention${NC}"
+fi
+
+# 6. CMakeLists.txt update check
+echo "🔧 Checking CMakeLists.txt updates..."
+new_cpp_files=$(git diff --cached --name-only | grep "\.cpp$" | wc -l || echo 0)
+cmake_updated=$(git diff --cached --name-only | grep "CMakeLists.txt" | wc -l || echo 0)
+if [ "$new_cpp_files" -gt 0 ] && [ "$cmake_updated" -eq 0 ]; then
+    echo -e "${YELLOW}⚠️  New .cpp files added but CMakeLists.txt not updated${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}✅ Pre-commit checks completed!${NC}"
+echo ""
+
+# Hook completed successfully
+exit 0

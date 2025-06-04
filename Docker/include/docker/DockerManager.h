@@ -1,3 +1,11 @@
+/**
+ * @file DockerManager.h
+ * @brief Docker container and image management interface
+ * @author AVProjectUi Team
+ * @version 1.0
+ * @date 2024
+ */
+
 #ifndef DOCKER_MANAGER_H
 #define DOCKER_MANAGER_H
 
@@ -13,18 +21,44 @@
 // Namespace for all Docker-related components of the project.
 namespace Docker {
 
-// Provides an interface to manage Docker resources such as containers and images.
-// This class encapsulates Docker CLI command execution and data parsing,
-// offering a structured way to interact with Docker.
-// It is designed to return data objects; presentation of this data is left to the client code.
+/**
+ * @brief Provides an interface to manage Docker resources such as containers and images
+ * 
+ * @details The DockerManager class encapsulates Docker CLI command execution and data parsing,
+ * offering a structured way to interact with Docker infrastructure. It provides high-level
+ * methods for container lifecycle management, image operations, and system monitoring.
+ * 
+ * Key features:
+ * - Container lifecycle management (create, start, stop, remove)
+ * - Image management and repository operations
+ * - Network configuration and management
+ * - Volume management for persistent storage
+ * - Resource monitoring and logging
+ * - Docker daemon health checks
+ * 
+ * @note This class is designed to return data objects; presentation of this data 
+ *       is left to the client code.
+ * 
+ * @warning Requires Docker to be installed and the Docker daemon to be running
+ *          on the host system.
+ */
 class DockerManager {
 public:
-    // Constructor: Initializes a new DockerManager instance.
-    // May perform preliminary checks or setup if necessary in the future.
+    /**
+     * @brief Constructor: Initializes a new DockerManager instance
+     * 
+     * Performs preliminary checks to ensure Docker is available and accessible.
+     * May configure default settings and validate Docker daemon connectivity.
+     */
     DockerManager();
 
-    // Destructor: Cleans up resources if any were acquired by the DockerManager.
-    // Default implementation is suitable if no specific cleanup is needed.
+    /**
+     * @brief Destructor: Cleans up resources if any were acquired by the DockerManager
+     * 
+     * Ensures proper cleanup of any resources or connections established during
+     * the DockerManager's lifetime. Default implementation is suitable if no 
+     * specific cleanup is needed.
+     */
     ~DockerManager() = default;
 
     // --- Docker Daemon Utilities ---

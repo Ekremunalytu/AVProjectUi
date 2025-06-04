@@ -1,3 +1,16 @@
+/**
+ * @file SandboxManager.cpp
+ * @brief Implementation of the SandboxManager class for secure file execution and analysis
+ * @author AVProjectUi Team
+ * @version 1.0
+ * @date 2024
+ * 
+ * @details This file implements the SandboxManager class which provides secure
+ * containerized execution environments for malware analysis and file testing.
+ * The implementation uses Docker containers to isolate potentially dangerous
+ * executables and provides comprehensive monitoring and result collection.
+ */
+
 #include "SandboxManager.h"
 #include "SandboxTypes.h"
 #include "../Docker/include/docker/DockerManager.h"
@@ -13,19 +26,35 @@
 
 namespace Sandbox {
 
-// Default constructor - creates its own DockerManager
+/**
+ * @brief Default constructor - creates a new DockerManager instance
+ * 
+ * @details Initializes the SandboxManager with its own Docker management
+ * instance for handling container operations and sandbox environments.
+ */
 SandboxManager::SandboxManager()
     : dockerManager_(std::make_unique<Docker::DockerManager>()) {
     std::cout << "[SandboxManager] Initialized with new DockerManager" << std::endl;
 }
 
-// Constructor with provided DockerManager
+/**
+ * @brief Constructor with provided DockerManager
+ * @param dockerMgr Unique pointer to an existing DockerManager instance
+ * 
+ * @details Allows injection of a specific DockerManager instance, useful
+ * for testing or when sharing Docker resources across components.
+ */
 SandboxManager::SandboxManager(std::unique_ptr<Docker::DockerManager> dockerMgr)
     : dockerManager_(std::move(dockerMgr)) {
     std::cout << "[SandboxManager] Initialized with provided DockerManager" << std::endl;
 }
 
-// Destructor
+/**
+ * @brief Destructor - performs cleanup of sandbox resources
+ * 
+ * @details Ensures all orphaned sandbox containers are cleaned up
+ * before the SandboxManager is destroyed.
+ */
 SandboxManager::~SandboxManager() {
     try {
         cleanupOrphanedSandboxes();

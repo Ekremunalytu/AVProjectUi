@@ -1,3 +1,26 @@
+/**
+ * @file CdrSanitizer.h
+ * @brief CDR (Content Disarm and Reconstruction) Sanitizer - File sanitization engine
+ * @author AVProjectUi Team
+ * @version 1.0
+ * @date 2024
+ * 
+ * @details This header defines the main sanitization engine for the CDR system.
+ * The CdrSanitizer class provides a unified interface for sanitizing various file
+ * types by removing or neutralizing potentially malicious active content while
+ * preserving the file's legitimate functionality.
+ * 
+ * Supported file types:
+ * - Microsoft Office documents (Word, Excel, PowerPoint)
+ * - PDF documents
+ * - HTML files
+ * - Archive files (ZIP, RAR, 7z)
+ * - Script files (JavaScript, PowerShell, VBScript)
+ * - Image files (with embedded metadata)
+ * 
+ * @note This sanitizer uses pluggable FileSanitizer implementations for different file types
+ * @warning All sanitization operations should be performed in isolated environments
+ */
 #ifndef CDRSANITIZER_H
 #define CDRSANITIZER_H
 

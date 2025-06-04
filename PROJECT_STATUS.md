@@ -1,14 +1,14 @@
-# Proje Durumu: AVProjectUi
+# Project Status: AVProjectUi
 
-**Son Güncelleme:** 30 Mayıs 2025
+**Last Update:** May 30, 2025
 
-Bu belge, AVProjectUi antivirüs projesinin mevcut geliştirme durumunu, tamamlanan özellikleri, devam eden çalışmaları, gelecek planlarını ve bilinen sorunları kapsamlı bir şekilde özetlemektedir.
+This document provides a comprehensive overview of the current development status, completed features, ongoing work, future plans, and known issues of the AVProjectUi antivirus project.
 
-## 1. Proje Genel Bakış
+## 1. Project Overview
 
-AVProjectUi, öncelikli olarak Windows 10 ve Windows 11 (x64) platformlarını hedefleyen, modern bir kullanıcı arayüzüne sahip bir antivirüs uygulamasıdır. Geliştirme süreci macOS üzerinde Qt ve C++ kullanılarak yürütülmektedir.
+AVProjectUi is an antivirus application with a modern user interface, primarily targeting Windows 10 and Windows 11 (x64) platforms. The development process is carried out on macOS using Qt and C++.
 
-## 2. Mevcut Durum ve İlerleme
+## 2. Current Status and Progress
 
 ### 2.1. Temel Altyapı ve Çerçeve
 

@@ -1,3 +1,11 @@
+/**
+ * @file SandboxManager.h
+ * @brief Sandbox environment management for secure malware analysis
+ * @author AVProjectUi Team
+ * @version 1.0
+ * @date 2024
+ */
+
 #ifndef SANDBOX_MANAGER_H
 #define SANDBOX_MANAGER_H
 
@@ -14,18 +22,63 @@
 
 namespace Sandbox {
 
-// SandboxManager uses DockerManager via composition to provide
-// specialized sandbox functionality for malware analysis
+/**
+ * @brief Manages isolated sandbox environments for safe malware analysis
+ * 
+ * @details The SandboxManager provides a high-level interface for creating,
+ * managing, and monitoring isolated execution environments using Docker containers.
+ * It specializes in malware analysis scenarios where files need to be executed
+ * safely without risking the host system.
+ * 
+ * Key capabilities:
+ * - Isolated container environments with restricted network access
+ * - Real-time monitoring of file system changes and process behavior
+ * - Automated cleanup and resource management
+ * - Integration with Docker and CDR technologies
+ * - Support for multiple concurrent sandbox instances
+ * - Comprehensive logging and analysis reporting
+ * 
+ * @note SandboxManager uses DockerManager via composition to provide
+ *       specialized sandbox functionality for malware analysis
+ * 
+ * @warning Sandbox environments should be properly isolated from production
+ *          networks and sensitive data.
+ */
 class SandboxManager {
 private:
-    std::unique_ptr<Docker::DockerManager> dockerManager_;  // Composition instead of inheritance
+    /**
+     * @brief Docker manager instance for container operations
+     * 
+     * Provides low-level Docker container management capabilities
+     * through composition rather than inheritance.
+     */
+    std::unique_ptr<Docker::DockerManager> dockerManager_;
     
 public:
-    // Constructor
+    /**
+     * @brief Default constructor for SandboxManager
+     * 
+     * Creates a new SandboxManager with a default DockerManager instance.
+     * Initializes the sandbox environment with standard security settings.
+     */
     SandboxManager();
+    
+    /**
+     * @brief Constructor with custom DockerManager
+     * 
+     * Creates a SandboxManager using the provided DockerManager instance,
+     * allowing for custom Docker configurations and specialized setups.
+     * 
+     * @param dockerMgr Custom DockerManager instance to use for container operations
+     */
     explicit SandboxManager(std::unique_ptr<Docker::DockerManager> dockerMgr);
     
-    // Destructor - cleanup any active sandbox environments
+    /**
+     * @brief Destructor - cleanup any active sandbox environments
+     * 
+     * Ensures all running sandbox containers are properly stopped and cleaned up,
+     * preventing resource leaks and ensuring system stability.
+     */
     ~SandboxManager();
 
     // Docker functionality access

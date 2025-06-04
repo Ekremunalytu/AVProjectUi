@@ -126,8 +126,46 @@ private: // m_settings is now private
 
     // Helper function to get the actual path to config.ini
     QString getActualConfigIniPath() const {
-        // Corrected path to config.ini relative to the application executable directory
-        return QDir::cleanPath(QApplication::applicationDirPath() + QStringLiteral("/../Core/config.ini"));
+        QString appPath = QApplication::applicationDirPath();
+        
+        // Try multiple possible locations for config.ini
+        QStringList possiblePaths = {
+            // 1. Same directory as executable (for deployed applications)
+            QDir::cleanPath(appPath + QStringLiteral("/config.ini")),
+            
+            // 2. Core subdirectory relative to executable
+            QDir::cleanPath(appPath + QStringLiteral("/Core/config.ini")),
+            
+            // 3. One level up and then Core (for build directories)
+            QDir::cleanPath(appPath + QStringLiteral("/../Core/config.ini")),
+            
+            // 4. For macOS .app bundles - go up to project root
+            QDir::cleanPath(appPath + QStringLiteral("/../../../../Core/config.ini")),
+            
+            // 5. For Windows debug/release builds
+            QDir::cleanPath(appPath + QStringLiteral("/../../Core/config.ini")),
+            
+            // 6. Alternative paths for different build configurations
+            QDir::cleanPath(appPath + QStringLiteral("/../../../Core/config.ini"))
+        };
+        
+        // Return the first existing config file
+        for (const QString& path : possiblePaths) {
+            if (QFileInfo::exists(path)) {
+                qDebug() << "Found config.ini at:" << path;
+                return path;
+            }
+        }
+        
+        // If no config file found, return default path and log warning
+        QString defaultPath = QDir::cleanPath(appPath + QStringLiteral("/../Core/config.ini"));
+        qWarning() << "config.ini not found in any expected location. Using default path:" << defaultPath;
+        qWarning() << "Searched paths:";
+        for (const QString& path : possiblePaths) {
+            qWarning() << "  -" << path;
+        }
+        
+        return defaultPath;
     }
 
     // Helper function to get the default database path relative to config.ini's directory
