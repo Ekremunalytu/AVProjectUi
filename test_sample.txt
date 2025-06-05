@@ -1,3 +1,0 @@
-This is a test file for advanced scanning.
-It contains some sample content to test the VirusTotal integration.
-This file should be safe and not contain any malicious content.

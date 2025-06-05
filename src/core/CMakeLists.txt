@@ -8,6 +8,7 @@ add_library(Core STATIC
     interfaces/IDockerScanner.h
     interfaces/IScanner.h
     interfaces/IVirusTotalScanner.h
+    interfaces/IYaraRuleManager.h
     interfaces/ScannerTypes.h
 )
 

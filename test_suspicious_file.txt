@@ -1,0 +1,4 @@
+This file contains suspicious content for testing:
+powershell -EncodedCommand -WindowStyle Hidden
+VirtualAlloc WriteProcessMemory CreateRemoteThread
+This should trigger some YARA rules.

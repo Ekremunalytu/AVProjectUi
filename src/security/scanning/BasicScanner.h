@@ -6,10 +6,12 @@
 #include <QFileInfo>
 #include <QCryptographicHash>
 #include <QFileDialog>
+#include <QFuture>
 #include <memory>
 #include <system_error>
 #include "../../core/interfaces/IScanner.h"
 #include "../../core/interfaces/ScannerTypes.h"
+#include "yara/YaraRuleManager.h"
 
 // Add Qt String Literal namespace for Qt 6 compatibility
 using namespace Qt::StringLiterals;
@@ -30,6 +32,9 @@ enum class ScannerErrorCode {
     DatabaseQueryFailed,
     InvalidInput,
     MaliciousFileDetected,
+    YaraInitializationFailed,
+    YaraRulesLoadFailed,
+    YaraScanFailed,
     Unknown
 };
 
@@ -49,6 +54,13 @@ public:
     explicit BasicScanner(QObject* parent = nullptr, DbManager* dbManager = nullptr);
     
     /**
+     * @brief Initializes YARA engine and loads rules.
+     * @param rulesPath Path to the YARA rules directory or file.
+     * @return True if initialization was successful, false otherwise.
+     */
+    bool initializeYara(const QString& rulesPath = QString());
+    
+    /**
      * @brief Destructor for BasicScanner.
      */
     ~BasicScanner() override;
@@ -65,6 +77,24 @@ public:
      * @return True if the scan was initiated, false otherwise.
      */
     bool scanFile(const QString& filePath) override;
+    
+    /**
+     * @brief Performs a comprehensive scan combining hash check and YARA analysis.
+     * 
+     * This method first performs a hash-based scan against the malware database,
+     * then if the file is not found in the database, performs YARA rule scanning.
+     * 
+     * @param filePath Path to the file to be scanned
+     * @return True if scan completed successfully, false on error
+     */
+    bool scanFileComprehensive(const QString& filePath);
+    
+    /**
+     * @brief Performs YARA rule scanning on the specified file.
+     * @param filePath Path to the file to be scanned with YARA rules
+     * @return True if scan completed successfully, false on error
+     */
+    bool scanFileWithYara(const QString& filePath);
     
     /**
      * @brief Retrieves information about the currently selected file.
@@ -135,6 +165,26 @@ public:
      * @return Error message as a QString.
      */
     QString getLastErrorMessage() const;
+    
+    /**
+     * @brief Performs asynchronous YARA scanning
+     * @param filePath Path to the file to be scanned
+     * @return Future that will contain the scan results
+     */
+    QFuture<QString> scanFileAsync(const QString& filePath);
+    
+    /**
+     * @brief Sets maximum file size for scanning
+     * @param maxSize Maximum file size in bytes
+     */
+    void setMaxFileSize(qint64 maxSize);
+    
+    /**
+     * @brief Checks if file size is within limits
+     * @param filePath Path to the file to check
+     * @return True if file size is acceptable, false otherwise
+     */
+    bool isFileSizeAcceptable(const QString& filePath) const;
 
 signals:
     /**
@@ -171,6 +221,9 @@ private:
     DbManager* m_dbManager; ///< Pointer to database manager (not owned by this class)
     ScannerErrorCode m_lastError; ///< Last error code that occurred during scanning
     QString m_lastErrorMessage; ///< Human-readable message for the last error
+    std::unique_ptr<YaraRuleManager> m_yaraManager; ///< YARA rule manager for malware detection
+    bool m_yaraInitialized; ///< Flag indicating if YARA engine is initialized
+    qint64 m_maxFileSize; ///< Maximum file size allowed for scanning
 };
 
 #endif //BASICSCANNER_H

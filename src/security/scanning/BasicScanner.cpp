@@ -6,10 +6,17 @@
  */
 
 #include "BasicScanner.h"
+#include "yara/YaraRuleManager.h"
 #include "../../storage/database/DbManager/DbManager.h"
 #include "../../storage/database/DatabaseService/DatabaseService.h"
 #include <QFile>
 #include <QDebug>
+#include <QDir>
+#include <QStandardPaths>
+#include <QCoreApplication>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+#include <QFutureWatcher>
 #include <system_error>
 
 // Add Qt String Literal namespace for Qt 6 compatibility
@@ -32,6 +39,8 @@ namespace StandardText {
     // Error messages
     constexpr auto DB_NOT_AVAILABLE = "Database connection is not available.";
     constexpr auto SCAN_CANCELED = "Scan canceled.";
+    constexpr auto YARA_NOT_INITIALIZED = "YARA engine is not initialized.";
+    constexpr auto YARA_SCAN_FAILED = "YARA scan failed.";
 }
 
 /**
@@ -46,7 +55,10 @@ BasicScanner::BasicScanner(QObject* parent, DbManager* dbManager)
     : QObject(parent),
       m_isScanning(false),
       m_dbManager(dbManager),
-      m_lastError(ScannerErrorCode::NoError)
+      m_lastError(ScannerErrorCode::NoError),
+      m_yaraManager(std::make_unique<YaraRuleManager>()),
+      m_yaraInitialized(false),
+      m_maxFileSize(10 * 1024 * 1024) // Default max file size: 10 MB
 {
     // If no DbManager provided, get from DatabaseService
     if (!m_dbManager) {
@@ -57,12 +69,103 @@ BasicScanner::BasicScanner(QObject* parent, DbManager* dbManager)
             setLastError(ScannerErrorCode::DatabaseNotConnected);
         }
     }
+    
+    // Initialize YARA with default rules path
+    initializeYara();
 }
 
 /**
  * @brief Default destructor
  */
 BasicScanner::~BasicScanner() = default;
+
+/**
+ * @brief Initializes YARA engine and loads rules
+ * @param rulesPath Path to the YARA rules directory or file
+ * @return True if initialization was successful, false otherwise
+ */
+bool BasicScanner::initializeYara(const QString& rulesPath)
+{
+    if (m_yaraInitialized) {
+        return true; // Already initialized
+    }
+    
+    // Initialize YARA engine
+    auto initResult = m_yaraManager->initialize();
+    if (initResult) {  // Check if error occurred (non-zero value)
+        qDebug() << "Failed to initialize YARA engine:" << initResult.message().c_str();
+        setLastError(ScannerErrorCode::YaraInitializationFailed, 
+                    QString("YARA initialization failed: %1").arg(initResult.message().c_str()));
+        return false;
+    }
+    
+    // Determine rules path
+    QString actualRulesPath = rulesPath;
+    if (actualRulesPath.isEmpty()) {
+        qDebug() << "No YARA rules path provided, searching for rules...";
+        
+        // Try different possible paths for YARA rules
+        QStringList possiblePaths = {
+            // Source directory relative to project root
+            "/Volumes/Crucial/AVProjectUi/src/security/scanning/yara/rules",
+            // Relative to current working directory (for source builds)
+            QDir::currentPath() + "/src/security/scanning/yara/rules",
+            // Relative to application directory (for release builds)
+            QCoreApplication::applicationDirPath() + "/rules",
+            QCoreApplication::applicationDirPath() + "/../rules",
+            QCoreApplication::applicationDirPath() + "/../../src/security/scanning/yara/rules",
+            QCoreApplication::applicationDirPath() + "/../../../src/security/scanning/yara/rules",
+            QCoreApplication::applicationDirPath() + "/../../../../src/security/scanning/yara/rules",
+            // Try relative to executable path for debug builds
+            QCoreApplication::applicationDirPath() + "/../../../../../../../src/security/scanning/yara/rules"
+        };
+        
+        qDebug() << "Current working directory:" << QDir::currentPath();
+        qDebug() << "Application directory:" << QCoreApplication::applicationDirPath();
+        qDebug() << "Searching for YARA rules in the following paths:";
+        
+        // Find the first existing path
+        for (const QString& path : possiblePaths) {
+            qDebug() << "  Checking:" << path;
+            QDir dir(path);
+            if (dir.exists()) {
+                qDebug() << "    Directory exists!";
+                // Check if there are actually .yar files in this directory
+                QStringList yarFiles = dir.entryList(QStringList() << "*.yar", QDir::Files, QDir::Name);
+                qDebug() << "    Found .yar files:" << yarFiles;
+                if (!yarFiles.isEmpty()) {
+                    actualRulesPath = path;
+                    qDebug() << "Found YARA rules directory with" << yarFiles.size() << "rule files at:" << actualRulesPath;
+                    break;
+                }
+            } else {
+                qDebug() << "    Directory does not exist";
+            }
+        }
+        
+        // If no directory found, fall back to Qt resources
+        if (actualRulesPath.isEmpty()) {
+            actualRulesPath = ":/rules"; // Qt resource path
+            qDebug() << "No local YARA rules found, trying Qt resources:" << actualRulesPath;
+        }
+    }
+    
+    // Load YARA rules
+    auto loadResult = m_yaraManager->loadRules(actualRulesPath.toStdString());
+    if (loadResult) {  // Check if error occurred (non-zero value)
+        qDebug() << "Failed to load YARA rules from:" << actualRulesPath;
+        qDebug() << "Error:" << loadResult.message().c_str();
+        setLastError(ScannerErrorCode::YaraRulesLoadFailed,
+                    QString("Failed to load YARA rules from %1: %2")
+                    .arg(actualRulesPath)
+                    .arg(loadResult.message().c_str()));
+        return false;
+    }
+    
+    m_yaraInitialized = true;
+    qDebug() << "YARA engine initialized successfully with rules from:" << actualRulesPath;
+    return true;
+}
 
 /**
  * @brief Opens a file dialog for the user to select a file for scanning
@@ -110,13 +213,26 @@ bool BasicScanner::selectFile()
 /**
  * @brief Initiates a scan on the specified file path or the previously selected file
  * 
- * Checks file validity, calculates its SHA256 hash, and compares against the malware database.
- * Emits scanResultsReady when complete or scanError if an error occurs.
+ * This method now performs comprehensive scanning by delegating to scanFileComprehensive.
  * 
  * @param filePath Path to the file to scan. If empty, uses previously selected file
  * @return True if scan was initiated successfully, false if an error occurred
  */
 bool BasicScanner::scanFile(const QString& filePath)
+{
+    return scanFileComprehensive(filePath);
+}
+
+/**
+ * @brief Performs a comprehensive scan combining hash check and YARA analysis
+ * 
+ * This method first performs a hash-based scan against the malware database,
+ * then if the file is not found in the database, performs YARA rule scanning.
+ * 
+ * @param filePath Path to the file to be scanned
+ * @return True if scan completed successfully, false on error
+ */
+bool BasicScanner::scanFileComprehensive(const QString& filePath)
 {
     // Reset error state
     setLastError(ScannerErrorCode::NoError);
@@ -150,7 +266,7 @@ bool BasicScanner::scanFile(const QString& filePath)
     
     m_isScanning = true;
     
-    // Calculate file hash
+    // Step 1: Calculate file hash
     ScannerErrorCode hashError = ScannerErrorCode::NoError;
     QString fileHash = calculateSha256(m_selectedFile.filePath(), &hashError);
     
@@ -165,12 +281,11 @@ bool BasicScanner::scanFile(const QString& filePath)
         return false;
     }
     
-    // Check if hash exists in database
+    // Step 2: Check hash in database
     ScannerErrorCode dbError = ScannerErrorCode::NoError;
     bool hashFound = checkHashInDatabase(fileHash, &dbError);
     
     qDebug() << "Hash found in database:" << hashFound;
-    qDebug() << "Database error:" << (dbError != ScannerErrorCode::NoError ? "Yes" : "No");
     
     if (dbError != ScannerErrorCode::NoError) {
         m_isScanning = false;
@@ -181,19 +296,113 @@ bool BasicScanner::scanFile(const QString& filePath)
         return false;
     }
     
-    // Prepare results
+    // Prepare initial results
     m_results = tr(StandardText::FILE_LABEL).arg(m_selectedFile.fileName());
     m_results += tr(StandardText::HASH_LABEL).arg(fileHash);
     
     if (hashFound) {
+        // File found in malware database - it's definitely malicious
         m_results += tr(StandardText::STATUS_MALICIOUS);
-        emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected!"));
+        m_results += tr("\n\n=== YARA Analysis ===\n");
+        m_results += tr("Skipped: File already identified as malicious in database\n");
+        
+        m_isScanning = false;
+        emit scanResultsReady(m_results);
+        emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious file detected in database!"));
+        return true;
     } else {
-        m_results += tr(StandardText::STATUS_CLEAN);
+        // Hash not found in database - proceed with YARA analysis
+        m_results += tr("Status: Not found in database - Proceeding with YARA analysis...\n");
+        m_results += tr("\n=== YARA Analysis ===\n");
+        
+        // Step 3: Perform YARA scanning
+        if (m_yaraInitialized) {
+            std::vector<std::string> yaraMatches;
+            auto scanResult = m_yaraManager->scanFile(m_selectedFile.filePath().toStdString(), yaraMatches);
+            
+            if (scanResult) {  // Check if error occurred (non-zero value)
+                // YARA scan failed
+                setLastError(ScannerErrorCode::YaraScanFailed,
+                            QString("YARA scan failed: %1").arg(scanResult.message().c_str()));
+                m_results += tr("YARA scan failed: %1\n").arg(scanResult.message().c_str());
+                m_results += tr("Final Status: UNKNOWN - Database clean, YARA scan failed\n");
+            } else if (!yaraMatches.empty()) {
+                // YARA rules matched - file is potentially malicious
+                m_results += tr("YARA Rules Matched (%1):\n").arg(yaraMatches.size());
+                for (const auto& match : yaraMatches) {
+                    m_results += tr("  - %1\n").arg(QString::fromStdString(match));
+                }
+                m_results += tr("Final Status: SUSPICIOUS/MALICIOUS - YARA rules detected potential threats\n");
+                
+                m_isScanning = false;
+                emit scanResultsReady(m_results);
+                emit scanError(ScannerErrorCode::MaliciousFileDetected, tr("Malicious patterns detected by YARA!"));
+                return true;
+            } else {
+                // No YARA matches - file appears clean
+                m_results += tr("No YARA rules matched\n");
+                m_results += tr("Final Status: CLEAN - Not found in database and no YARA matches\n");
+            }
+        } else {
+            // YARA not initialized
+            m_results += tr("YARA engine not initialized - skipping rule-based analysis\n");
+            m_results += tr("Final Status: CLEAN (Database only) - Not found in database\n");
+        }
     }
     
     m_isScanning = false;
     emit scanResultsReady(m_results);
+    return true;
+}
+
+/**
+ * @brief Performs YARA rule scanning on the specified file
+ * @param filePath Path to the file to be scanned with YARA rules
+ * @return True if scan completed successfully, false on error
+ */
+bool BasicScanner::scanFileWithYara(const QString& filePath)
+{
+    if (!m_yaraInitialized) {
+        setLastError(ScannerErrorCode::YaraInitializationFailed, tr(StandardText::YARA_NOT_INITIALIZED));
+        return false;
+    }
+    
+    if (filePath.isEmpty()) {
+        setLastError(ScannerErrorCode::InvalidInput, tr("File path is empty"));
+        return false;
+    }
+    
+    QFileInfo fileInfo(filePath);
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        setLastError(ScannerErrorCode::FileNotFound, tr("File does not exist: %1").arg(filePath));
+        return false;
+    }
+    
+    // Perform YARA scan
+    std::vector<std::string> matches;
+    auto result = m_yaraManager->scanFile(filePath.toStdString(), matches);
+    
+    if (result) {  // Check if error occurred (non-zero value)
+        setLastError(ScannerErrorCode::YaraScanFailed,
+                    QString("YARA scan failed: %1").arg(result.message().c_str()));
+        return false;
+    }
+    
+    // Process results
+    QString yaraResults = tr("=== YARA Scan Results ===\n");
+    yaraResults += tr("File: %1\n").arg(fileInfo.fileName());
+    
+    if (matches.empty()) {
+        yaraResults += tr("Status: CLEAN - No YARA rules matched\n");
+    } else {
+        yaraResults += tr("Status: SUSPICIOUS/MALICIOUS - %1 YARA rule(s) matched\n").arg(matches.size());
+        yaraResults += tr("Matched Rules:\n");
+        for (const auto& match : matches) {
+            yaraResults += tr("  - %1\n").arg(QString::fromStdString(match));
+        }
+    }
+    
+    m_results = yaraResults;
     return true;
 }
 
@@ -442,8 +651,68 @@ QString BasicScanner::getDefaultErrorMessage(ScannerErrorCode code) const
             return tr("Database query failed");
         case ScannerErrorCode::InvalidInput:
             return tr("Invalid input provided");
+        case ScannerErrorCode::MaliciousFileDetected:
+            return tr("Malicious file detected");
+        case ScannerErrorCode::YaraInitializationFailed:
+            return tr("YARA engine initialization failed");
+        case ScannerErrorCode::YaraRulesLoadFailed:
+            return tr("Failed to load YARA rules");
+        case ScannerErrorCode::YaraScanFailed:
+            return tr("YARA scan operation failed");
         case ScannerErrorCode::Unknown:
         default:
             return tr("Unknown error");
     }
+}
+
+/**
+ * @brief Performs asynchronous YARA scanning
+ * @param filePath Path to the file to be scanned
+ * @return Future that will contain the scan results
+ */
+QFuture<QString> BasicScanner::scanFileAsync(const QString& filePath)
+{
+    return QtConcurrent::run([this, filePath]() -> QString {
+        std::vector<std::string> matches;
+        auto result = m_yaraManager->scanFile(filePath.toStdString(), matches);
+        
+        if (result) {
+            return QString("YARA scan failed: %1").arg(result.message().c_str());
+        }
+        
+        QString results = QString("=== Async YARA Scan Results ===\n");
+        results += QString("File: %1\n").arg(QFileInfo(filePath).fileName());
+        
+        if (matches.empty()) {
+            results += "Status: CLEAN - No YARA rules matched\n";
+        } else {
+            results += QString("Status: SUSPICIOUS/MALICIOUS - %1 rule(s) matched\n").arg(matches.size());
+            results += "Matched Rules:\n";
+            for (const auto& match : matches) {
+                results += QString("  - %1\n").arg(QString::fromStdString(match));
+            }
+        }
+        
+        return results;
+    });
+}
+
+/**
+ * @brief Sets maximum file size for scanning
+ * @param maxSize Maximum file size in bytes
+ */
+void BasicScanner::setMaxFileSize(qint64 maxSize)
+{
+    m_maxFileSize = maxSize;
+}
+
+/**
+ * @brief Checks if file size is within limits
+ * @param filePath Path to the file to check
+ * @return True if file size is acceptable, false otherwise
+ */
+bool BasicScanner::isFileSizeAcceptable(const QString& filePath) const
+{
+    QFileInfo fileInfo(filePath);
+    return fileInfo.size() <= m_maxFileSize;
 }
