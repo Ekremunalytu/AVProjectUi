@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HistoryWidget</class>
+ <widget class="QWidget" name="HistoryWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1281</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Scan History</string>
+  </property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing">
+    <number>15</number>
+   </property>
+   <property name="leftMargin">
+    <number>12</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>12</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="FilterGroupBox">
+     <property name="title">
+      <string>Filter and Search</string>
+     </property>
+     <layout class="QVBoxLayout" name="filtersGroupLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>8</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <property name="bottomMargin">
+       <number>8</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="FilterRow1Layout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="scanTypeLabel">
+          <property name="text">
+           <string>Type:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="scanTypeFilterComboBox">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the event type to display</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>All Types</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Scans</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Threats</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Updates</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>System Changes</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="statusLabel">
+          <property name="text">
+           <string>Status:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="statusFilterComboBox">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the event status to display</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>All Statuses</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Successful</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Failed</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>User Intervention Required</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="riskLevelLabel">
+          <property name="text">
+           <string>Risk Level:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="riskLevelFilterComboBox">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the risk level to display</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>All Risk Levels</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>High</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Medium</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Low</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Information</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="actionStatusLabel">
+          <property name="text">
+           <string>Action Status:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="actionStatusFilterComboBox">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the action status to display</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>All Action Statuses</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Quarantined</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Deleted</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Blocked</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Allowed</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="filterRow1Spacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="FilterRow2Layout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="SearchLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Enter text to search</string>
+          </property>
+          <property name="placeholderText">
+           <string>Search history by keyword...</string>
+          </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="startDateLabel">
+          <property name="text">
+           <string>Start Date:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="startDateEdit">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the start date for filtering</string>
+          </property>
+          <property name="displayFormat">
+           <string>d.MM.yyyy</string>
+          </property>
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="endDateLabel">
+          <property name="text">
+           <string>End Date:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="endDateEdit">
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Select the end date for filtering</string>
+          </property>
+          <property name="displayFormat">
+           <string>d.MM.yyyy</string>
+          </property>
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string>background-color: transparent;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="applyFiltersButton">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Apply current filters</string>
+          </property>
+          <property name="text">
+           <string>Filter</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/filter.png</normaloff>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="resetFiltersButton">
+          <property name="minimumSize">
+           <size>
+            <width>130</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Reset all filter options</string>
+          </property>
+          <property name="text">
+           <string>Clear Filters</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/reset.png</normaloff>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="filterRow2Spacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="FilterRow3Layout">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <item>
+         <spacer name="filterRow3Spacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="exportButton">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Export displayed history to a file</string>
+          </property>
+          <property name="text">
+           <string>Export</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="viewDetailsButton">
+          <property name="minimumSize">
+           <size>
+            <width>130</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>View details of the selected event</string>
+          </property>
+          <property name="text">
+           <string>Details Window</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deleteEventButton">
+          <property name="minimumSize">
+           <size>
+            <width>160</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Delete the selected event</string>
+          </property>
+          <property name="text">
+           <string>Delete Selected Event</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="actionButtonSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="clearAllHistoryButton">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Clear all history records</string>
+          </property>
+          <property name="text">
+           <string>Clear All History</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="FilterActionsLayout">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <item>
+         <spacer name="filterActionsLeftSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableView" name="historyTableView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>3</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Displays historical event data</string>
+     </property>
+     <property name="styleSheet">
+      <string>QTableView#historyTableView { background-color: rgba(50, 50, 50, 178); border-radius: 8px; color: #F0F0F0; gridline-color: rgba(80, 80, 80, 255); alternate-background-color: rgba(55, 55, 55, 178); } QTableView#historyTableView QHeaderView::section { background-color: rgba(65, 65, 65, 200); color: white; padding: 4px; border: 1px solid rgba(80, 80, 80, 255); font-weight: bold; }</string>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+     </property>
+     <property name="showGrid">
+      <bool>false</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="detailsAndActionsGroupBox">
+     <property name="styleSheet">
+      <string>QGroupBox#detailsAndActionsGroupBox { background-color: rgba(50, 50, 50, 178); border: 1px solid rgba(80, 80, 80, 255); border-radius: 8px; margin-top: 1ex; } QGroupBox#detailsAndActionsGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 2px 10px; color: #E0E0E0; font-weight: bold; }</string>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Event Details and Actions</string>
+     </property>
+     <layout class="QVBoxLayout" name="detailsLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QTextBrowser" name="detailsTextBrowser">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string>QTextBrowser#detailsTextBrowser { background-color: transparent; color: #F0F0F0; border: none; padding: 5px; }</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="eventDetailsTextEdit">
+        <property name="toolTip">
+         <string>Shows details of the selected event</string>
+        </property>
+        <property name="styleSheet">
+         <string>QTextEdit#eventDetailsTextEdit { background-color: transparent; color: #F0F0F0; border: none; padding: 5px; }</string>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="actionButtonsLayout">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <item>
+         <spacer name="actionButtonsSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="detailsVerticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

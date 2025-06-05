@@ -35,6 +35,8 @@ AVProjectUi is a comprehensive antivirus solution that combines multiple scannin
 
 ## 🔧 Building
 
+For detailed requirements and build instructions, see [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md).
+
 ### Quick Start
 
 ```bash
@@ -221,6 +223,13 @@ Run `make help` to see all available targets, including:
 - **Build Targets**: configure, build, test, coverage
 - **Documentation Targets**: docs, docs-serve, docs-open, docs-clean
 - **Development Targets**: setup-dev, analyze, optimize
+
+## 📊 Project Status & Architecture
+
+- **Project Status**: See [`docs/user/PROJECT_STATUS.md`](docs/user/PROJECT_STATUS.md)
+- **Architecture**: See [`docs/architecture/project_structure.md`](docs/architecture/project_structure.md)
+- **Optimization Examples**: See [`docs/architecture/OPTIMIZATION_EXAMPLE.md`](docs/architecture/OPTIMIZATION_EXAMPLE.md)
+- **Requirements**: See [`docs/user/REQUIREMENTS.md`](docs/user/REQUIREMENTS.md)
 
 ## 📄 Project Structure
 

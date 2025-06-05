@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/">
+        <file alias="images/background.png">Images/Background.png</file>
+        <file alias="images/Settings.png">Images/Settings.png</file>
+        <file alias="images/applogo.png">Images/AppLogo.png</file>
+        <file alias="images/shield.png">Images/Shield.png</file>
+        <file alias="styles/main.qss">stylesheet.qss</file>
+        <file alias="styles/dashboard.css">DashboardStyle.css</file>
+        <file alias="images/dashboardLogo.png">Images/dashboardLogo.png</file>
+        <file alias="images/history.png">Images/history.png</file>
+        <file alias="images/ServiceStatus.png">Images/ServiceStatus.png</file>
+        <file alias="images/basicScan.png">Images/basicScan.png</file>
+        <file alias="images/advancedScan.png">Images/advancedScan.png</file>
+        <file alias="images/cdrScan.png">Images/cdrScan.png</file>
+        <file alias="images/sandboxScan.png">Images/sandboxScan.png</file>
+    </qresource>
+</RCC>

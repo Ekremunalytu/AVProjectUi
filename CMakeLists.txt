@@ -1,3 +1,4 @@
+# AVProjectUi - Layer-Based Architecture
 cmake_minimum_required(VERSION 3.19)
 
 if(APPLE)
@@ -5,161 +6,123 @@ if(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
-project(AvProjectUi LANGUAGES CXX)
+project(AVProjectUi VERSION 1.0.0 LANGUAGES CXX)
 
 # C++ standard settings
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Disable internationalization, forcing English - remove tr() function effects
+# Disable internationalization, forcing English
 add_definitions(-DQT_NO_TRANSLATION)
 
-# Qt path configuration - adjust this according to your Qt installation
+# Qt path configuration
 if(APPLE)
   set(CMAKE_PREFIX_PATH "/Volumes/Crucial/QT/6.10.0/macos")
 elseif(WIN32)
   set(CMAKE_PREFIX_PATH "C:/Qt/6.9.0/mingw_64")
 endif()
 
-# Find required Qt packages with proper version
+# Find required Qt packages
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Network)
 
 # Enable automatic handling of Qt-specific files
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/UI)
-
-# Global include directories
-include_directories(
-    ${CMAKE_SOURCE_DIR}          # Root directory for absolute includes
-    ${CMAKE_BINARY_DIR}          # Generated files directory (ui_*.h, etc.)
-    ${CMAKE_SOURCE_DIR}/Docker/include # Added for Docker headers
-)
-
-# Add resource file properly
-set(PROJECT_RESOURCES ${CMAKE_SOURCE_DIR}/resources.qrc)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/src/presentation)
 
 qt_standard_project_setup()
 
-qt_add_executable(AvProjectUi
+# Global include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_BINARY_DIR}
+)
+
+# Add subdirectories (Layer-based)
+add_subdirectory(src/core)
+add_subdirectory(src/storage)
+add_subdirectory(src/security)
+add_subdirectory(src/infrastructure)
+add_subdirectory(src/application)
+add_subdirectory(src/presentation)
+
+# Main executable
+qt_add_executable(AVProjectUi
     WIN32 MACOSX_BUNDLE
-        main.cpp
-
-        UI/Mainwindow/mainwindow.cpp
-        UI/Mainwindow/mainwindow.h
-        UI/Mainwindow/mainwindow.ui
-
-        UI/Widgets/Dashboard/DashboardWidget.cpp
-        UI/Widgets/Dashboard/DashboardWidget.h
-        UI/Widgets/Dashboard/DashboardWidget.ui
-
-        ${PROJECT_RESOURCES}
-
-        Database/DbManager/DbManager.cpp
-        Database/DbManager/DbManager.h
-
-        Database/DatabaseService/DatabaseService.cpp
-        Database/DatabaseService/DatabaseService.h
-        
-        Database/Models/ScanHistoryModel.cpp
-        Database/Models/ScanHistoryModel.h
-        
-        Scanner/Dashboard/BasicScanner/BasicScanner.cpp
-        Scanner/Dashboard/BasicScanner/BasicScanner.h
-        
-        Scanner/CDRScanner.cpp
-        Scanner/CDRScanner.h        
-        Docker/src/docker/DockerManager.cpp        Docker/src/cdr/CdrManager.cpp
-        Docker/src/cdr/CdrSanitizer.cpp
-        Docker/src/cdr/FilesystemCompat.cpp
-        
-        Sandbox/SandboxManager.cpp
-        Sandbox/SandboxManager.h
-
-        Core/AppConfig.h
-        Network/VirusTotal/VirusTotalManager.cpp
-        Network/VirusTotal/VirusTotalManager.h
-
-        Network/Monitor/NetworkMonitor.cpp
-        Network/Monitor/NetworkMonitor.h
-
-        UI/Widgets/History/HistoryWidget.cpp
-        UI/Widgets/History/HistoryWidget.h
-        UI/Widgets/History/HistoryWidget.ui
-
-        UI/Widgets/ServiceStatus/ServiceStatusWidget.cpp
-        UI/Widgets/ServiceStatus/ServiceStatusWidget.h
-        UI/Widgets/ServiceStatus/ServiceStatusWidget.ui
+    src/presentation/application/main.cpp
 )
 
-# Include directories with proper Qt paths
-target_include_directories(AvProjectUi PRIVATE
-    ${CMAKE_SOURCE_DIR}                # Project root for absolute includes
-    ${CMAKE_SOURCE_DIR}/Docker/include # Docker component includes
-    ${CMAKE_BINARY_DIR}                # Generated files (ui_*.h, etc.)
-    ${Qt6Core_INCLUDE_DIRS}           # Qt Core includes
-    ${Qt6Widgets_INCLUDE_DIRS}        # Qt Widgets includes
-    ${Qt6Sql_INCLUDE_DIRS}            # Qt SQL includes
-)
-
-# Add compile definitions to ensure proper Qt handling
-target_compile_definitions(AvProjectUi PRIVATE
-    QT_NO_CAST_FROM_ASCII
-    QT_NO_CAST_TO_ASCII
-)
-
-target_link_libraries(AvProjectUi
+# Link all layers
+target_link_libraries(AVProjectUi
     PRIVATE
+        Core
+        Storage
+        Security
+        Infrastructure
+        Application
+        Presentation
         Qt::Core
         Qt::Widgets
         Qt::Sql
         Qt::Network
 )
 
-include(GNUInstallDirs)
+# Enable testing
+option(BUILD_TESTING "Build tests" ON)
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
-install(TARGETS AvProjectUi
-    BUNDLE  DESTINATION AvProjectUi
+# Installation
+include(GNUInstallDirs)
+install(TARGETS AVProjectUi
+    BUNDLE  DESTINATION AVProjectUi
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 qt_generate_deploy_app_script(
-    TARGET AvProjectUi
+    TARGET AVProjectUi
     OUTPUT_SCRIPT deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+# Copy config file
+add_custom_command(TARGET AVProjectUi POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_SOURCE_DIR}/src/core/config/config.ini
+    $<TARGET_FILE_DIR:AVProjectUi>/config.ini
+    COMMENT "Copying config.ini to executable directory"
+)
 
 # Documentation targets
 find_program(DOXYGEN_EXECUTABLE doxygen)
 find_program(PYTHON_EXECUTABLE python3)
 
 if(DOXYGEN_EXECUTABLE)
-    # Generate documentation target
     add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/api/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/api
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
     )
     
-    # Serve documentation target
     if(PYTHON_EXECUTABLE)
         add_custom_target(serve-docs
-            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/serve_docs.py
+            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/scripts/serve_docs.py
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             COMMENT "Starting documentation server"
             VERBATIM
         )
         
-        # Combined target: generate docs and serve them
         add_custom_target(docs-serve
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile
-            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/serve_docs.py
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/api/Doxyfile
+            COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/scripts/serve_docs.py
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/api
             COMMENT "Generating documentation and starting server"
             VERBATIM
         )
@@ -169,21 +132,3 @@ if(DOXYGEN_EXECUTABLE)
 else()
     message(WARNING "Doxygen not found. Documentation targets will not be available.")
 endif()
-
-if(WIN32)
-    # Add a target to copy Qt DLLs
-    add_custom_command(TARGET AvProjectUi POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_PREFIX_PATH}/bin # Qt bin folder path
-        $<TARGET_FILE_DIR:AvProjectUi> # Target executable directory
-        COMMENT "Copying Qt DLLs to build directory"
-    )
-endif()
-
-# Copy config.ini to executable directory for all platforms
-add_custom_command(TARGET AvProjectUi POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_SOURCE_DIR}/Core/config.ini
-    $<TARGET_FILE_DIR:AvProjectUi>/config.ini
-    COMMENT "Copying config.ini to executable directory"
-)
