@@ -27,6 +27,9 @@ int main(int argc, char *argv[])
     // Initialize Qt application
     QApplication a(argc, argv);
 
+    // Initialize resources from static library
+    Q_INIT_RESOURCE(resources);
+
     // Load application configuration using singleton pattern
     auto& appConfig = AppConfig::getInstance();
     appConfig.loadConfig(); // Ensure configuration is loaded
@@ -38,12 +41,30 @@ int main(int argc, char *argv[])
     }
 
     // Load and apply application stylesheet
+    qDebug() << "Attempting to load stylesheet from:" << u":/styles/main.qss"_s;
+    
+    // List all available resources for debugging
+    QDir resourceDir(u":/"_s);
+    qDebug() << "Available resources in root:" << resourceDir.entryList();
+    QDir stylesDir(u":/styles"_s);
+    qDebug() << "Available resources in styles:" << stylesDir.entryList();
+    
     QFile styleFile(u":/styles/main.qss"_s);
     if (!styleFile.open(QFile::ReadOnly)) {
         qDebug() << "Failed to load style file: " << styleFile.errorString();
         // Print the file path for debugging purposes
         qDebug() << "Searched file: " << styleFile.fileName();
+        
+        // Try alternative path
+        QFile alternativeStyleFile(u":/stylesheet.qss"_s);
+        if (alternativeStyleFile.open(QFile::ReadOnly)) {
+            qDebug() << "Found alternative stylesheet path";
+            QString styleSheetContent = QString::fromUtf8(alternativeStyleFile.readAll());
+            a.setStyleSheet(styleSheetContent);
+            alternativeStyleFile.close();
+        }
     } else {
+        qDebug() << "Successfully loaded stylesheet";
         QString styleSheetContent = QString::fromUtf8(styleFile.readAll());
         a.setStyleSheet(styleSheetContent);
         styleFile.close();

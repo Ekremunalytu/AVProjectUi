@@ -13,5 +13,8 @@
         <file alias="images/advancedScan.png">Images/advancedScan.png</file>
         <file alias="images/cdrScan.png">Images/cdrScan.png</file>
         <file alias="images/sandboxScan.png">Images/sandboxScan.png</file>
+        <file alias="images/refresh.png">Images/refresh.png</file>
+        <file alias="icons/filter.png">Icons/filter.png</file>
+        <file alias="icons/reset.png">Icons/reset.png</file>
     </qresource>
 </RCC>
