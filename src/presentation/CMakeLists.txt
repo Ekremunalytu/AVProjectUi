@@ -10,6 +10,13 @@ qt_add_library(Presentation STATIC
     widgets/Dashboard/DashboardWidget.h
     widgets/Dashboard/DashboardWidget.ui
     
+    # Settings widgets
+    widgets/Settings/SettingsDialog.cpp
+    widgets/Settings/SettingsDialog.h
+    widgets/Settings/SettingsWidget.cpp
+    widgets/Settings/SettingsWidget.h
+    widgets/Settings/SettingsWidget.ui
+    
     # History widgets
     widgets/History/HistoryWidget.cpp
     widgets/History/HistoryWidget.h

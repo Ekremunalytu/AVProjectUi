@@ -10,6 +10,7 @@
 #include "../widgets/Dashboard/DashboardWidget.h"
 #include "../widgets/History/HistoryWidget.h"
 #include "../widgets/ServiceStatus/ServiceStatusWidget.h"
+#include "../widgets/Settings/SettingsWidget.h"
 #include "storage/database/DatabaseService/DatabaseService.h"
 
 /**
@@ -56,6 +57,12 @@ MainWindow::MainWindow(QWidget *parent)
         // If the page at index 1 (for Service Status) doesn't exist in the stacked widget, log a warning.
         qWarning("Service Status page (at index 1) not found in contentStackedWidget. ServiceStatusWidget will not be added.");
     }
+
+    // Create the settings widget and add it to the settings page
+    SettingsWidget *settingsWidget = new SettingsWidget(this);
+    QVBoxLayout *settingsLayout = new QVBoxLayout(ui->settingsPage);
+    settingsLayout->addWidget(settingsWidget);
+    ui->settingsPage->setLayout(settingsLayout);
     
     // Set up navigation button connections
     connect(ui->navDashbardButton, &QPushButton::clicked, this, [this]() {

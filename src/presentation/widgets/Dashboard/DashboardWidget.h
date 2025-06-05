@@ -128,13 +128,7 @@ private slots:
      */
     void onNetworkMonitorButtonClicked();
     
-    /**
-     * @brief Handles click on the Configuration button at the bottom of the interface.
-     * 
-     * Opens configuration dialog for customizing scanning settings,
-     * API keys, and other application preferences.
-     */
-    void onConfigButtonClicked();
+
     
     /**
      * @brief Handles click on the Refresh button at the bottom of the interface.
@@ -145,11 +139,43 @@ private slots:
     void onRefreshButtonClicked();
     
     /**
+     * @brief Handles settings changes from the settings dialog.
+     * 
+     * Slot that responds to settings changes and updates the dashboard accordingly.
+     */
+    void onSettingsChanged();
+    
+    /**
+     * @brief Applies settings changes to the dashboard.
+     * 
+     * Updates dashboard appearance, behavior, and configuration based on current settings.
+     */
+    void applySettingsChanges();
+    
+    /**
+     * @brief Adds a result entry to the advanced scan results table.
+     * 
+     * Helper method to add scan results to the advanced scan table with proper formatting.
+     * 
+     * @param scanType The type of scan performed
+     * @param status The status of the scan
+     * @param details Detailed information about the scan result
+     */
+    void addAdvancedScanResult(const QString& scanType, const QString& status, const QString& details);
+
+    /**
      * @brief Handles the file selection for Basic Scan.
      * 
      * Opens a file dialog and initiates scanning of the selected file.
      */
     void onBasicScanSelectFile();
+    
+    /**
+     * @brief Handles the directory selection for Basic Scan.
+     * 
+     * Opens a directory dialog and initiates scanning of the selected directory.
+     */
+    void onBasicScanSelectDirectory();
     
     /**
      * @brief Handles the file selection for Advanced Scan.
@@ -191,6 +217,27 @@ private slots:
      * @param type The selection type (file or directory)
      */
     void startAdvancedScanWithPath(const QString &path, const QString &type);
+    
+    /**
+     * @brief Formats VirusTotal JSON results into a user-friendly display format.
+     * 
+     * Parses the VirusTotal API response and creates a formatted summary 
+     * with threat assessment, detection statistics, and file metadata.
+     * 
+     * @param jsonResults The raw JSON response from VirusTotal API
+     * @return Formatted string suitable for display in the UI
+     */
+    QString formatVirusTotalResults(const QString& jsonResults);
+    
+    /**
+     * @brief Add VirusTotal engine results to the advanced scan table.
+     * 
+     * Parses VirusTotal JSON response and adds each engine's result 
+     * as a separate row in the advanced scan results table.
+     * 
+     * @param jsonResults The raw JSON response from VirusTotal API
+     */
+    void addVirusTotalEngineResults(const QString& jsonResults);
 
 private:
    

@@ -34,30 +34,45 @@
      <property name="styleSheet">
       <string>
 QTabWidget::pane { 
-  border: 1px solid #4A4A4A;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.02);
+  border: 2px solid #2E7D32;
+  border-radius: 8px;
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 rgba(46, 125, 50, 0.1),
+                              stop: 1 rgba(0, 0, 0, 0.05));
   margin-top: -1px;
+  padding: 4px;
 }
 QTabWidget::tab-bar {
-  left: 5px;
+  left: 8px;
 }
 QTabBar::tab {
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 1px solid #3A3A3A;
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 rgba(69, 90, 100, 0.8),
+                              stop: 1 rgba(38, 50, 56, 0.9));
+  border: 2px solid #37474F;
   border-bottom: 0px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  padding: 8px 16px;
-  margin-right: 2px;
-  color: #CCCCCC;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 10px 20px;
+  margin-right: 3px;
+  color: #B0BEC5;
+  font-weight: 500;
+  font-size: 11px;
+  min-width: 80px;
 }
 QTabBar::tab:selected {
-  background-color: rgba(30, 30, 30, 0.1);
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 rgba(46, 125, 50, 0.9),
+                              stop: 1 rgba(27, 94, 32, 0.8));
   color: #FFFFFF;
+  border: 2px solid #2E7D32;
+  font-weight: 600;
 }
 QTabBar::tab:hover:!selected {
-  background-color: rgba(60, 60, 60, 0.2);
+  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                              stop: 0 rgba(96, 125, 139, 0.7),
+                              stop: 1 rgba(55, 71, 79, 0.8));
+  color: #E0E0E0;
 }
       </string>
      </property>
@@ -85,9 +100,20 @@ QTabBar::tab:hover:!selected {
          <property name="styleSheet">
           <string>
 QFrame {
-    border: 1px solid #4A4A4A;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid #2E7D32;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 rgba(232, 245, 233, 0.95),
+                                stop: 1 rgba(200, 230, 201, 0.9));
+    border-radius: 8px;
+    padding: 8px;
+}
+QTextEdit {
+    border: 1px solid #66BB6A;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    padding: 6px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
 }
           </string>
          </property>
@@ -112,6 +138,97 @@ QFrame {
         </widget>
        </item>
        <item>
+        <widget class="QFrame" name="basicScanControlsFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumHeight">
+          <number>80</number>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="styleSheet">
+          <string>
+QFrame {
+    border: 1px solid #4CAF50;
+    background-color: rgba(232, 245, 233, 0.7);
+    border-radius: 6px;
+    padding: 8px;
+}
+QRadioButton {
+    color: #2E7D32;
+    font-weight: 500;
+    font-size: 11px;
+    spacing: 5px;
+}
+QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+QRadioButton::indicator:unchecked {
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    background-color: white;
+}
+QRadioButton::indicator:checked {
+    border: 2px solid #2E7D32;
+    border-radius: 8px;
+    background-color: #4CAF50;
+}
+          </string>
+         </property>
+         <layout class="QHBoxLayout" name="basicScanControlsLayout">
+          <item>
+           <widget class="QLabel" name="scanTypeLabel">
+            <property name="text">
+             <string>Tarama Türü:</string>
+            </property>
+            <property name="styleSheet">
+             <string>QLabel { color: #2E7D32; font-weight: bold; font-size: 12px; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="fileScanRadio">
+            <property name="text">
+             <string>Tekil Dosya</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="directoryScanRadio">
+            <property name="text">
+             <string>Dizin Tarama</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="basicControlsSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="basicScanButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -121,12 +238,38 @@ QFrame {
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>40</height>
+           <width>180</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
-          <string>Run Basic Scan</string>
+          <string>Tarama Başlat</string>
+         </property>
+         <property name="styleSheet">
+          <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #4CAF50,
+                                stop: 1 #388E3C);
+    color: white;
+    border: 2px solid #2E7D32;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #66BB6A,
+                                stop: 1 #4CAF50);
+    border: 2px solid #4CAF50;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #388E3C,
+                                stop: 1 #2E7D32);
+}
+          </string>
          </property>
          <property name="icon">
           <iconset resource="../../resources.qrc">
@@ -140,7 +283,7 @@ QFrame {
      <!-- Advanced Scan Tab -->
      <widget class="QWidget" name="advancedScanTab">
       <attribute name="title">
-       <string>Advanced Scan</string>
+       <string>VirusTotal</string>
       </attribute>
       <layout class="QVBoxLayout" name="advancedScanTabLayout">
        <item>
@@ -160,9 +303,25 @@ QFrame {
          <property name="styleSheet">
           <string>
 QFrame {
-    border: 1px solid #4A4A4A;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid #1976D2;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 rgba(227, 242, 253, 0.95),
+                                stop: 1 rgba(187, 222, 251, 0.9));
+    border-radius: 8px;
+    padding: 8px;
+}
+QTableWidget {
+    border: 1px solid #42A5F5;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    gridline-color: #E1F5FE;
+}
+QTableWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #E1F5FE;
+}
+QTableWidget::item:selected {
+    background-color: rgba(33, 150, 243, 0.2);
 }
           </string>
          </property>
@@ -183,41 +342,7 @@ QFrame {
             </property>
             <layout class="QHBoxLayout" name="advancedScanControlsLayout">
              <item>
-              <widget class="QPushButton" name="selectFileButton">
-               <property name="text">
-                <string>Select File</string>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="icon">
-                <iconset resource="../../resources/resources.qrc">
-                 <normaloff>:/images/Settings.png</normaloff>:/images/Settings.png</iconset>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="selectDirectoryButton">
-               <property name="text">
-                <string>Select Directory</string>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>120</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="icon">
-                <iconset resource="../../resources/resources.qrc">
-                 <normaloff>:/images/Settings.png</normaloff>:/images/Settings.png</iconset>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
+              <spacer name="leftSpacer">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -232,12 +357,38 @@ QFrame {
              <item>
               <widget class="QLabel" name="selectedPathLabel">
                <property name="text">
-                <string>No file or directory selected</string>
+                <string>VirusTotal ile dosya analizi için 'VirusTotal Analizi' butonuna tıklayın</string>
                </property>
                <property name="styleSheet">
-                <string>QLabel { color: #CCCCCC; font-style: italic; }</string>
+                <string>QLabel { 
+                    color: #1976D2; 
+                    font-style: italic; 
+                    font-weight: 500; 
+                    font-size: 12px;
+                    text-align: center; 
+                    background-color: rgba(227, 242, 253, 0.7);
+                    border: 1px solid #42A5F5;
+                    border-radius: 4px;
+                    padding: 6px;
+                }</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
+             </item>
+             <item>
+              <spacer name="rightSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -280,12 +431,38 @@ QFrame {
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>40</height>
+           <width>180</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
-          <string>Run Advanced Scan</string>
+          <string>VirusTotal Analizi</string>
+         </property>
+         <property name="styleSheet">
+          <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #2196F3,
+                                stop: 1 #1976D2);
+    color: white;
+    border: 2px solid #1565C0;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #42A5F5,
+                                stop: 1 #2196F3);
+    border: 2px solid #1976D2;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #1976D2,
+                                stop: 1 #1565C0);
+}
+          </string>
          </property>
          <property name="icon">
           <iconset resource="../../resources.qrc">
@@ -319,9 +496,20 @@ QFrame {
          <property name="styleSheet">
           <string>
 QFrame {
-    border: 1px solid #4A4A4A;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid #FF9800;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 rgba(255, 248, 225, 0.95),
+                                stop: 1 rgba(255, 236, 179, 0.9));
+    border-radius: 8px;
+    padding: 8px;
+}
+QTextEdit {
+    border: 1px solid #FFB74D;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    padding: 6px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
 }
           </string>
          </property>
@@ -355,12 +543,38 @@ QFrame {
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>40</height>
+           <width>180</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
           <string>Run CDR Scan</string>
+         </property>
+         <property name="styleSheet">
+          <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #FF9800,
+                                stop: 1 #F57400);
+    color: white;
+    border: 2px solid #E65100;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #FFB74D,
+                                stop: 1 #FF9800);
+    border: 2px solid #F57400;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #F57400,
+                                stop: 1 #E65100);
+}
+          </string>
          </property>
          <property name="icon">
           <iconset resource="../../resources.qrc">
@@ -394,9 +608,20 @@ QFrame {
          <property name="styleSheet">
           <string>
 QFrame {
-    border: 1px solid #4A4A4A;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid #9C27B0;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 rgba(248, 240, 252, 0.95),
+                                stop: 1 rgba(225, 190, 231, 0.9));
+    border-radius: 8px;
+    padding: 8px;
+}
+QTextEdit {
+    border: 1px solid #CE93D8;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    padding: 6px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
 }
           </string>
          </property>
@@ -430,12 +655,38 @@ QFrame {
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>40</height>
+           <width>180</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
           <string>Run Sandbox Analysis</string>
+         </property>
+         <property name="styleSheet">
+          <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #9C27B0,
+                                stop: 1 #7B1FA2);
+    color: white;
+    border: 2px solid #6A1B9A;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #BA68C8,
+                                stop: 1 #9C27B0);
+    border: 2px solid #7B1FA2;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #7B1FA2,
+                                stop: 1 #6A1B9A);
+}
+          </string>
          </property>
          <property name="icon">
           <iconset resource="../../resources.qrc">
@@ -469,9 +720,20 @@ QFrame {
          <property name="styleSheet">
           <string>
 QFrame {
-    border: 1px solid #4A4A4A;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
+    border: 2px solid #607D8B;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 rgba(236, 239, 241, 0.95),
+                                stop: 1 rgba(207, 216, 220, 0.9));
+    border-radius: 8px;
+    padding: 8px;
+}
+QTextEdit {
+    border: 1px solid #90A4AE;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    padding: 6px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
 }
           </string>
          </property>
@@ -505,12 +767,38 @@ QFrame {
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>40</height>
+           <width>180</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
           <string>Start Network Monitor</string>
+         </property>
+         <property name="styleSheet">
+          <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #607D8B,
+                                stop: 1 #455A64);
+    color: white;
+    border: 2px solid #37474F;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #78909C,
+                                stop: 1 #607D8B);
+    border: 2px solid #455A64;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #455A64,
+                                stop: 1 #37474F);
+}
+          </string>
          </property>
         </widget>
        </item>
@@ -534,29 +822,6 @@ QFrame {
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="configButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Configuration</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../resources.qrc">
-         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="refreshButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -566,12 +831,38 @@ QFrame {
        </property>
        <property name="minimumSize">
         <size>
-         <width>120</width>
-         <height>40</height>
+         <width>140</width>
+         <height>45</height>
         </size>
        </property>
        <property name="text">
         <string>Refresh</string>
+       </property>
+       <property name="styleSheet">
+        <string>
+QPushButton {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #607D8B,
+                                stop: 1 #455A64);
+    color: white;
+    border: 2px solid #37474F;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 8px 16px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #78909C,
+                                stop: 1 #607D8B);
+    border: 2px solid #455A64;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #455A64,
+                                stop: 1 #37474F);
+}
+        </string>
        </property>
        <property name="icon">
         <iconset resource="../../resources.qrc">

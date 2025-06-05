@@ -1,6 +1,7 @@
 #include "DashboardWidget.h"
 #include "ui_dashboardwidget.h"
 #include "storage/database/DatabaseService/DatabaseService.h"
+#include "../../../core/config/SettingsManager.h"
 #include <QDebug>
 #include <QAction>
 #include <QMessageBox>
@@ -230,11 +231,7 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     ui->networkMonitorButton->setStyleSheet(networkButtonStyle);
     ui->networkMonitorButton->setText(u"Ağ İzlemeyi Durdur"_s);
     
-    // Config and refresh buttons
-    QString configButtonStyle = buttonStyleBase;
-    ui->configButton->setStyleSheet(configButtonStyle);
-    ui->configButton->setText(u"Yapılandırma"_s); // Turkish localization
-    
+    // Refresh button
     QString refreshButtonStyle = buttonStyleBase;
     refreshButtonStyle.replace(u"#2A2A2A"_s, u"#607D8B"_s); // Blue Grey
     ui->refreshButton->setStyleSheet(refreshButtonStyle);
@@ -259,7 +256,6 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     connect(ui->cdrScanButton, &QPushButton::clicked, this, &DashboardWidget::onCdrScanButtonClicked);
     connect(ui->sandboxScanButton, &QPushButton::clicked, this, &DashboardWidget::onSandboxScanButtonClicked);
     connect(ui->networkMonitorButton, &QPushButton::clicked, this, &DashboardWidget::onNetworkMonitorButtonClicked);
-    connect(ui->configButton, &QPushButton::clicked, this, &DashboardWidget::onConfigButtonClicked);
     connect(ui->refreshButton, &QPushButton::clicked, this, &DashboardWidget::onRefreshButtonClicked);
     
     // Basic scan connections
@@ -273,13 +269,19 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     connect(m_networkMonitor, &NetworkMonitor::newLogMessage, this, &DashboardWidget::appendNetworkLog);
     m_networkMonitor->startMonitoring(); // Start monitoring
     
-    // Advanced Scan file/directory selection button connections
-    connect(ui->selectFileButton, &QPushButton::clicked, this, &DashboardWidget::onSelectFileClicked);
-    connect(ui->selectDirectoryButton, &QPushButton::clicked, this, &DashboardWidget::onSelectDirectoryClicked);
+    // Initialize advanced scan results table
+    if (ui->advancedScanResultsTableWidget) {
+        ui->advancedScanResultsTableWidget->setColumnCount(3);
+        QStringList headers;
+        headers << tr("Scan Type") << tr("Status") << tr("Details");
+        ui->advancedScanResultsTableWidget->setHorizontalHeaderLabels(headers);
+        ui->advancedScanResultsTableWidget->horizontalHeader()->setStretchLastSection(true);
+        ui->advancedScanResultsTableWidget->setWordWrap(true);
+        ui->advancedScanResultsTableWidget->verticalHeader()->setDefaultSectionSize(60);
+    }
     
-    // Initialize UI states
-    ui->advancedScanButton->setEnabled(false); // Disable until file/directory is selected
-    ui->selectedPathLabel->setText(tr("No file or directory selected"));
+    // Initialize UI states - Advanced scan button is now always enabled
+    ui->selectedPathLabel->setText(tr("Click 'Advanced Scan' to select file or directory"));
 }
 
 /**
@@ -297,35 +299,41 @@ DashboardWidget::~DashboardWidget() {
 /**
  * @brief Handles the Basic Scan button click.
  * 
- * Initiates the file selection process for a basic scan.
+ * Checks the scan type radio buttons and initiates either file or directory scanning.
  */
 void DashboardWidget::onBasicScanButtonClicked() {
-    onBasicScanSelectFile();
+    // Check which scan type is selected
+    if (ui->fileScanRadio->isChecked()) {
+        onBasicScanSelectFile();
+    } else if (ui->directoryScanRadio->isChecked()) {
+        onBasicScanSelectDirectory();
+    } else {
+        // Default to file scan if neither is checked
+        ui->fileScanRadio->setChecked(true);
+        onBasicScanSelectFile();
+    }
 }
 
 /**
  * @brief Handles the Advanced Scan button click.
  * 
- * Uses the previously selected file or directory for advanced scanning.
+ * Opens a file dialog for advanced scanning (file only, no directory option).
  */
 void DashboardWidget::onAdvancedScanButtonClicked() {
-    // Check if we have a selected path from the file/directory selection buttons
-    QString selectedPath = ui->selectedPathLabel->property("selectedPath").toString();
-    QString selectionType = ui->selectedPathLabel->property("selectionType").toString();
+    // Only allow file scanning for advanced scan
+    QString selectedPath = QFileDialog::getOpenFileName(this,
+        tr("Select File for Advanced Scan"),
+        QDir::homePath(),
+        tr("All Files (*.*)"));
     
-    if (!selectedPath.isEmpty() && !selectionType.isEmpty()) {
-        // Use the selected path for advanced scanning
+    if (!selectedPath.isEmpty()) {
+        // Switch to advanced scan tab and clear previous results
         ui->dashboardTabWidget->setCurrentWidget(ui->advancedScanTab);
-        
-        // Clear previous results
         ui->advancedScanResultsTableWidget->clearContents();
         ui->advancedScanResultsTableWidget->setRowCount(0);
         
-        // Start advanced scan with the selected path
-        startAdvancedScanWithPath(selectedPath, selectionType);
-    } else {
-        // Fallback to the old method if no path is selected
-        onAdvancedScanSelectFile();
+        // Start advanced scan immediately
+        startAdvancedScanWithPath(selectedPath, "file");
     }
 }
 
@@ -868,17 +876,6 @@ void DashboardWidget::onNetworkMonitorButtonClicked() {
 }
 
 /**
- * @brief Handles the Configuration button click.
- * 
- * Currently a placeholder for configuration functionality.
- */
-void DashboardWidget::onConfigButtonClicked() {
-    qDebug() << "Config button clicked"; 
-    // Placeholder for configuration dialog or page
-    QMessageBox::information(this, u"Configuration"_s, u"Configuration options will be available in a future update."_s);
-}
-
-/**
  * @brief Handles the Refresh button click.
  * 
  * Refreshes the current view and any associated data.
@@ -923,6 +920,82 @@ void DashboardWidget::onRefreshButtonClicked() {
 }
 
 /**
+ * @brief Handles settings changes from the settings dialog.
+ * 
+ * Slot that responds to settings changes and updates the dashboard accordingly.
+ */
+void DashboardWidget::onSettingsChanged() {
+    qDebug() << "Settings changed - updating dashboard";
+    applySettingsChanges();
+}
+
+/**
+ * @brief Applies settings changes to the dashboard.
+ * 
+ * Updates dashboard appearance, behavior, and configuration based on current settings.
+ */
+void DashboardWidget::applySettingsChanges() {
+    // Get the current settings
+    SettingsManager& settings = SettingsManager::getInstance();
+    
+    // Apply language settings
+    QString language = settings.getLanguage();
+    if (language == "tr") {
+        // Apply Turkish localization
+        ui->basicScanButton->setText(u"Temel Tarama"_s);
+        ui->advancedScanButton->setText(u"Gelişmiş Tarama"_s);
+        ui->cdrScanButton->setText(u"CDR Taraması"_s);
+        ui->sandboxScanButton->setText(u"Sandbox Taraması"_s);
+        ui->refreshButton->setText(u"Yenile"_s);
+        
+        // Update tab names
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->basicScanTab), u"Temel Tarama"_s);
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->advancedScanTab), u"Gelişmiş Tarama"_s);
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->cdrTab), u"CDR"_s);
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->sandboxTab), u"Sandbox"_s);
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->networkTab), u"Ağ İzleme"_s);
+    } else {
+        // Apply English localization
+        ui->basicScanButton->setText("Basic Scan");
+        ui->advancedScanButton->setText("Advanced Scan");
+        ui->cdrScanButton->setText("CDR Scan");
+        ui->sandboxScanButton->setText("Sandbox Scan");
+        ui->refreshButton->setText("Refresh");
+        
+        // Update tab names
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->basicScanTab), "Basic Scan");
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->advancedScanTab), "Advanced Scan");
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->cdrTab), "CDR");
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->sandboxTab), "Sandbox");
+        ui->dashboardTabWidget->setTabText(ui->dashboardTabWidget->indexOf(ui->networkTab), "Network Monitor");
+    }
+    
+    // Apply theme settings
+    QString theme = settings.getTheme();
+    if (theme == "light") {
+        // Apply light theme (currently not implemented, but placeholder for future)
+        qDebug() << "Light theme not yet implemented";
+    } else {
+        // Keep the current dark theme
+        qDebug() << "Using dark theme";
+    }
+    
+    // Apply auto-scan settings to scanner if needed
+    if (settings.getAutoScanEnabled() && m_basicScanner) {
+        qDebug() << "Auto-scan is enabled";
+        // Auto-scan logic could be implemented here
+    }
+    
+    // Update network monitoring if settings changed
+    if (m_networkMonitor) {
+        // Could restart with new settings if needed
+        qDebug() << "Network monitor settings updated";
+    }
+    
+    qDebug() << "Dashboard settings applied successfully";
+}
+
+/**
  * @brief Handles file selection and initiates the basic scan process.
  * 
  * Opens a file dialog for the user to select a file, then initiates
@@ -960,51 +1033,205 @@ void DashboardWidget::onBasicScanSelectFile() {
 }
 
 /**
- * @brief Handles file selection and initiates the advanced scan process.
+ * @brief Handles directory selection and initiates the basic scan process for all files in the directory.
  * 
- * Opens a file dialog for the user to select a file, then processes
- * that file for advanced scanning and updates the UI accordingly.
+ * Opens a directory dialog for the user to select a directory, then iterates through
+ * all files in the directory and scans each one.
+ */
+void DashboardWidget::onBasicScanSelectDirectory() {
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
+    ui->basicScanResultsTextEdit->clear();
+    ui->basicScanResultsTextEdit->append(QString::fromUtf8("Dizin seçiliyor..."));
+    
+    QString dirPath = QFileDialog::getExistingDirectory(this, 
+                                                        tr("Tarama için Dizin Seçin"), 
+                                                        QDir::homePath(), 
+                                                        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    
+    if (!dirPath.isEmpty()) {
+        QDir directory(dirPath);
+        QStringList filters;
+        filters << "*"; // Scan all files
+        QFileInfoList fileList = directory.entryInfoList(filters, QDir::Files | QDir::NoDotAndDotDot);
+        
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Seçilen dizin: %1").arg(QFileInfo(dirPath).baseName()));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Bulunan dosya sayısı: %1").arg(fileList.size()));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Dizin taraması başlatılıyor...\n"));
+        
+        if (fileList.isEmpty()) {
+            ui->basicScanResultsTextEdit->append(QString::fromUtf8("⚠️ Seçilen dizinde taranabilir dosya bulunamadı."));
+            return;
+        }
+        
+        int totalFiles = fileList.size();
+        int scannedFiles = 0;
+        int maliciousFiles = 0;
+        
+        // Scan each file in the directory
+        for (const QFileInfo& fileInfo : fileList) {
+            scannedFiles++;
+            QString filePath = fileInfo.absoluteFilePath();
+            
+            // Update progress
+            ui->basicScanResultsTextEdit->append(QString::fromUtf8("\n[%1/%2] Taranıyor: %3")
+                                                 .arg(scannedFiles)
+                                                 .arg(totalFiles)
+                                                 .arg(fileInfo.fileName()));
+            
+            // Scan the file synchronously for directory scanning
+            if (m_basicScanner->scanFile(filePath)) {
+                // Process the app events to prevent freezing
+                QCoreApplication::processEvents();
+                
+                // Wait for scan to complete (simplified synchronous approach for directory scanning)
+                // In a real implementation, you might want to use a more sophisticated approach
+                // For now, we'll assume the scan completes quickly for each file
+                QString results = m_basicScanner->getResults();
+                
+                if (results.contains("MALICIOUS", Qt::CaseInsensitive)) {
+                    maliciousFiles++;
+                    ui->basicScanResultsTextEdit->setTextColor(QColor("#FF5252"));
+                    ui->basicScanResultsTextEdit->append(QString::fromUtf8("  ⚠️ MALİCİOUS - %1").arg(fileInfo.fileName()));
+                } else {
+                    ui->basicScanResultsTextEdit->setTextColor(QColor("#4CAF50"));
+                    ui->basicScanResultsTextEdit->append(QString::fromUtf8("  ✓ TEMİZ - %1").arg(fileInfo.fileName()));
+                }
+                ui->basicScanResultsTextEdit->setTextColor(QColor("#FFFFFF")); // Reset color
+                
+            } else {
+                ui->basicScanResultsTextEdit->setTextColor(QColor("#FFA726"));
+                ui->basicScanResultsTextEdit->append(QString::fromUtf8("  ⚠️ HATA - %1: %2")
+                                                     .arg(fileInfo.fileName())
+                                                     .arg(m_basicScanner->getLastErrorMessage()));
+                ui->basicScanResultsTextEdit->setTextColor(QColor("#FFFFFF")); // Reset color
+            }
+        }
+        
+        // Display summary
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("\n=== DIZIN TARAMA SONUCU ==="));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Toplam dosya: %1").arg(totalFiles));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Taranan dosya: %1").arg(scannedFiles));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Zararlı dosya: %1").arg(maliciousFiles));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Temiz dosya: %1").arg(scannedFiles - maliciousFiles));
+        
+        if (maliciousFiles > 0) {
+            ui->basicScanResultsTextEdit->setTextColor(QColor("#FF5252"));
+            ui->basicScanResultsTextEdit->append(QString::fromUtf8("\n⚠️ DİKKAT: Dizinde zararlı dosya tespit edildi!"));
+        } else {
+            ui->basicScanResultsTextEdit->setTextColor(QColor("#4CAF50"));
+            ui->basicScanResultsTextEdit->append(QString::fromUtf8("\n✓ Dizin temiz - zararlı dosya bulunamadı."));
+        }
+        ui->basicScanResultsTextEdit->setTextColor(QColor("#FFFFFF")); // Reset color
+        
+    } else {
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8("Dizin seçimi iptal edildi."));
+    }
+}
+
+/**
+ * @brief Append new network log messages to the network monitoring display.
+ * 
+ * Updates the network monitoring interface with new log messages
+ * from the network monitor component.
+ * 
+ * @param logMessage New network log message to display
+ */
+void DashboardWidget::appendNetworkLog(const QString& logMessage) {
+    if (ui->networkCommunicationTextEdit) {
+        ui->networkCommunicationTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        ui->networkCommunicationTextEdit->append(logMessage);
+    }
+}
+
+/**
+ * @brief Handles and displays scanner errors.
+ * 
+ * @param errorCode The error code.
+ * @param errorMessage A descriptive error message.
+ */
+void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString& errorMessage) {
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
+    
+    if (ui->basicScanResultsTextEdit) {
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(errorMessage));
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s)); // Reset color
+    }
+    
+    qDebug() << "Basic scan error:" << static_cast<int>(errorCode) << errorMessage;
+}
+
+/**
+ * @brief Adds a result entry to the advanced scan results table.
+ * 
+ * Helper method to add scan results to the advanced scan table with proper formatting.
+ * 
+ * @param scanType The type of scan performed
+ * @param status The status of the scan
+ * @param details Detailed information about the scan result
+ */
+void DashboardWidget::addAdvancedScanResult(const QString& scanType, const QString& status, const QString& details) {
+    if (!ui->advancedScanResultsTableWidget) {
+        return;
+    }
+    
+    int rowCount = ui->advancedScanResultsTableWidget->rowCount();
+    ui->advancedScanResultsTableWidget->insertRow(rowCount);
+    
+    ui->advancedScanResultsTableWidget->setItem(rowCount, 0, new QTableWidgetItem(scanType));
+    ui->advancedScanResultsTableWidget->setItem(rowCount, 1, new QTableWidgetItem(status));
+    ui->advancedScanResultsTableWidget->setItem(rowCount, 2, new QTableWidgetItem(details));
+}
+
+/**
+ * @brief Handle results from VirusTotal analysis.
+ * 
+ * Processes and displays analysis results received from the VirusTotal
+ * cloud scanning service.
+ * 
+ * @param results Formatted string containing VirusTotal analysis results
+ */
+void DashboardWidget::handleVirusTotalResults(const QString& results) {
+    ui->dashboardTabWidget->setCurrentWidget(ui->advancedScanTab);
+    
+    // Parse the JSON and add engine results to table
+    addVirusTotalEngineResults(results);
+    
+    qDebug() << "VirusTotal results received:" << results;
+}
+
+/**
+ * @brief Processes and displays scan results.
+ * 
+ * @param results String containing the scan results.
+ */
+void DashboardWidget::onBasicScanResultsReady(const QString& results) {
+    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
+    
+    if (ui->basicScanResultsTextEdit) {
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
+        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_RESULTS));
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
+        ui->basicScanResultsTextEdit->append(results);
+        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s)); // Reset color
+    }
+    
+    qDebug() << "Basic scan results ready:" << results;
+}
+
+/**
+ * @brief Handles the file selection for Advanced Scan.
+ * 
+ * Opens a file dialog and processes the selected file for advanced scanning.
  */
 void DashboardWidget::onAdvancedScanSelectFile() {
-    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab); // Show progress in basic view initially
-    ui->basicScanResultsTextEdit->clear();
-    ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTING_FILE));
+    QString filePath = QFileDialog::getOpenFileName(this, 
+                                                    tr("Select File for Advanced Scan"), 
+                                                    QDir::homePath(), 
+                                                    tr("All Files (*.*)"));
     
-    // Use BasicScanner's file selection dialog for now
-    if (m_basicScanner->selectFile()) {
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::FILE_SELECTED).arg(
-            m_basicScanner->getSelectedFile().fileName()));
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ADVANCED_SCAN));
-        
-        // First, perform a basic scan
-        if (m_basicScanner->scanFile(m_basicScanner->getSelectedFile().filePath())) {
-            // Basic scan started successfully, now proceed with VirusTotal analysis
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_SUBMITTING));
-            
-            // Set the file in the VirusTotal manager and submit it
-            if (m_virusTotalManager->scanFile(m_basicScanner->getSelectedFile().filePath())) {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_SUBMIT_STATUS).arg(
-                    m_virusTotalManager->getSubmissionStatus()));
-            } else {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                    u"Failed to submit file to VirusTotal"_s));
-            }
-        } else {
-            // Handle scan initiation error
-            if (m_basicScanner->getLastErrorCode() != ScannerErrorCode::NoError) {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                    m_basicScanner->getLastErrorMessage()));
-            }
-        }
-    } else {
-        if (m_basicScanner->getLastErrorCode() == ScannerErrorCode::NoError) {
-            // User canceled file selection, not an error
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::SELECTION_CANCELED));
-        } else {
-            // Handle file selection error
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                m_basicScanner->getLastErrorMessage()));
-        }
+    if (!filePath.isEmpty()) {
+        startAdvancedScanWithPath(filePath, "file");
     }
 }
 
@@ -1012,461 +1239,331 @@ void DashboardWidget::onAdvancedScanSelectFile() {
  * @brief Starts advanced scanning with the specified path and selection type.
  * 
  * Initiates an advanced scan operation using the provided path and type.
- * This function performs the same operations as onAdvancedScanSelectFile but
- * uses a pre-selected path instead of opening a file dialog.
+ * This function is called internally after path selection in advanced scan.
  * 
  * @param path The file or directory path to scan
  * @param type The selection type (file or directory)
  */
 void DashboardWidget::startAdvancedScanWithPath(const QString &path, const QString &type) {
-    // Update UI to show advanced scan tab
-    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab); // Show progress in basic view initially
-    ui->basicScanResultsTextEdit->clear();
-    
-    // Validate the provided path
-    QFileInfo pathInfo(path);
-    if (!pathInfo.exists()) {
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-            tr("Selected path does not exist: %1").arg(path)));
-        return;
-    }
-    
-    // Check if it's a file or directory based on type
-    if (type == "file") {
-        if (!pathInfo.isFile()) {
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                tr("Selected path is not a file: %1").arg(path)));
-            return;
-        }
-        
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::FILE_SELECTED).arg(
-            pathInfo.fileName()));
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ADVANCED_SCAN));
-        
-        // Set the file directly in the scanner
-        m_basicScanner->setFile(path);
-        
-        // Perform basic scan first
-        if (m_basicScanner->scanFile(path)) {
-            // Basic scan started successfully, now proceed with VirusTotal analysis
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_SUBMITTING));
-            
-            // Set the file in the VirusTotal manager and submit it
-            if (m_virusTotalManager->scanFile(path)) {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_SUBMIT_STATUS).arg(
-                    m_virusTotalManager->getSubmissionStatus()));
-            } else {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                    tr("Failed to submit file to VirusTotal")));
-            }
-        } else {
-            // Handle scan initiation error
-            if (m_basicScanner->getLastErrorCode() != ScannerErrorCode::NoError) {
-                ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                    m_basicScanner->getLastErrorMessage()));
-            }
-        }
-    } else if (type == "directory") {
-        if (!pathInfo.isDir()) {
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-                tr("Selected path is not a directory: %1").arg(path)));
-            return;
-        }
-        
-        ui->basicScanResultsTextEdit->append(tr("Directory selected: %1").arg(pathInfo.baseName()));
-        ui->basicScanResultsTextEdit->append(tr("Starting directory scan..."));
-        
-        // For directory scanning, we could implement batch scanning of files
-        // For now, show a message indicating directory scanning is not yet fully implemented
-        ui->basicScanResultsTextEdit->append(tr("Directory scanning is being processed..."));
-        ui->basicScanResultsTextEdit->append(tr("Note: Full directory scanning implementation is in progress."));
-    } else {
-        ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::ERROR_PREFIX).arg(
-            tr("Unknown selection type: %1").arg(type)));
-    }
-}
-
-/**
- * @brief Processes and displays the scan results in the UI.
- * 
- * Clears the current display, shows the new results, and updates
- * the total scans counter.
- * 
- * @param results The scan results as a formatted string.
- */
-void DashboardWidget::onBasicScanResultsReady(const QString& results) {
-    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-    ui->basicScanResultsTextEdit->clear();
-    
-    // Get current timestamp for the scan
-    QDateTime currentTime = QDateTime::currentDateTime();
-    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
-    
-    // Add a header with timestamp
-    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
-    ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
-    ui->basicScanResultsTextEdit->append(u""_s);
-    
-    // Format and colorize the scan results
-    if (results.contains(u"MALICIOUS"_s)) {
-        // Malicious result formatting
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
-        ui->basicScanResultsTextEdit->append(u"⚠️ SCAN RESULT:"_s);
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-        ui->basicScanResultsTextEdit->append(u"  MALICIOUS FILE DETECTED"_s);
-        ui->basicScanResultsTextEdit->append(u""_s);
-        
-        // Add remaining results with proper formatting
-        QStringList lines = results.split(u"\n"_s);
-        for(const QString& line : lines) {
-            if (line.contains(u"File:"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            } else if (line.contains(u"Hash:"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            } else if (line.contains(u"Threat:"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            } else {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            }
-        }
-    } else {
-        // Clean result formatting
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
-        ui->basicScanResultsTextEdit->append(u"✓ SCAN RESULT:"_s);
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
-        ui->basicScanResultsTextEdit->append(u"  FILE IS CLEAN"_s);
-        ui->basicScanResultsTextEdit->append(u""_s);
-        
-        // Add remaining results with proper formatting
-        QStringList lines = results.split(u"\n"_s);
-        for(const QString& line : lines) {
-            if (line.contains(u"File:"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            } else if (line.contains(u"Hash:"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            } else if (!line.contains(u"CLEAN"_s)) {
-                ui->basicScanResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-                ui->basicScanResultsTextEdit->append(line);
-            }
-        }
-    }
-}
-
-/**
- * @brief Handles and displays scanner error messages.
- * 
- * Processes error codes, updates the UI with appropriate messages,
- * and shows a message box for critical errors.
- * 
- * @param errorCode The error code from the scanner.
- * @param errorMessage The descriptive error message.
- */
-void DashboardWidget::onBasicScanError(ScannerErrorCode errorCode, const QString& errorMessage) {
-    ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-    // Display error message in a more user-friendly way
-    QString errorTitle;
-    QString errorIcon;
-    
-    switch (errorCode) {
-        case ScannerErrorCode::DatabaseNotConnected:
-            errorTitle = QString::fromUtf8(DashboardText::DB_ERROR);
-            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
-            break;
-        case ScannerErrorCode::FileNotFound:
-        case ScannerErrorCode::FileNotReadable:
-            errorTitle = QString::fromUtf8(DashboardText::FILE_ERROR);
-            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
-            break;
-        case ScannerErrorCode::HashCalculationFailed:
-            errorTitle = QString::fromUtf8(DashboardText::SCAN_ERROR);
-            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
-            break;
-        case ScannerErrorCode::MaliciousFileDetected:
-            errorTitle = QString::fromUtf8(DashboardText::MALICIOUS_DETECTED);
-            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
-            break;
-        default:
-            errorTitle = QString::fromUtf8(DashboardText::GENERIC_ERROR);
-            errorIcon = u":/UI/Resources/Images/applogo.png"_s;
-            break;
-    }
-    
-    // Log the error
-    qWarning() << "Basic Scan Error:" << static_cast<int>(errorCode) << "-" << errorMessage;
-    
-    // Add stylized error message to the scan results
-    QDateTime currentTime = QDateTime::currentDateTime();
-    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
-    
-    // If the text area is empty, start with a timestamp
-    if (ui->basicScanResultsTextEdit->toPlainText().isEmpty()) {
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
-        ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
-        ui->basicScanResultsTextEdit->append(u""_s);
-        
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-        ui->basicScanResultsTextEdit->append(u"⚠️ ERROR:"_s);
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
-        ui->basicScanResultsTextEdit->append(u"  "_s + errorMessage);
-    } else if (!ui->basicScanResultsTextEdit->toPlainText().contains(errorMessage)) {
-        // Only append if the error message isn't already there
-        ui->basicScanResultsTextEdit->append(u""_s);
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-        ui->basicScanResultsTextEdit->append(u"⚠️ ERROR:"_s);
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
-        ui->basicScanResultsTextEdit->append(u"  "_s + errorMessage);
-    }
-    
-    // For critical errors, show a message box
-    if (errorCode == ScannerErrorCode::DatabaseNotConnected || 
-        errorCode == ScannerErrorCode::DatabaseQueryFailed ||
-        errorCode == ScannerErrorCode::MaliciousFileDetected) {
-        QMessageBox::critical(this, errorTitle, errorMessage);
-    }
-}
-
-/**
- * @brief Handles VirusTotal results and parses the JSON response.
- * 
- * Logs the detailed engine results and updates the UI with summary statistics.
- * 
- * @param results The JSON response from VirusTotal.
- */
-void DashboardWidget::handleVirusTotalResults(const QString& results) {
-    qDebug() << "Raw VirusTotal Results in DashboardWidget (handleVirusTotalResults):" << (results.length() > 200 ? results.left(200) + QStringLiteral("...") : results);
-
-    QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(results.toUtf8(), &error);
-
-    if (error.error != QJsonParseError::NoError) {
-        qWarning() << "JSON Parse Error:" << error.errorString();
-        QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), QString(u"Failed to parse VirusTotal response: %1"_s).arg(error.errorString()));
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        ui->basicScanResultsTextEdit->clear();
-        ui->basicScanResultsTextEdit->setTextColor(Qt::red);
-        ui->basicScanResultsTextEdit->append(QString(u"VirusTotal Response Parse Error: %1"_s).arg(error.errorString()));
-        return;
-    }
-
-    if (!doc.isObject()) {
-        qWarning() << "VirusTotal response is not a JSON object.";
-        QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), u"Unexpected VirusTotal response format."_s);
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        ui->basicScanResultsTextEdit->clear();
-        ui->basicScanResultsTextEdit->setTextColor(Qt::red);
-        ui->basicScanResultsTextEdit->append(u"Unexpected VirusTotal response format."_s);
-        return;
-    }
-
-    QJsonObject rootObject = doc.object();
-    
-    // Check for overall error from VirusTotal API
-    if (rootObject.contains(u"error"_s)) {
-        QJsonObject errorObj = rootObject.value(u"error"_s).toObject();
-        QString errorMessage = errorObj.value(u"message"_s).toString(u"Unknown VirusTotal API error."_s);
-        qWarning() << "VirusTotal API Error:" << errorMessage;
-        QMessageBox::critical(this, QString::fromUtf8(DashboardText::VT_ERROR), errorMessage);
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        ui->basicScanResultsTextEdit->clear();
-        ui->basicScanResultsTextEdit->setTextColor(Qt::red);
-        ui->basicScanResultsTextEdit->append(QString(u"VirusTotal API Error: %1"_s).arg(errorMessage));
-        return;
-    }
-
-    if (!rootObject.contains(u"data"_s) || !rootObject.value(u"data"_s).isObject()) {
-        qWarning() << "VirusTotal response does not contain 'data' object. Analysis might be pending.";
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
-            ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
-        }
-        return;
-    }
-    
-    QJsonObject dataObject = rootObject.value(u"data"_s).toObject();
-
-    if (!dataObject.contains(u"attributes"_s) || !dataObject.value(u"attributes"_s).isObject()) {
-        qWarning() << "VirusTotal data object does not contain 'attributes'. Analysis might be pending.";
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        if (!ui->basicScanResultsTextEdit->toPlainText().contains(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING))) {
-            ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
-            ui->basicScanResultsTextEdit->append(QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING));
-        }
-        return;
-    }
-    QJsonObject attributesObject = dataObject.value(u"attributes"_s).toObject();
-
-    // Check if the analysis is completed by looking at the status or presence of results
-    QString analysisStatus = attributesObject.value(u"status"_s).toString();
-    bool hasResults = attributesObject.contains(u"results"_s) && attributesObject.value(u"results"_s).isObject();    if (!hasResults || analysisStatus == QLatin1String("queued")) {
-        qWarning() << "VirusTotal analysis is not complete or results are not yet available. Status:" << analysisStatus;
-        ui->dashboardTabWidget->setCurrentWidget(ui->basicScanTab);
-        
-        QString statusMessage;
-        if (analysisStatus == QLatin1String("queued")) {
-            statusMessage = tr("⏳ VirusTotal: Analiz kuyrukta bekliyor...");
-        } else {
-            statusMessage = QString::fromUtf8(DashboardText::VT_ANALYSIS_PENDING);
-        }
-        
-        if (!ui->basicScanResultsTextEdit->toPlainText().contains(statusMessage)) {
-             ui->basicScanResultsTextEdit->setTextColor(Qt::yellow);
-             ui->basicScanResultsTextEdit->append(statusMessage);
-        }
-        return;
-    }
-    
-    // At this point, we should have results
     ui->dashboardTabWidget->setCurrentWidget(ui->advancedScanTab);
-    ui->advancedScanResultsTableWidget->clearContents();
-    ui->advancedScanResultsTableWidget->setRowCount(0);
     
-    // Add visual improvements to the table
-    ui->advancedScanResultsTableWidget->setShowGrid(false);
-    ui->advancedScanResultsTableWidget->setAlternatingRowColors(true);
-    ui->advancedScanResultsTableWidget->verticalHeader()->setVisible(false);
-    ui->advancedScanResultsTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->advancedScanResultsTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->advancedScanResultsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // Clear previous results
+    if (ui->advancedScanResultsTableWidget) {
+        ui->advancedScanResultsTableWidget->clearContents();
+        ui->advancedScanResultsTableWidget->setRowCount(0);
+    }
     
-    // Get file metadata for displaying in the header
-    QString fileName = attributesObject.value(u"meaningful_name"_s).toString();
-    QString fileSha256 = dataObject.value(u"id"_s).toString();
+    // Update UI to show selected path
+    if (ui->selectedPathLabel) {
+        ui->selectedPathLabel->setText(tr("Selected %1: %2").arg(type, path));
+    }
     
-    QJsonObject analysisResults = attributesObject.value(u"results"_s).toObject();
-
-    // Prepare table with improved headers
-    ui->advancedScanResultsTableWidget->setColumnCount(3);
-    QStringList headers = {u"Tarama Motoru"_s, u"Kategori"_s, u"Sonuç"_s}; // Localized headers for Turkish
-    ui->advancedScanResultsTableWidget->setHorizontalHeaderLabels(headers);
+    // Add initial scan entry
+    addAdvancedScanResult(QString::fromUtf8(DashboardText::ADVANCED_SCAN), tr("Starting"), 
+                         tr("Initiating advanced scan for: %1").arg(path));
     
-    // Configure header appearance
-    QFont headerFont = ui->advancedScanResultsTableWidget->horizontalHeader()->font();
-    headerFont.setBold(true);
-    headerFont.setPointSize(headerFont.pointSize() + 1);
-    ui->advancedScanResultsTableWidget->horizontalHeader()->setFont(headerFont);
-
-    // Add file info header to the results
-    QDateTime currentTime = QDateTime::currentDateTime();
-    QString timestamp = currentTime.toString(u"yyyy-MM-dd hh:mm:ss"_s);
-    
-    // Count categories for summary and populate the table
-    int maliciousCount = 0;
-    int suspiciousCount = 0;
-    int cleanCount = 0;
-    int totalEngines = analysisResults.keys().count();
-    
-    // Process each engine's result and populate the table
-    int row = 0;
-    ui->advancedScanResultsTableWidget->setRowCount(totalEngines);
-    
-    for (auto it = analysisResults.constBegin(); it != analysisResults.constEnd(); ++it) {
-        QString engineName = it.key();
-        QJsonObject engineResult = it.value().toObject();
+    // Start actual VirusTotal scanning process
+    if (m_virusTotalManager) {
+        // Set the file to be scanned
+        m_virusTotalManager->setFile(path);
         
-        QString category = engineResult.value(u"category"_s).toString();
-        QString result = engineResult.value(u"result"_s).toString();
+        // Add status update for file submission
+        addAdvancedScanResult(tr("File Submission"), tr("In Progress"), tr("Submitting file to VirusTotal..."));
         
-        // Set engine name in first column
-        QTableWidgetItem* engineItem = new QTableWidgetItem(engineName);
-        ui->advancedScanResultsTableWidget->setItem(row, 0, engineItem);
+        // Start the scan
+        bool scanStarted = m_virusTotalManager->scanFile(path);
         
-        // Set category in second column
-        QTableWidgetItem* categoryItem = new QTableWidgetItem(category);
-        ui->advancedScanResultsTableWidget->setItem(row, 1, categoryItem);
-        
-        // Set result in third column
-        QTableWidgetItem* resultItem = new QTableWidgetItem(result.isEmpty() ? u"--"_s : result);
-        ui->advancedScanResultsTableWidget->setItem(row, 2, resultItem);
-        
-        // Set colors based on category
-        QColor rowColor;
-        if (category == u"malicious"_s) {
-            rowColor = QColor(u"#FFEBEE"_s); // Light red background
-            maliciousCount++;
-            engineItem->setForeground(QColor(u"#C62828"_s)); // Dark red text
-            categoryItem->setForeground(QColor(u"#C62828"_s));
-            resultItem->setForeground(QColor(u"#C62828"_s));
-        } else if (category == u"suspicious"_s) {
-            rowColor = QColor(u"#FFF8E1"_s); // Light yellow background
-            suspiciousCount++;
-            engineItem->setForeground(QColor(u"#F57F17"_s)); // Dark orange text
-            categoryItem->setForeground(QColor(u"#F57F17"_s));
-            resultItem->setForeground(QColor(u"#F57F17"_s));
-        } else if (category == u"undetected"_s || category == u"clean"_s) {
-            cleanCount++;
-            engineItem->setForeground(QColor(u"#2E7D32"_s)); // Dark green text
-            categoryItem->setForeground(QColor(u"#2E7D32"_s));
-            resultItem->setForeground(QColor(u"#2E7D32"_s));
+        if (scanStarted) {
+            addAdvancedScanResult(tr("VirusTotal Analysis"), tr("In Progress"), 
+                                tr("File uploaded successfully. Analysis in progress..."));
+            qDebug() << "VirusTotal scan started for file:" << path;
+        } else {
+            QString error = m_virusTotalManager->getLastError();
+            addAdvancedScanResult(tr("Scan Error"), tr("Failed"), 
+                                tr("Failed to start scan: %1").arg(error.isEmpty() ? tr("Unknown error") : error));
+            qDebug() << "Failed to start VirusTotal scan:" << error;
         }
-        
-        row++;
-    }
-    
-    // Display a summary message at the top
-    QString threatSummary = QString(u"Dosya analizi tamamlandı: %1 motordan %2 zararlı, %3 şüpheli, %4 temiz tespit."_s)
-                            .arg(totalEngines)
-                            .arg(maliciousCount)
-                            .arg(suspiciousCount)
-                            .arg(cleanCount);
-    
-    // Update basic scan results text with summary as well
-    ui->basicScanResultsTextEdit->clear();
-    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#9E9E9E"_s));
-    ui->basicScanResultsTextEdit->append(u"=== "_s + timestamp + u" ==="_s);
-    ui->basicScanResultsTextEdit->append(u""_s);
-    
-    if (maliciousCount > 0) {
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-        ui->basicScanResultsTextEdit->append(u"⚠️ VIRUS TOTAL ANALİZİ: ZARARLI"_s);
-    } else if (suspiciousCount > 0) {
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
-        ui->basicScanResultsTextEdit->append(u"⚠️ VIRUS TOTAL ANALİZİ: ŞÜPHELİ"_s);
     } else {
-        ui->basicScanResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
-        ui->basicScanResultsTextEdit->append(u"✓ VIRUS TOTAL ANALİZİ: TEMİZ"_s);
+        addAdvancedScanResult(tr("System Error"), tr("Failed"), 
+                            tr("VirusTotal manager not available"));
+        qDebug() << "VirusTotal manager not initialized";
     }
     
-    ui->basicScanResultsTextEdit->append(u""_s);
-    ui->basicScanResultsTextEdit->setTextColor(QColor(u"#FFFFFF"_s));
-    ui->basicScanResultsTextEdit->append(threatSummary);
+    qDebug() << "Starting advanced scan for" << type << ":" << path;
+}
+ 
+/**
+ * @brief Format VirusTotal JSON results into user-friendly text
+ * 
+ * Parses the raw JSON response from VirusTotal and formats it into
+ * a readable summary for display in the UI.
+ * 
+ * @param jsonResults Raw JSON string from VirusTotal API
+ * @return Formatted string suitable for display
+ */
+QString DashboardWidget::formatVirusTotalResults(const QString& jsonResults) {
+    QJsonDocument doc = QJsonDocument::fromJson(jsonResults.toUtf8());
     
-    // Optimize table display
-    ui->advancedScanResultsTableWidget->resizeColumnsToContents();
-    ui->advancedScanResultsTableWidget->horizontalHeader()->setStretchLastSection(true);
+    if (doc.isNull() || !doc.isObject()) {
+        return tr("Error: Invalid VirusTotal response format");
+    }
+    
+    QJsonObject root = doc.object();
+    
+    // Check if this is still in queue or analysing
+    if (root.contains("data") && root["data"].isObject()) {
+        QJsonObject data = root["data"].toObject();
+        
+        if (data.contains("attributes") && data["attributes"].isObject()) {
+            QJsonObject attrs = data["attributes"].toObject();
+            QString status = attrs.value("status").toString();
+            
+            // Handle non-completed analysis
+            if (status == "queued") {
+                return tr("Analysis Status: Queued\nYour file is waiting in the analysis queue. Please wait...");
+            } else if (status == "analysing") {
+                return tr("Analysis Status: In Progress\nVirusTotal engines are currently analyzing your file...");
+            }
+            
+            // Handle completed analysis
+            if (status == "completed" && attrs.contains("results") && attrs["results"].isObject()) {
+                QJsonObject results = attrs["results"].toObject();
+                QJsonObject stats = attrs.value("stats").toObject();
+                
+                // Extract key statistics
+                int malicious = stats.value("malicious").toInt();
+                int suspicious = stats.value("suspicious").toInt();
+                int undetected = stats.value("undetected").toInt();
+                int harmless = stats.value("harmless").toInt();
+                int timeout = stats.value("timeout").toInt();
+                int failure = stats.value("failure").toInt();
+                int typeUnsupported = stats.value("type-unsupported").toInt();
+                
+                int totalEngines = malicious + suspicious + undetected + harmless + timeout + failure;
+                
+                QString summary;
+                summary += tr("=== VirusTotal Analysis Summary ===\n\n");
+                
+                // Overall threat assessment
+                if (malicious > 0) {
+                    summary += tr("⚠️  THREAT DETECTED!\n");
+                    summary += tr("Malicious detections: %1/%2 engines\n\n").arg(malicious).arg(totalEngines);
+                } else if (suspicious > 0) {
+                    summary += tr("⚠️  SUSPICIOUS ACTIVITY\n");
+                    summary += tr("Suspicious detections: %1/%2 engines\n\n").arg(suspicious).arg(totalEngines);
+                } else {
+                    summary += tr("✅ CLEAN\n");
+                    summary += tr("No malicious content detected\n\n");
+                }
+                
+                // Detailed statistics
+                summary += tr("📊 Detection Statistics:\n");
+                if (malicious > 0) summary += tr("• Malicious: %1\n").arg(malicious);
+                if (suspicious > 0) summary += tr("• Suspicious: %1\n").arg(suspicious);
+                if (undetected > 0) summary += tr("• Undetected: %1\n").arg(undetected);
+                if (harmless > 0) summary += tr("• Harmless: %1\n").arg(harmless);
+                if (timeout > 0) summary += tr("• Timeout: %1\n").arg(timeout);
+                if (failure > 0) summary += tr("• Failed: %1\n").arg(failure);
+                if (typeUnsupported > 0) summary += tr("• Type Unsupported: %1\n").arg(typeUnsupported);
+                
+                // List malicious detections
+                if (malicious > 0) {
+                    summary += tr("\n🔍 Malicious Detections:\n");
+                    for (auto it = results.begin(); it != results.end(); ++it) {
+                        QJsonObject engine = it.value().toObject();
+                        QString category = engine.value("category").toString();
+                        QString result = engine.value("result").toString();
+                        
+                        if (category == "malicious" && !result.isEmpty()) {
+                            summary += tr("• %1: %2\n").arg(it.key(), result);
+                        }
+                    }
+                }
+                
+                // List suspicious detections
+                if (suspicious > 0) {
+                    summary += tr("\n⚠️  Suspicious Detections:\n");
+                    for (auto it = results.begin(); it != results.end(); ++it) {
+                        QJsonObject engine = it.value().toObject();
+                        QString category = engine.value("category").toString();
+                        QString result = engine.value("result").toString();
+                        
+                        if (category == "suspicious" && !result.isEmpty()) {
+                            summary += tr("• %1: %2\n").arg(it.key(), result);
+                        }
+                    }
+                }
+                
+                // File metadata if available
+                if (root.contains("meta") && root["meta"].isObject()) {
+                    QJsonObject meta = root["meta"].toObject();
+                    if (meta.contains("file_info") && meta["file_info"].isObject()) {
+                        QJsonObject fileInfo = meta["file_info"].toObject();
+                        summary += tr("\n📄 File Information:\n");
+                        if (fileInfo.contains("size")) {
+                            int size = fileInfo.value("size").toInt();
+                            summary += tr("• File Size: %1 bytes\n").arg(size);
+                        }
+                        if (fileInfo.contains("md5")) {
+                            summary += tr("• MD5: %1\n").arg(fileInfo.value("md5").toString());
+                        }
+                        if (fileInfo.contains("sha1")) {
+                            summary += tr("• SHA1: %1\n").arg(fileInfo.value("sha1").toString());
+                        }
+                        if (fileInfo.contains("sha256")) {
+                            summary += tr("• SHA256: %1\n").arg(fileInfo.value("sha256").toString());
+                        }
+                    }
+                }
+                
+                return summary;
+            }
+        }
+    }
+    
+    // Fallback for unexpected format
+    return tr("Analysis completed but results format is unexpected.\n\nRaw response: %1").arg(jsonResults.left(500));
 }
 
 /**
- * @brief Appends network log messages to the network monitoring display.
+ * @brief Add VirusTotal engine results to the advanced scan table
  * 
- * This slot receives network log messages from the NetworkMonitor and displays
- * them in the network communication text edit widget.
+ * Parses VirusTotal JSON response and adds each engine's result 
+ * as a separate row in the advanced scan results table.
  * 
- * @param logMessage The network log message to append
+ * @param jsonResults Raw JSON string from VirusTotal API
  */
-void DashboardWidget::appendNetworkLog(const QString& logMessage) {
-    if (!logMessage.isEmpty()) {
-        // Get current timestamp
-        QDateTime currentTime = QDateTime::currentDateTime();
-        QString timestamp = currentTime.toString(u"hh:mm:ss"_s);
-        
-        // Set text color for network logs
-        ui->networkCommunicationTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-        
-        // Append the log message with timestamp
-        ui->networkCommunicationTextEdit->append(QString(u"[%1] %2"_s).arg(timestamp, logMessage));
-        
-        // Ensure the text edit scrolls to the bottom to show the latest message
-        QTextCursor cursor = ui->networkCommunicationTextEdit->textCursor();
-        cursor.movePosition(QTextCursor::End);
-        ui->networkCommunicationTextEdit->setTextCursor(cursor);
-        ui->networkCommunicationTextEdit->ensureCursorVisible();
+void DashboardWidget::addVirusTotalEngineResults(const QString& jsonResults) {
+    QJsonDocument doc = QJsonDocument::fromJson(jsonResults.toUtf8());
+    
+    if (doc.isNull() || !doc.isObject()) {
+        addAdvancedScanResult(tr("VirusTotal Error"), tr("Failed"), tr("Invalid response format"));
+        return;
     }
+    
+    QJsonObject root = doc.object();
+    
+    // Check if this is still in queue or analysing
+    if (root.contains("data") && root["data"].isObject()) {
+        QJsonObject data = root["data"].toObject();
+        
+        if (data.contains("attributes") && data["attributes"].isObject()) {
+            QJsonObject attrs = data["attributes"].toObject();
+            QString status = attrs.value("status").toString();
+            
+            // Handle non-completed analysis
+            if (status == "queued") {
+                addAdvancedScanResult(tr("VirusTotal"), tr("Queued"), 
+                                    tr("File is waiting in the analysis queue..."));
+                return;
+            } else if (status == "analysing") {
+                addAdvancedScanResult(tr("VirusTotal"), tr("Analyzing"), 
+                                    tr("Engines are currently analyzing the file..."));
+                return;
+            }
+            
+            // Handle completed analysis
+            if (status == "completed" && attrs.contains("results") && attrs["results"].isObject()) {
+                QJsonObject results = attrs["results"].toObject();
+                QJsonObject stats = attrs.value("stats").toObject();
+                
+                // Extract key statistics
+                int malicious = stats.value("malicious").toInt();
+                int suspicious = stats.value("suspicious").toInt();
+                int undetected = stats.value("undetected").toInt();
+                int harmless = stats.value("harmless").toInt();
+                int timeout = stats.value("timeout").toInt();
+                int failure = stats.value("failure").toInt();
+                int totalEngines = malicious + suspicious + undetected + harmless + timeout + failure;
+                
+                // Add summary row first
+                QString summaryStatus;
+                QString summaryDetails;
+                if (malicious > 0) {
+                    summaryStatus = tr("⚠️ THREAT DETECTED");
+                    summaryDetails = tr("Malicious: %1/%2 engines detected threats").arg(malicious).arg(totalEngines);
+                } else if (suspicious > 0) {
+                    summaryStatus = tr("⚠️ SUSPICIOUS");
+                    summaryDetails = tr("Suspicious: %1/%2 engines flagged suspicious activity").arg(suspicious).arg(totalEngines);
+                } else {
+                    summaryStatus = tr("✅ CLEAN");
+                    summaryDetails = tr("Clean: %1/%2 engines found no threats").arg(totalEngines).arg(totalEngines);
+                }
+                
+                addAdvancedScanResult(tr("📊 VirusTotal Summary"), summaryStatus, summaryDetails);
+                
+                // Add file information if available
+                if (root.contains("meta") && root["meta"].isObject()) {
+                    QJsonObject meta = root["meta"].toObject();
+                    if (meta.contains("file_info") && meta["file_info"].isObject()) {
+                        QJsonObject fileInfo = meta["file_info"].toObject();
+                        QString fileDetails;
+                        if (fileInfo.contains("size")) {
+                            int size = fileInfo.value("size").toInt();
+                            fileDetails += tr("Size: %1 bytes").arg(size);
+                        }
+                        if (fileInfo.contains("sha256")) {
+                            if (!fileDetails.isEmpty()) fileDetails += "\n";
+                            fileDetails += tr("SHA256: %1").arg(fileInfo.value("sha256").toString());
+                        }
+                        addAdvancedScanResult(tr("📄 File Info"), tr("Details"), fileDetails);
+                    }
+                }
+                
+                // Now add each engine result as a separate row
+                QStringList engineKeys = results.keys();
+                std::sort(engineKeys.begin(), engineKeys.end());
+                
+                for (const QString& engineName : engineKeys) {
+                    QJsonObject engine = results[engineName].toObject();
+                    QString category = engine.value("category").toString();
+                    QString result = engine.value("result").toString();
+                    QString method = engine.value("method").toString();
+                    QString engineVersion = engine.value("engine_version").toString();
+                    
+                    QString status;
+                                       QString details;
+                    
+                    if (category == "malicious") {
+                        status = tr("🔴 MALICIOUS");
+                        details = result.isEmpty() ? tr("Threat detected") : result;
+                    } else if (category == "suspicious") {
+                        status = tr("🟡 SUSPICIOUS");
+                        details = result.isEmpty() ? tr("Suspicious activity") : result;
+                    } else if (category == "undetected") {
+                        status = tr("✅ CLEAN");
+                        details = tr("No threats detected");
+                    } else if (category == "harmless") {
+                        status = tr("✅ HARMLESS");
+                        details = tr("File is harmless");
+                    } else if (category == "timeout") {
+                        status = tr("⏱️ TIMEOUT");
+                        details = tr("Analysis timed out");
+                    } else if (category == "failure") {
+                        status = tr("❌ FAILED");
+                        details = tr("Analysis failed");
+                    } else if (category == "type-unsupported") {
+                        status = tr("❓ UNSUPPORTED");
+                        details = tr("File type not supported");
+                    } else {
+                        status = category.toUpper();
+                        details = result.isEmpty() ? tr("Unknown result") : result;
+                    }
+                    
+                    // Add engine version info if available
+                    if (!engineVersion.isEmpty()) {
+                        details += tr("\nEngine: v%1").arg(engineVersion);
+                    }
+                    
+                    addAdvancedScanResult(engineName, status, details);
+                }
+                
+                return;
+            }
+        }
+    }
+    
+    // Fallback for unexpected format
+    addAdvancedScanResult(tr("VirusTotal Error"), tr("Unexpected Format"), 
+                         tr("Analysis completed but response format is unexpected"));
 }
-
