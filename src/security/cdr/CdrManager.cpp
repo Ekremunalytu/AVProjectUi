@@ -498,8 +498,26 @@ std::string CdrManager::startAnalysis(const std::string& directoryPath,
                 while (dirIter2.has_next()) {
                     std::string entryPath = dirIter2.current();
                     if (fs::is_regular_file(entryPath)) {
-                        // Simulate file processing
-                        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Placeholder for actual work
+                        // Detect file type
+                        FileType fileType = CdrSanitizer::detectAndValidateFileType(entryPath);
+                        
+                        // Create output path in the configured output directory
+                        fs::Path inputFile(entryPath);
+                        std::string fileName = inputFile.filename();
+                        std::string outputPath = config.outputDirectory + "/" + fileName;
+                        
+                        // Perform actual sanitization
+                        SanitizationResult sanitResult = sanitizer.sanitizeFile(entryPath, outputPath, config, fileType);
+                        sanitizationResults.push_back(sanitResult);
+                        
+                        // Log threats detected for debugging
+                        if (!sanitResult.threatsDetected.empty()) {
+                            std::cout << "CDR Analysis - Threats detected in " << entryPath << ":" << std::endl;
+                            for (const auto& threat : sanitResult.threatsDetected) {
+                                std::cout << "  - " << threat << std::endl;
+                            }
+                        }
+                        
                         processedFiles++;
                         {
                             std::lock_guard<std::mutex> lock(analysesMutex);
@@ -1442,30 +1460,62 @@ std::vector<std::string> CdrManager::detectActiveContent(const std::string& file
     
     try {
         FileType type = detectFileType(filePath);
-        FileTypeInfo typeInfo = getFileTypeInfo(type);
         
-        // Return the known active content types for this file type
-        activeContent = typeInfo.activeContentTypes;
-        
-        // Add specific detection for certain file types
+        // Perform comprehensive threat detection based on file type
         switch (type) {
             case FileType::PDF_DOCUMENT:
                 if (detectPdfJavaScript(filePath)) {
-                    activeContent.push_back("JavaScript_Detected");
+                    activeContent.push_back("JavaScript");
+                    activeContent.push_back("PDF_JavaScript_Detected");
+                }
+                // Check for additional PDF threats
+                if (detectPdfActiveContent(filePath)) {
+                    activeContent.push_back("ActiveContent");
                 }
                 break;
+                
             case FileType::OFFICE_DOCUMENT:
                 if (detectOfficeMacros(filePath)) {
-                    activeContent.push_back("Macros_Detected");
+                    activeContent.push_back("Macros");
+                    activeContent.push_back("Office_Macros_Detected");
                 }
                 break;
+                
             case FileType::HTML_DOCUMENT:
-                // Basic HTML script detection could be added here
+                if (detectHtmlScript(filePath)) {
+                    activeContent.push_back("Script");
+                    activeContent.push_back("HTML_Script_Detected");
+                }
                 break;
+                
+            case FileType::SCRIPT_FILE:
+                activeContent.push_back("ExecutableScript");
+                break;
+                
+            case FileType::EXECUTABLE_FILE:
+                activeContent.push_back("Executable");
+                activeContent.push_back("Potentially_Dangerous");
+                break;
+                
             default:
+                // For unknown file types, perform basic text-based scanning
+                if (detectSuspiciousContent(filePath)) {
+                    activeContent.push_back("SuspiciousContent");
+                }
                 break;
         }
+        
+        // Log the detection results for debugging
+        if (!activeContent.empty()) {
+            std::cout << "[detectActiveContent] Found threats in " << filePath << ": ";
+            for (const auto& threat : activeContent) {
+                std::cout << threat << " ";
+            }
+            std::cout << std::endl;
+        }
+        
     } catch (const std::exception& e) {
+        std::cout << "[detectActiveContent] Error analyzing " << filePath << ": " << e.what() << std::endl;
         activeContent.push_back("Detection_Error");
     }
     
@@ -1563,6 +1613,135 @@ bool CdrManager::quarantineFile(const std::string& filePath, const std::string& 
         }
         return false;
     } catch (const fs::FilesystemError& e) {
+        return false;
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
+// === Additional Helper Methods for Threat Detection ===
+
+bool CdrManager::detectPdfActiveContent(const std::string& filePath) {
+    try {
+        std::ifstream file(filePath, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        std::string content((std::istreambuf_iterator<char>(file)),
+                          std::istreambuf_iterator<char>());
+        file.close();
+        
+        // Check for various PDF active content patterns
+        std::vector<std::string> activeContentPatterns = {
+            "/URI",           // URI actions
+            "/Launch",        // Launch actions
+            "/ImportData",    // Form data import
+            "/SubmitForm",    // Form submission
+            "/GoToR",         // Remote go-to actions
+            "/Sound",         // Sound objects
+            "/Movie",         // Movie objects
+            "/3D",            // 3D objects
+            "/RichMedia",     // Rich media
+            "/Flash",         // Flash content
+            "eval(",          // JavaScript eval
+            "String.fromCharCode", // Obfuscated strings
+            "unescape(",      // URL decoding
+            "document.write", // Dynamic content writing
+        };
+        
+        for (const auto& pattern : activeContentPatterns) {
+            if (content.find(pattern) != std::string::npos) {
+                std::cout << "[detectPdfActiveContent] Found pattern: " << pattern << std::endl;
+                return true;
+            }
+        }
+        
+        return false;
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
+bool CdrManager::detectHtmlScript(const std::string& filePath) {
+    try {
+        std::ifstream file(filePath);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        std::string content((std::istreambuf_iterator<char>(file)),
+                          std::istreambuf_iterator<char>());
+        file.close();
+        
+        // Convert to lowercase for case-insensitive matching
+        std::string lowerContent = content;
+        std::transform(lowerContent.begin(), lowerContent.end(), lowerContent.begin(),
+                      [](unsigned char c){ return std::tolower(c); });
+        
+        // Check for script tags and dangerous patterns
+        std::vector<std::string> scriptPatterns = {
+            "<script",
+            "javascript:",
+            "onload=",
+            "onclick=",
+            "onerror=",
+            "eval(",
+            "document.write",
+            "window.location",
+            "document.cookie"
+        };
+        
+        for (const auto& pattern : scriptPatterns) {
+            if (lowerContent.find(pattern) != std::string::npos) {
+                return true;
+            }
+        }
+        
+        return false;
+    } catch (const std::exception& e) {
+        return false;
+    }
+}
+
+bool CdrManager::detectSuspiciousContent(const std::string& filePath) {
+    try {
+        std::ifstream file(filePath, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        std::string content((std::istreambuf_iterator<char>(file)),
+                          std::istreambuf_iterator<char>());
+        file.close();
+        
+        // Check for suspicious patterns in any file type
+        std::vector<std::string> suspiciousPatterns = {
+            "eval(",
+            "exec(",
+            "system(",
+            "shell_exec",
+            "base64_decode",
+            "String.fromCharCode",
+            "unescape",
+            "document.write",
+            "iframe",
+            "exploit",
+            "payload",
+            "shellcode"
+        };
+        
+        // Convert to lowercase for case-insensitive matching
+        std::string lowerContent = content;
+        std::transform(lowerContent.begin(), lowerContent.end(), lowerContent.begin(),
+                      [](unsigned char c){ return std::tolower(c); });
+        
+        for (const auto& pattern : suspiciousPatterns) {
+            if (lowerContent.find(pattern) != std::string::npos) {
+                return true;
+            }
+        }
+        
         return false;
     } catch (const std::exception& e) {
         return false;

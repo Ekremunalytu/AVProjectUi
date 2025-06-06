@@ -198,6 +198,19 @@ private slots:
     void onBasicScanError(ScannerErrorCode errorCode, const QString& errorMessage);
     
     /**
+     * @brief Processes and displays CDR scan results.
+     * @param results String containing the CDR scan results.
+     */
+    void onCdrScanResultsReady(const QString& results);
+    
+    /**
+     * @brief Handles and displays CDR scanner errors.
+     * @param errorCode The error code.
+     * @param errorMessage A descriptive error message.
+     */
+    void onCdrScanError(ScannerErrorCode errorCode, const QString& errorMessage);
+    
+    /**
      * @brief Handles file selection for advanced scan.
      */
     void onSelectFileClicked();

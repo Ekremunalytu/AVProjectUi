@@ -12,9 +12,13 @@
 #include "../../core/interfaces/IDockerScanner.h"
 #include "../../core/interfaces/ScannerTypes.h"
 #include "../../infrastructure/docker/DockerManager.h" // Assuming DockerManager.h is the main header for your Docker library
+#include <QObject>
 #include <QString>
 #include <memory> // For std::unique_ptr
 #include <QFileInfo>
+
+// Forward declaration
+enum class ScannerErrorCode;
 
 // Include CDR specific headers
 #include "CdrManager.h"
@@ -35,15 +39,19 @@
  * 
  * @note This scanner requires Docker to be installed and running on the system.
  */
-class CDRScanner : public IDockerScanner {
+class CDRScanner : public QObject, public IDockerScanner {
+    Q_OBJECT
+    
 public:
     /**
      * @brief Constructor for CDRScanner
      * 
      * Initializes the CDR scanner with default settings and prepares
      * the Docker environment for CDR operations.
+     * 
+     * @param parent The parent QObject (optional)
      */
-    CDRScanner();
+    explicit CDRScanner(QObject *parent = nullptr);
     
     /**
      * @brief Destructor for CDRScanner
@@ -250,6 +258,20 @@ private:
      * @return true if the CDR container is active and running, false otherwise
      */
     bool isCdrContainerRunning() const;
+
+signals:
+    /**
+     * @brief Signal emitted when CDR scan results are available.
+     * @param results The scan results as a formatted string.
+     */
+    void scanResultsReady(const QString& results);
+    
+    /**
+     * @brief Signal emitted when an error occurs during CDR scanning.
+     * @param errorCode The error code.
+     * @param errorMessage The error message.
+     */
+    void scanError(ScannerErrorCode errorCode, const QString& errorMessage);
 };
 
 #endif // CDR_SCANNER_H

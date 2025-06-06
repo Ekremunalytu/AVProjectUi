@@ -224,6 +224,11 @@ namespace CDR {
         void copyFileFromContainer(const std::string& containerId, 
                                  const std::string& containerPath, 
                                  const std::string& hostPath);
+        
+        // Enhanced threat detection helper methods
+        bool detectPdfActiveContent(const std::string& filePath);
+        bool detectHtmlScript(const std::string& filePath);
+        bool detectSuspiciousContent(const std::string& filePath);
 
     public:
         /**

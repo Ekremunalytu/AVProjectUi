@@ -131,6 +131,7 @@ private:
 // Helper functions for file content detection
 bool detectPdfJavaScript(const std::string& filePath);
 bool detectOfficeMacros(const std::string& filePath);
+bool sanitizePdfJavaScript(const std::string& inputPath, const std::string& outputPath);
 
 } // namespace CDR
 
