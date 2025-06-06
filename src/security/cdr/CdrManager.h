@@ -407,6 +407,17 @@ namespace CDR {
                                                const CdrConfiguration& config);
 
         /**
+         * @brief Sanitize text documents (.txt, .csv, etc.)
+         * @param filePath Path to the text file
+         * @param outputPath Path for the sanitized output
+         * @param config Sanitization configuration
+         * @return SanitizationResult with processing details
+         */
+        SanitizationResult sanitizeTextDocument(const std::string& filePath, 
+                                               const std::string& outputPath, 
+                                               const CdrConfiguration& config);
+
+        /**
          * @brief Sanitize script files (JavaScript, PowerShell, etc.)
          * @param filePath Path to the script file
          * @param outputPath Path for the sanitized output

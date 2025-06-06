@@ -219,6 +219,9 @@ bool CDRScanner::scanFile(const QString& filePath) {
                 case CDR::FileType::HTML_DOCUMENT:
                     result = cdrManager->sanitizeHtmlDocument(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
                     break;
+                case CDR::FileType::TEXT_DOCUMENT:
+                    result = cdrManager->sanitizeTextDocument(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
+                    break;
                 case CDR::FileType::ARCHIVE_FILE:
                     result = cdrManager->sanitizeArchiveFile(filePath.toStdString(), sanitizedFilePath.toStdString(), cdrConfig);
                     break;

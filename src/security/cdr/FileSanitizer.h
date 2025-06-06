@@ -188,6 +188,31 @@ private:
 };
 
 /**
+ * @brief Sanitizer for text documents (.txt, .csv, etc.).
+ * 
+ * Handles detection and removal of suspicious URLs, shell commands,
+ * script content, and other potentially dangerous patterns in text files.
+ */
+class TextSanitizer : public FileSanitizer {
+public:
+    SanitizationResult sanitize(const std::string& inputPath,
+                               const std::string& outputPath,
+                               const CdrConfiguration& config) override;
+    
+    bool canHandle(FileType type) const override;
+    std::vector<std::string> getDetectableThreats() const override;
+
+private:
+    std::string removeSuspiciousUrls(const std::string& textContent);
+    std::string removeShellCommands(const std::string& textContent);
+    std::string removeScriptPatterns(const std::string& textContent);
+    std::string removeExecutablePatterns(const std::string& textContent);
+    bool containsSuspiciousContent(const std::string& textContent);
+    bool isBase64Content(const std::string& line);
+    bool isEncodedContent(const std::string& line);
+};
+
+/**
  * @brief Analyzer for script files (JavaScript, PowerShell, VBScript, etc.).
  * 
  * Performs static analysis to detect obfuscation, suspicious API calls,

@@ -1543,6 +1543,13 @@ SanitizationResult CdrManager::sanitizeHtmlDocument(const std::string& filePath,
     return sanitizer.sanitizeHtmlFile(filePath, outputPath, config);
 }
 
+SanitizationResult CdrManager::sanitizeTextDocument(const std::string& filePath, 
+                                                   const std::string& outputPath, 
+                                                   const CdrConfiguration& config) {
+    CdrSanitizer sanitizer;
+    return sanitizer.sanitizeTextFile(filePath, outputPath, config);
+}
+
 SanitizationResult CdrManager::sanitizeArchiveFile(const std::string& filePath, 
                                                    const std::string& outputPath, 
                                                    const CdrConfiguration& config) {

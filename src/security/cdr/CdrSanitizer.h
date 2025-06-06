@@ -99,6 +99,7 @@ public:
     SanitizationResult sanitizeArchiveFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeScriptFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
     SanitizationResult sanitizeImageFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
+    SanitizationResult sanitizeTextFile(const std::string& inputPath, const std::string& outputPath, const CdrConfiguration& config);
 
     // Information methods
     std::vector<std::string> getAvailableSanitizers() const;

