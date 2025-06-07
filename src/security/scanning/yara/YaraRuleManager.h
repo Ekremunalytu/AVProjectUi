@@ -14,6 +14,17 @@
 #include <unordered_map>
 #include "../../../core/interfaces/IYaraRuleManager.h"
 
+// Forward declaration for YaraConfig
+namespace YaraConfig {
+    enum class RuleCategory {
+        BASIC_MALWARE,
+        ADVANCED_THREATS, 
+        TROJANS,
+        MALDOCS,
+        CUSTOM
+    };
+}
+
 // Forward declarations - using typedef instead of forward struct declarations to avoid conflicts
 struct YR_RULES;
 // Note: Not forward-declaring YR_COMPILER as it's defined in yara.h
@@ -65,6 +76,10 @@ public:
     std::error_code initialize() override;
     std::error_code loadRules(const std::string& rulesPath) override;
     std::error_code scanFile(const std::string& filePath, std::vector<std::string>& matches) override;
+    
+    // Auto-load built-in rules
+    std::error_code loadBuiltinRules();
+    std::error_code loadRulesByCategory(YaraConfig::RuleCategory category);
     
     // Additional methods used in implementation
     std::error_code finalize();

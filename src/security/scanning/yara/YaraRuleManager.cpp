@@ -11,6 +11,11 @@
 #include <QTextStream>
 #include <QDirIterator>
 
+// Include generated configuration if available
+#ifdef CMAKE_CURRENT_BINARY_DIR
+#include "YaraRulesPaths.h"
+#endif
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -244,14 +249,32 @@ std::error_code YaraRuleManager::loadRules(const std::string& rulesPath) {
     bool foundRules = false;
     
     if (pathInfo.isDir()) {
-        // Handle directory - load all .yar files (non-recursive to avoid duplicates)
+        // Handle directory - load all .yar files recursively
         QDir rulesDir(qRulesPath);
+        
+        // Get all .yar files in the main directory
         QStringList yaraFiles = rulesDir.entryList(QStringList() << "*.yar", QDir::Files, QDir::Name);
         
-        qDebug() << "Found" << yaraFiles.size() << ".yar files in directory:" << qRulesPath;
+        // Also search in subdirectories recursively
+        QDirIterator it(qRulesPath, QStringList() << "*.yar", QDir::Files, QDirIterator::Subdirectories);
+        QStringList allYaraFiles;
         
+        // Add files from main directory
         for (const QString& fileName : yaraFiles) {
-            QString ruleFile = rulesDir.absoluteFilePath(fileName);
+            allYaraFiles << rulesDir.absoluteFilePath(fileName);
+        }
+        
+        // Add files from subdirectories
+        while (it.hasNext()) {
+            QString filePath = it.next();
+            if (!allYaraFiles.contains(filePath)) {  // Avoid duplicates
+                allYaraFiles << filePath;
+            }
+        }
+        
+        qDebug() << "Found" << allYaraFiles.size() << ".yar files in directory (including subdirectories):" << qRulesPath;
+        
+        for (const QString& ruleFile : allYaraFiles) {
             qDebug() << "Loading YARA rule file:" << ruleFile;
             
             QFile file(ruleFile);
@@ -555,4 +578,91 @@ void YaraRuleManager::resetStatistics() {
     m_stats.averageScanTime = std::chrono::milliseconds{0};
     m_stats.ruleMatchCounts.clear();
     // Keep totalRulesLoaded and lastRuleUpdate
+}
+
+// Built-in Rules Loading Functions
+std::error_code YaraRuleManager::loadBuiltinRules() {
+    if (!initialized) {
+        return make_error_code(YaraErrorCodes::NotInitialized);
+    }
+
+    qDebug() << "Loading built-in YARA rules...";
+    
+    // Try to find rules directory relative to executable
+    QString exePath = QCoreApplication::applicationDirPath();
+    QStringList rulePaths = {
+        exePath + "/yara_rules",           // Next to executable
+        exePath + "/../yara_rules",        // One level up
+        exePath + "/../../yara_rules",     // Two levels up (for build structure)
+        exePath + "/Contents/Resources/yara_rules",  // macOS app bundle
+#ifdef YARA_RULES_PATHS_H
+        YaraConfig::RULES_BASE_DIR,        // From generated config
+#endif
+        "/Volumes/Crucial/AVProjectUi/src/security/scanning/yara"  // Fallback to source
+    };
+
+    QString foundRulesDir;
+    for (const QString& path : rulePaths) {
+        QFileInfo pathInfo(path);
+        if (pathInfo.exists() && pathInfo.isDir()) {
+            // Check if it contains .yar files
+            QDir dir(path);
+            QStringList yarFiles = dir.entryList(QStringList() << "*.yar", QDir::Files | QDir::AllDirs, QDir::Name);
+            if (!yarFiles.isEmpty() || dir.exists("rules") || dir.exists("maldocs")) {
+                foundRulesDir = path;
+                qDebug() << "Found YARA rules directory at:" << foundRulesDir;
+                break;
+            }
+        }
+    }
+
+    if (foundRulesDir.isEmpty()) {
+        qDebug() << "No built-in YARA rules directory found. Searched paths:";
+        for (const QString& path : rulePaths) {
+            qDebug() << "  -" << path;
+        }
+        return make_error_code(YaraErrorCodes::FileNotFound);
+    }
+
+    // Load all rules from the found directory
+    return loadRules(foundRulesDir.toStdString());
+}
+
+std::error_code YaraRuleManager::loadRulesByCategory(YaraConfig::RuleCategory category) {
+    if (!initialized) {
+        return make_error_code(YaraErrorCodes::NotInitialized);
+    }
+
+    // Try to find application directory first for built rules
+    QString exePath = QCoreApplication::applicationDirPath();
+    QString rulesBaseDir = exePath + "/yara_rules";
+    
+    QString rulePath;
+    switch(category) {
+        case YaraConfig::RuleCategory::BASIC_MALWARE:
+            rulePath = rulesBaseDir + "/rules/malware_basic.yar";
+            break;
+        case YaraConfig::RuleCategory::ADVANCED_THREATS:
+            rulePath = rulesBaseDir + "/rules/advanced_threats.yar";
+            break;
+        case YaraConfig::RuleCategory::TROJANS:
+            rulePath = rulesBaseDir + "/rules/trojans.yar";
+            break;
+        case YaraConfig::RuleCategory::MALDOCS:
+            rulePath = rulesBaseDir + "/maldocs";  // Entire directory
+            break;
+        case YaraConfig::RuleCategory::CUSTOM:
+            rulePath = rulesBaseDir + "/rules/custom.yar";
+            break;
+        default:
+            return loadBuiltinRules();  // Fallback to loading all rules
+    }
+    
+    if (!rulePath.isEmpty()) {
+        qDebug() << "Loading rules for category:" << static_cast<int>(category) << "from:" << rulePath;
+        return loadRules(rulePath.toStdString());
+    }
+
+    qDebug() << "Category-based rule loading failed, falling back to all rules";
+    return loadBuiltinRules();  // Fallback to loading all rules
 }

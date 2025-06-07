@@ -99,6 +99,14 @@ add_custom_command(TARGET AVProjectUi POST_BUILD
     COMMENT "Copying config.ini to executable directory"
 )
 
+# Copy YARA rules to executable directory
+add_custom_command(TARGET AVProjectUi POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_BINARY_DIR}/yara_rules
+    $<TARGET_FILE_DIR:AVProjectUi>/yara_rules
+    COMMENT "Copying YARA rules to executable directory"
+)
+
 # Documentation targets
 find_program(DOXYGEN_EXECUTABLE doxygen)
 find_program(PYTHON_EXECUTABLE python3)

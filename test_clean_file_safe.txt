@@ -1,0 +1,21 @@
+Hello World!
+
+This is a clean test file that should not trigger any YARA rules.
+
+It contains only normal, benign content:
+- Simple text
+- No suspicious patterns
+- No malicious code
+- No encoded commands
+- No malware signatures
+
+This file should result in a CLEAN scan result.
+
+Here's some random content:
+- Today's weather is nice
+- Programming is fun
+- Security scanning is important
+- YARA rules help detect threats
+- Clean files should pass through safely
+
+End of clean test file.

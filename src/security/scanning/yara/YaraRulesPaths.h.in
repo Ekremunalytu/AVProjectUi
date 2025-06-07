@@ -1,0 +1,61 @@
+#ifndef YARA_RULES_PATHS_H
+#define YARA_RULES_PATHS_H
+
+// Auto-generated YARA rules configuration
+// This file is generated during build process - do not edit manually
+
+#include <QString>
+#include <QStringList>
+
+namespace YaraConfig {
+    // Base directory for YARA rules
+    static const QString RULES_BASE_DIR = "@YARA_RULES_INSTALL_DIR@";
+    
+    // Individual rule directories
+    static const QString RULES_DIR = RULES_BASE_DIR + "/rules";
+    static const QString MALDOCS_DIR = RULES_BASE_DIR + "/maldocs";
+    
+    // Get all rule directories for scanning
+    inline QStringList getAllRuleDirectories() {
+        return {RULES_DIR, MALDOCS_DIR};
+    }
+    
+    // Get all rule files (for validation)
+    inline QStringList getAllRuleFiles() {
+        QStringList files;
+        
+        // Add specific rule files here if needed
+        // This can be extended with specific file paths
+        
+        return files;
+    }
+    
+    // Rule categories
+    enum class RuleCategory {
+        BASIC_MALWARE,
+        ADVANCED_THREATS, 
+        TROJANS,
+        MALDOCS,
+        CUSTOM
+    };
+    
+    // Get rules by category
+    inline QString getRulesByCategory(RuleCategory category) {
+        switch(category) {
+            case RuleCategory::BASIC_MALWARE:
+                return RULES_DIR + "/malware_basic.yar";
+            case RuleCategory::ADVANCED_THREATS:
+                return RULES_DIR + "/advanced_threats.yar";
+            case RuleCategory::TROJANS:
+                return RULES_DIR + "/trojans.yar";
+            case RuleCategory::MALDOCS:
+                return MALDOCS_DIR;  // Entire directory
+            case RuleCategory::CUSTOM:
+                return RULES_DIR + "/custom.yar";
+            default:
+                return QString();
+        }
+    }
+}
+
+#endif // YARA_RULES_PATHS_H

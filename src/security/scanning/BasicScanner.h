@@ -9,6 +9,7 @@
 #include <QFuture>
 #include <memory>
 #include <system_error>
+#include <chrono>
 #include "../../core/interfaces/IScanner.h"
 #include "../../core/interfaces/ScannerTypes.h"
 #include "yara/YaraRuleManager.h"
@@ -214,6 +215,63 @@ private:
      * @return A default error message.
      */
     QString getDefaultErrorMessage(ScannerErrorCode code) const;
+
+    // Enhanced scan result formatting methods
+    /**
+     * @brief Generates a comprehensive scan header with file details
+     * @return Formatted header string
+     */
+    QString generateScanHeader() const;
+    
+    /**
+     * @brief Generates database analysis results
+     */
+    QString generateDatabaseAnalysisResult(const QString& hash, bool found, 
+                                         std::chrono::milliseconds hashTime, 
+                                         std::chrono::milliseconds dbTime) const;
+    
+    /**
+     * @brief Generates YARA analysis header
+     */
+    QString generateYaraAnalysisResult(std::chrono::high_resolution_clock::time_point scanStart) const;
+    
+    /**
+     * @brief Generates results when YARA scanning is skipped
+     */
+    QString generateYaraSkippedResult() const;
+    
+    /**
+     * @brief Generates YARA match results
+     */
+    QString generateYaraMatchResult(const std::vector<std::string>& matches, 
+                                   std::chrono::milliseconds scanTime) const;
+    
+    /**
+     * @brief Generates YARA clean results
+     */
+    QString generateYaraCleanResult(std::chrono::milliseconds scanTime) const;
+    
+    /**
+     * @brief Generates the final scan result summary
+     */
+    QString generateFinalResult(bool isMalicious, bool foundInDb, int yaraMatches,
+                               std::chrono::high_resolution_clock::time_point scanStart,
+                               bool yaraFailed = false, bool yaraNotInitialized = false) const;
+    
+    /**
+     * @brief Formats file size in human-readable format
+     */
+    QString formatFileSize(qint64 size) const;
+    
+    /**
+     * @brief Formats file permissions
+     */
+    QString formatFilePermissions() const;
+    
+    /**
+     * @brief Formats datetime from chrono time_point
+     */
+    QString formatDateTime(const std::chrono::system_clock::time_point& timePoint) const;
 
     QFileInfo m_selectedFile; ///< Information about the currently selected file
     QString m_results; ///< Formatted results from the last scan operation
