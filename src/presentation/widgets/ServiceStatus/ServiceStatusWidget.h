@@ -96,52 +96,29 @@ private:
     void updateOverallStatus();
     
     /**
-     * @brief Update core protection services status
+     * @brief Update core scanning engines status
      * 
-     * Checks and displays the status of essential security services
-     * including scanning engines and real-time protection.
+     * Checks and displays the status of essential scanning services
+     * including YARA engine, Basic Scanner, and VirusTotal integration.
      */
-    void updateCoreProtectionStatus();
+    void updateCoreScanningEnginesStatus();
     
     /**
      * @brief Update technical components status
      * 
      * Monitors and displays the status of technical infrastructure
-     * components like databases, network services, and file systems.
+     * components like SQLite database, CDR service, Sandbox analysis,
+     * and Docker infrastructure.
      */
     void updateTechnicalComponentsStatus();
     
     /**
      * @brief Update other additional components status
      * 
-     * Checks the status of auxiliary services and optional components
-     * that enhance system functionality.
+     * Checks the status of network monitoring, connectivity status,
+     * system resources, and application logging.
      */
     void updateOtherAdditionsStatus();
-    
-    /**
-     * @brief Populate dynamic API keys information
-     * 
-     * Dynamically loads and displays the status of configured API keys
-     * for external services like VirusTotal, threat intelligence feeds, etc.
-     */
-    void populateDynamicApiKeys();
-    
-    /**
-     * @brief Populate dynamic Docker containers information
-     * 
-     * Loads and displays the current status of all Docker containers
-     * used for scanning operations (CDR, Sandbox, etc.).
-     */
-    void populateDynamicContainers();
-    
-    /**
-     * @brief Populate dynamic Docker images information
-     * 
-     * Displays information about available Docker images and their
-     * readiness for scanning operations.
-     */
-    void populateDynamicImages();
     
     /**
      * @brief Update the last refresh timestamp
@@ -150,6 +127,49 @@ private:
      * was last refreshed.
      */
     void updateLastRefreshTime();
+    
+    /**
+     * @brief Check Docker daemon status
+     * 
+     * Verifies if Docker daemon is running and accessible.
+     * 
+     * @return true if Docker is running, false otherwise
+     */
+    bool checkDockerStatus();
+    
+    /**
+     * @brief Get number of running Docker containers
+     * 
+     * Queries Docker daemon for the count of currently running containers.
+     * 
+     * @return Number of running containers
+     */
+    int getDockerContainerCount();
+    
+    /**
+     * @brief Get number of Docker images
+     * 
+     * Queries Docker daemon for the total count of available images.
+     * 
+     * @return Number of Docker images
+     */
+    int getDockerImageCount();
+    
+    /**
+     * @brief Check internet connectivity status
+     * 
+     * Tests connectivity to external services using ping.
+     * 
+     * @return true if connectivity is available, false otherwise
+     */
+    bool checkConnectivityStatus();
+    
+    /**
+     * @brief Update system resource monitoring
+     * 
+     * Updates CPU usage, memory usage, and disk space information.
+     */
+    void updateSystemResourceStatus();
 };
 
 #endif // SERVICESTATUSWIDGET_H

@@ -110,7 +110,7 @@ void SettingsDialog::setupScanningTab()
     
     m_virusTotalApiKeyEdit = new QLineEdit();
     m_virusTotalApiKeyEdit->setEchoMode(QLineEdit::Password);
-    m_virusTotalApiKeyEdit->setPlaceholderText(tr("VirusTotal API anahtarınızı girin"));
+    m_virusTotalApiKeyEdit->setPlaceholderText(tr("Enter your VirusTotal API key"));
     vtLayout->addRow(tr("API Anahtarı:"), m_virusTotalApiKeyEdit);
     
     layout->addWidget(vtGroup);
@@ -130,7 +130,7 @@ void SettingsDialog::setupScanningTab()
     // Quarantine path
     QHBoxLayout *quarantineLayout = new QHBoxLayout();
     m_quarantinePathEdit = new QLineEdit();
-    m_quarantinePathEdit->setPlaceholderText(tr("Karantina klasörü yolu"));
+    m_quarantinePathEdit->setPlaceholderText(tr("Quarantine folder path"));
     m_browseQuarantineButton = new QPushButton(tr("Gözat..."));
     connect(m_browseQuarantineButton, &QPushButton::clicked, this, &SettingsDialog::onBrowseQuarantineClicked);
     
@@ -194,7 +194,7 @@ void SettingsDialog::setupAdvancedTab()
     
     QHBoxLayout *dbPathLayout = new QHBoxLayout();
     m_databasePathEdit = new QLineEdit();
-    m_databasePathEdit->setPlaceholderText(tr("Veritabanı dosya yolu"));
+    m_databasePathEdit->setPlaceholderText(tr("Database file path"));
     m_browseDatabaseButton = new QPushButton(tr("Gözat..."));
     connect(m_browseDatabaseButton, &QPushButton::clicked, this, &SettingsDialog::onBrowseDatabaseClicked);
     

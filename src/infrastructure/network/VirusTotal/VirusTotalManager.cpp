@@ -19,6 +19,7 @@
 #include <QPointer>
 #include <QString>
 #include <QRegularExpression>
+#include "../../../core/session/SessionManager.h"
 
 // Define error code namespace for better error handling
 namespace VTErrorCodes {
@@ -406,6 +407,9 @@ bool VirusTotalManager::scanFile(const QString& filePath) {
         qWarning() << "Error: File does not exist:" << filePath;
         return false;
     }
+    
+    // Increment VirusTotal scan counter since we're submitting to VirusTotal
+    SessionManager::getInstance().incrementVirusTotalScans();
     
     // Submit the file to VirusTotal for scanning
     return submitToRemoteService();

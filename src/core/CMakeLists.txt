@@ -4,6 +4,8 @@ add_library(Core STATIC
     config/config.ini
     config/SettingsManager.h
     config/SettingsManager.cpp
+    session/SessionManager.h
+    session/SessionManager.cpp
     interfaces/IDbManager.h
     interfaces/IDockerScanner.h
     interfaces/IScanner.h

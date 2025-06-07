@@ -184,53 +184,43 @@
                             <item>
                                 <widget class="QGroupBox" name="groupBoxCoreProtection">
                                     <property name="title">
-                                        <string>Core Protection</string>
+                                        <string>Core Scanning Engines</string>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayoutCoreProtection">
                                         <property name="spacing">
                                             <number>12</number>
                                         </property>
                                         <item>
-                                            <widget class="QFrame" name="frameRealTime">
-                                                <layout class="QGridLayout" name="gridLayoutRealTime">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelRealTimeTitle"><property name="text"><string>Real-Time Protection:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelRealTimeStatus"><property name="text"><string>Unknown</string></property></widget></item>
+                                            <widget class="QFrame" name="frameBasicScanner">
+                                                <layout class="QGridLayout" name="gridLayoutBasicScanner">
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelBasicScannerTitle"><property name="text"><string>Basic File Scanner:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelBasicScannerStatus"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelBasicScannerFilesTitle"><property name="text"><string>Files Scanned (Session):</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelBasicScannerFilesValue"><property name="text"><string>0</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>
                                         <item>
-                                            <widget class="QFrame" name="frameVirusDefs">
-                                                <layout class="QGridLayout" name="gridLayoutVirusDefs">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelVirusDefsTitle"><property name="text"><string>Virus Definitions Status:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelVirusDefsStatus"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelLastSuccessfulUpdateTitle"><property name="text"><string>Last Successful Update:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelLastSuccessfulUpdateValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="2" column="0"><widget class="QLabel" name="labelVirusDefsVersionTitle"><property name="text"><string>Definition Version:</string></property></widget></item>
-                                                    <item row="2" column="1"><widget class="QLabel" name="labelVirusDefsVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                            <widget class="QFrame" name="frameYaraEngine">
+                                                <layout class="QGridLayout" name="gridLayoutYaraEngine">
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelYaraEngineTitle"><property name="text"><string>YARA Rule Engine:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelYaraEngineStatus"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelYaraRulesTitle"><property name="text"><string>Active Rules:</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelYaraRulesValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="2" column="0"><widget class="QLabel" name="labelYaraLastUpdateTitle"><property name="text"><string>Rules Last Updated:</string></property></widget></item>
+                                                    <item row="2" column="1"><widget class="QLabel" name="labelYaraLastUpdateValue"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>
                                         <item>
-                                            <widget class="QFrame" name="frameEngineVersion">
-                                                <layout class="QGridLayout" name="gridLayoutEngineVersion">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelEngineVersionTitle"><property name="text"><string>Engine Version:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelEngineVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelLastCheckTitle"><property name="text"><string>Last Update Check:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelLastCheckValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="2" column="0"><widget class="QLabel" name="labelUpdateAvailableTitle"><property name="text"><string>Update Available?:</string></property></widget></item>
-                                                    <item row="2" column="1"><widget class="QLabel" name="labelUpdateAvailableValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                </layout>
-                                            </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="QFrame" name="frameLicenseStatus">
-                                                <property name="visible">
-                                                    <bool>true</bool> </property>
-                                                <layout class="QGridLayout" name="gridLayoutLicenseStatus">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelLicenseStatusTitle"><property name="text"><string>License Status:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelLicenseStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelLicenseTimeLeftTitle"><property name="text"><string>Time Left:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelLicenseTimeLeftValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                            <widget class="QFrame" name="frameVirusTotalIntegration">
+                                                <layout class="QGridLayout" name="gridLayoutVirusTotalIntegration">
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelVirusTotalTitle"><property name="text"><string>VirusTotal Integration:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelVirusTotalStatus"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelVirusTotalApiTitle"><property name="text"><string>API Key Status:</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelVirusTotalApiValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="2" column="0"><widget class="QLabel" name="labelVirusTotalQuotaTitle"><property name="text"><string>Daily Usage:</string></property></widget></item>
+                                                    <item row="2" column="1"><widget class="QLabel" name="labelVirusTotalQuotaValue"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>
@@ -246,142 +236,77 @@
                                     <property name="checkable">
                                         <bool>false</bool>
                                     </property>
-                                    <layout class="QVBoxLayout" name="verticalLayoutTechnical">
-                                        <item>
-                                            <widget class="QGroupBox" name="groupBoxLocalDb">
-                                                <property name="title"><string>Local Database</string></property>
-                                                <layout class="QGridLayout" name="gridLayoutLocalDb">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelLocalDbStatusTitle"><property name="text"><string>Status:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelLocalDbStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelLocalDbLastSyncTitle"><property name="text"><string>Last Sync/Backup:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelLocalDbLastSyncValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="2" column="0"><widget class="QLabel" name="labelLocalDbSizeTitle"><property name="text"><string>Size:</string></property></widget></item>
-                                                    <item row="2" column="1"><widget class="QLabel" name="labelLocalDbSizeValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="3" column="0"><widget class="QLabel" name="labelLocalDbTypeVersionTitle"><property name="text"><string>Engine (Version):</string></property></widget></item>
-                                                    <item row="3" column="1"><widget class="QLabel" name="labelLocalDbTypeVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                    <item row="4" column="0"><widget class="QLabel" name="labelLocalDbPortTitle"><property name="text"><string>Connection Port:</string></property></widget></item>
-                                                    <item row="4" column="1"><widget class="QLabel" name="labelLocalDbPortValue"><property name="text"><string>Not Applicable</string></property></widget></item>
-                                                    <item row="5" column="0"><widget class="QLabel" name="labelLocalDbIntegrityTitle"><property name="text"><string>Integrity Status:</string></property></widget></item>
-                                                    <item row="5" column="1"><widget class="QLabel" name="labelLocalDbIntegrityValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                </layout>
-                                            </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="Line" name="line_4"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
-                                        </item>
-                                        <item>
-                                            <widget class="QGroupBox" name="groupBoxApiKeys">
-                                                <property name="title"><string>API Key Statuses</string></property>
-                                                <layout class="QVBoxLayout" name="verticalLayoutApiKeys">
-                                                    <item>
-                                                        <layout class="QVBoxLayout" name="dynamicApiKeysLayout"/>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QFrame" name="frameApiExample">
-                                                            <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
-                                                            <layout class="QGridLayout" name="gridLayoutApiExample">
-                                                                <item row="0" column="0" colspan="2"><widget class="QLabel" name="labelApiNameExample"><property name="text"><string>API Name/Service: Cloud Analysis API (Example)</string></property><property name="font"><font><weight>75</weight><bold>true</bold></font></property></widget></item>
-                                                                <item row="1" column="0"><widget class="QLabel" name="labelApiStatusTitleExample"><property name="text"><string>Status:</string></property></widget></item>
-                                                                <item row="1" column="1"><widget class="QLabel" name="labelApiStatusValueExample"><property name="text"><string>Active and Valid</string></property></widget></item>
-                                                                <item row="2" column="0"><widget class="QLabel" name="labelApiLastConnTitleExample"><property name="text"><string>Last Successful Connection:</string></property></widget></item>
-                                                                <item row="2" column="1"><widget class="QLabel" name="labelApiLastConnValueExample"><property name="text"><string>2025-05-10 14:30:00</string></property></widget></item>
-                                                                <item row="3" column="0"><widget class="QLabel" name="labelApiUsageTitleExample"><property name="text"><string>Usage (Last 24h):</string></property></widget></item>
-                                                                <item row="3" column="1"><widget class="QLabel" name="labelApiUsageValueExample"><property name="text"><string>150/1000 requests</string></property></widget></item>
-                                                                <item row="4" column="0"><widget class="QLabel" name="labelApiEndpointTitleExample"><property name="text"><string>API Endpoint:</string></property></widget></item>
-                                                                <item row="4" column="1"><widget class="QLabel" name="labelApiEndpointValueExample"><property name="text"><string>api.example.com/v1/****</string></property></widget></item>
-                                                                <item row="5" column="0"><widget class="QLabel" name="labelApiLatencyTitleExample"><property name="text"><string>Last Response Time:</string></property></widget></item>
-                                                                <item row="5" column="1"><widget class="QLabel" name="labelApiLatencyValueExample"><property name="text"><string>85ms</string></property></widget></item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="Line" name="line_5"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
-                                        </item>
-                                        <item>
-                                            <widget class="QGroupBox" name="groupBoxDocker">
-                                                <property name="title"><string>Docker Infrastructure</string></property>
-                                                <layout class="QVBoxLayout" name="verticalLayoutDocker">
-                                                    <item>
-                                                        <widget class="QFrame" name="frameDockerService">
-                                                            <layout class="QGridLayout" name="gridLayoutDockerService">
-                                                                <item row="0" column="0" colspan="2"><widget class="QLabel" name="labelDockerServiceTitle"><property name="text"><string>Docker Service (Daemon)</string></property><property name="font"><font><weight>75</weight><bold>true</bold></font></property></widget></item>
-                                                                <item row="1" column="0"><widget class="QLabel" name="labelDockerDaemonStatusTitle"><property name="text"><string>Status:</string></property></widget></item>
-                                                                <item row="1" column="1"><widget class="QLabel" name="labelDockerDaemonStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                                <item row="2" column="0"><widget class="QLabel" name="labelDockerVersionTitle"><property name="text"><string>Docker Version:</string></property></widget></item>
-                                                                <item row="2" column="1"><widget class="QLabel" name="labelDockerVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                                <item row="3" column="0"><widget class="QLabel" name="labelDockerApiVersionTitle"><property name="text"><string>API Version:</string></property></widget></item>
-                                                                <item row="3" column="1"><widget class="QLabel" name="labelDockerApiVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBoxContainers">
-                                                            <property name="title"><string>Container Statuses</string></property>
-                                                            <layout class="QVBoxLayout" name="verticalLayoutContainers">
-                                                                <item>
-                                                                    <layout class="QVBoxLayout" name="dynamicContainersLayout"/>
-                                                                </item>
-                                                                <item>
-                                                                    <widget class="QFrame" name="frameContainerExample">
-                                                                        <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
-                                                                        <layout class="QGridLayout" name="gridLayoutContainerExample">
-                                                                            <item row="0" column="0" colspan="3"><widget class="QLabel" name="labelContainerNameExample"><property name="text"><string>Container: av-scanner-worker (Example)</string></property><property name="font"><font><weight>75</weight><bold>true</bold></font></property></widget></item>
-                                                                            <item row="1" column="0"><widget class="QLabel" name="labelContainerImageTitleExample"><property name="text"><string>Image:</string></property></widget></item>
-                                                                            <item row="1" column="1" colspan="2"><widget class="QLabel" name="labelContainerImageValueExample"><property name="text"><string>myav/scanner:latest</string></property></widget></item>
-                                                                            <item row="2" column="0"><widget class="QLabel" name="labelContainerStatusTitleExample"><property name="text"><string>Status:</string></property></widget></item>
-                                                                            <item row="2" column="1" colspan="2"><widget class="QLabel" name="labelContainerStatusValueExample"><property name="text"><string>Running</string></property></widget></item>
-                                                                            <item row="3" column="0"><widget class="QLabel" name="labelContainerUptimeTitleExample"><property name="text"><string>Uptime:</string></property></widget></item>
-                                                                            <item row="3" column="1" colspan="2"><widget class="QLabel" name="labelContainerUptimeValueExample"><property name="text"><string>7 days</string></property></widget></item>
-                                                                            <item row="4" column="0"><widget class="QLabel" name="labelContainerPortsTitleExample"><property name="text"><string>Ports:</string></property></widget></item>
-                                                                            <item row="4" column="1" colspan="2"><widget class="QLabel" name="labelContainerPortsValueExample"><property name="text"><string>Unknown</string></property></widget></item>
-                                                                            <item row="5" column="0"><widget class="QLabel" name="labelContainerCpuMemTitleExample"><property name="text"><string>CPU/Memory:</string></property></widget></item>
-                                                                            <item row="5" column="1" colspan="2"><widget class="QLabel" name="labelContainerCpuMemValueExample"><property name="text"><string>%5 / 256MB</string></property></widget></item>
-                                                                            <item row="6" column="0"><widget class="QLabel" name="labelContainerHealthTitleExample"><property name="text"><string>Health Check:</string></property></widget></item>
-                                                                            <item row="6" column="1" colspan="2"><widget class="QLabel" name="labelContainerHealthValueExample"><property name="text"><string>Healthy (10s ago)</string></property></widget></item>
-                                                                            <item row="7" column="1"><widget class="QPushButton" name="buttonContainerLogsExample"><property name="text"><string>Show Logs</string></property></widget></item>
-                                                                            <item row="7" column="2"><spacer name="horizontalSpacerContainer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
-                                                                        </layout>
-                                                                    </widget>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBoxImages">
-                                                            <property name="title"><string>Image Statuses</string></property>
-                                                            <layout class="QVBoxLayout" name="verticalLayoutImages">
-                                                                <item>
-                                                                    <layout class="QVBoxLayout" name="dynamicImagesLayout"/>
-                                                                </item>
-                                                                <item>
-                                                                    <widget class="QFrame" name="frameImageExample">
-                                                                        <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
-                                                                        <layout class="QGridLayout" name="gridLayoutImageExample">
-                                                                            <item row="0" column="0" colspan="2"><widget class="QLabel" name="labelImageNameTagExample"><property name="text"><string>Image: myav/scanner:latest (Example)</string></property><property name="font"><font><weight>75</weight><bold>true</bold></font></property></widget></item>
-                                                                            <item row="1" column="0"><widget class="QLabel" name="labelImageSizeTitleExample"><property name="text"><string>Size:</string></property></widget></item>
-                                                                            <item row="1" column="1"><widget class="QLabel" name="labelImageSizeValueExample"><property name="text"><string>500MB</string></property></widget></item>
-                                                                            <item row="2" column="0"><widget class="QLabel" name="labelImageCreatedTitleExample"><property name="text"><string>Creation Date:</string></property></widget></item>
-                                                                            <item row="2" column="1"><widget class="QLabel" name="labelImageCreatedValueExample"><property name="text"><string>2025-04-01</string></property></widget></item>
-                                                                            <item row="3" column="0"><widget class="QLabel" name="labelImageLocalTitleExample"><property name="text"><string>Available Locally?:</string></property></widget></item>
-                                                                            <item row="3" column="1"><widget class="QLabel" name="labelImageLocalValueExample"><property name="text"><string>Yes</string></property></widget></item>
-                                                                            <item row="4" column="0"><widget class="QLabel" name="labelImageSourceTitleExample"><property name="text"><string>Source (Registry):</string></property></widget></item>
-                                                                            <item row="4" column="1"><widget class="QLabel" name="labelImageSourceValueExample"><property name="text"><string>DockerHub</string></property></widget></item>
-                                                                            <item row="5" column="0"><widget class="QLabel" name="labelImageUpToDateTitleExample"><property name="text"><string>Up to Date?:</string></property></widget></item>
-                                                                            <item row="5" column="1"><widget class="QLabel" name="labelImageUpToDateValueExample"><property name="text"><string>Yes</string></property></widget></item>
-                                                                            <item row="6" column="0"><widget class="QLabel" name="labelImageScanTitleExample"><property name="text"><string>Last Security Scan:</string></property></widget></item>
-                                                                            <item row="6" column="1"><widget class="QLabel" name="labelImageScanValueExample"><property name="text"><string>No Issues (2025-04-02)</string></property></widget></item>
-                                                                        </layout>
-                                                                    </widget>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                        </item>
+                                    <layout class="QVBoxLayout" name="verticalLayoutTechnical">                        <item>
+                            <widget class="QGroupBox" name="groupBoxLocalDb">
+                                <property name="title"><string>SQLite Database</string></property>
+                                <layout class="QGridLayout" name="gridLayoutLocalDb">
+                                    <item row="0" column="0"><widget class="QLabel" name="labelLocalDbStatusTitle"><property name="text"><string>Connection Status:</string></property></widget></item>
+                                    <item row="0" column="1"><widget class="QLabel" name="labelLocalDbStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="1" column="0"><widget class="QLabel" name="labelLocalDbFileTitle"><property name="text"><string>Database File:</string></property></widget></item>
+                                    <item row="1" column="1"><widget class="QLabel" name="labelLocalDbFileValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="2" column="0"><widget class="QLabel" name="labelLocalDbSizeTitle"><property name="text"><string>File Size:</string></property></widget></item>
+                                    <item row="2" column="1"><widget class="QLabel" name="labelLocalDbSizeValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="3" column="0"><widget class="QLabel" name="labelLocalDbVersionTitle"><property name="text"><string>SQLite Version:</string></property></widget></item>
+                                    <item row="3" column="1"><widget class="QLabel" name="labelLocalDbVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="4" column="0"><widget class="QLabel" name="labelLocalDbRecordsTitle"><property name="text"><string>Record Count:</string></property></widget></item>
+                                    <item row="4" column="1"><widget class="QLabel" name="labelLocalDbRecordsValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                </layout>
+                            </widget>
+                        </item>                        <item>
+                            <widget class="Line" name="line_4"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
+                        </item>
+                        <item>
+                            <widget class="QGroupBox" name="groupBoxCdrService">
+                                <property name="title"><string>CDR File Sanitization</string></property>
+                                <layout class="QGridLayout" name="gridLayoutCdrService">
+                                    <item row="0" column="0"><widget class="QLabel" name="labelCdrStatusTitle"><property name="text"><string>Service Status:</string></property></widget></item>
+                                    <item row="0" column="1"><widget class="QLabel" name="labelCdrStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="1" column="0"><widget class="QLabel" name="labelCdrProcessedTitle"><property name="text"><string>Files Processed (Session):</string></property></widget></item>
+                                    <item row="1" column="1"><widget class="QLabel" name="labelCdrProcessedValue"><property name="text"><string>0</string></property></widget></item>
+                                    <item row="2" column="0"><widget class="QLabel" name="labelCdrEngineTitle"><property name="text"><string>Sanitization Engine:</string></property></widget></item>
+                                    <item row="2" column="1"><widget class="QLabel" name="labelCdrEngineValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                </layout>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="Line" name="line_5"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
+                        </item>
+                        <item>
+                            <widget class="QGroupBox" name="groupBoxSandbox">
+                                <property name="title"><string>Sandbox Analysis</string></property>
+                                <layout class="QGridLayout" name="gridLayoutSandbox">
+                                    <item row="0" column="0"><widget class="QLabel" name="labelSandboxStatusTitle"><property name="text"><string>Service Status:</string></property></widget></item>
+                                    <item row="0" column="1"><widget class="QLabel" name="labelSandboxStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                    <item row="1" column="0"><widget class="QLabel" name="labelSandboxActiveTitle"><property name="text"><string>Active Analyses:</string></property></widget></item>
+                                    <item row="1" column="1"><widget class="QLabel" name="labelSandboxActiveValue"><property name="text"><string>0</string></property></widget></item>
+                                    <item row="2" column="0"><widget class="QLabel" name="labelSandboxCompletedTitle"><property name="text"><string>Completed (Session):</string></property></widget></item>
+                                    <item row="2" column="1"><widget class="QLabel" name="labelSandboxCompletedValue"><property name="text"><string>0</string></property></widget></item>
+                                    <item row="3" column="0"><widget class="QLabel" name="labelSandboxEnvironmentTitle"><property name="text"><string>Environment Status:</string></property></widget></item>
+                                    <item row="3" column="1"><widget class="QLabel" name="labelSandboxEnvironmentValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                </layout>
+                            </widget>
+                        </item>                        <item>
+                            <widget class="QGroupBox" name="groupBoxDocker">
+                                <property name="title"><string>Docker Infrastructure</string></property>
+                                <layout class="QVBoxLayout" name="verticalLayoutDocker">
+                                    <item>
+                                        <widget class="QFrame" name="frameDockerService">
+                                            <layout class="QGridLayout" name="gridLayoutDockerService">
+                                                <item row="0" column="0" colspan="2"><widget class="QLabel" name="labelDockerServiceTitle"><property name="text"><string>Docker Service (Daemon)</string></property><property name="font"><font><weight>75</weight><bold>true</bold></font></property></widget></item>
+                                                <item row="1" column="0"><widget class="QLabel" name="labelDockerDaemonStatusTitle"><property name="text"><string>Status:</string></property></widget></item>
+                                                <item row="1" column="1"><widget class="QLabel" name="labelDockerDaemonStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                <item row="2" column="0"><widget class="QLabel" name="labelDockerVersionTitle"><property name="text"><string>Docker Version:</string></property></widget></item>
+                                                <item row="2" column="1"><widget class="QLabel" name="labelDockerVersionValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                <item row="3" column="0"><widget class="QLabel" name="labelDockerContainersTitle"><property name="text"><string>Active Containers:</string></property></widget></item>
+                                                <item row="3" column="1"><widget class="QLabel" name="labelDockerContainersValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                <item row="4" column="0"><widget class="QLabel" name="labelDockerImagesTitle"><property name="text"><string>Available Images:</string></property></widget></item>
+                                                <item row="4" column="1"><widget class="QLabel" name="labelDockerImagesValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                            </layout>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </widget>
+                        </item>
                                     </layout>
                                 </widget>
                             </item>
@@ -393,15 +318,15 @@
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayoutOther">
                                         <item>
-                                            <widget class="QGroupBox" name="groupBoxConnectivity">
-                                                <property name="title"><string>Connectivity Statuses</string></property>
-                                                <layout class="QGridLayout" name="gridLayoutConnectivity">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelConnUpdateServerTitle"><property name="text"><string>Antivirus Update Servers:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelConnUpdateServerValue"><property name="text"><string>Reachable</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelConnCloudServicesTitle"><property name="text"><string>Cloud Services (General):</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelConnCloudServicesValue"><property name="text"><string>Reachable</string></property></widget></item>
-                                                    <item row="2" column="0"><widget class="QLabel" name="labelConnInternetTitle"><property name="text"><string>Internet Connection (General):</string></property></widget></item>
-                                                    <item row="2" column="1"><widget class="QLabel" name="labelConnInternetValue"><property name="text"><string>Available</string></property></widget></item>
+                                            <widget class="QGroupBox" name="groupBoxNetworkMonitoring">
+                                                <property name="title"><string>Network Monitoring</string></property>
+                                                <layout class="QGridLayout" name="gridLayoutNetworkMonitoring">
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelNetworkStatusTitle"><property name="text"><string>Monitoring Status:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelNetworkStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelNetworkActiveTitle"><property name="text"><string>Active Connections:</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelNetworkActiveValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="2" column="0"><widget class="QLabel" name="labelNetworkThreatTitle"><property name="text"><string>Threats Detected:</string></property></widget></item>
+                                                    <item row="2" column="1"><widget class="QLabel" name="labelNetworkThreatValue"><property name="text"><string>0</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>
@@ -409,15 +334,26 @@
                                             <widget class="Line" name="line_6"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
                                         </item>
                                         <item>
+                                            <widget class="QGroupBox" name="groupBoxConnectivity">
+                                                <property name="title"><string>Connectivity Status</string></property>
+                                                <layout class="QGridLayout" name="gridLayoutConnectivity">
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelConnVirusTotalTitle"><property name="text"><string>VirusTotal API:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelConnVirusTotalValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelConnInternetTitle"><property name="text"><string>Internet Connection:</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelConnInternetValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                </layout>
+                                            </widget>
+                                        </item>
+                                        <item>
                                             <widget class="QGroupBox" name="groupBoxSystemResources">
-                                                <property name="title"><string>System Resource Usage (Antivirus Services)</string></property>
+                                                <property name="title"><string>System Resource Usage</string></property>
                                                 <layout class="QGridLayout" name="gridLayoutSystemResources">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelResCpuTitle"><property name="text"><string>CPU Usage:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelResCpuValue"><property name="text"><string>%2</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelResMemoryTitle"><property name="text"><string>Memory Usage:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelResMemoryValue"><property name="text"><string>150 MB</string></property></widget></item>
-                                                    <item row="2" column="0"><widget class="QLabel" name="labelResDiskIoTitle"><property name="text"><string>Disk I/O (Current):</string></property></widget></item>
-                                                    <item row="2" column="1"><widget class="QLabel" name="labelResDiskIoValue"><property name="text"><string>Low</string></property></widget></item>
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelResCpuTitle"><property name="text"><string>CPU Usage (AV Services):</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelResCpuValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelResMemoryTitle"><property name="text"><string>Memory Usage (AV Services):</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelResMemoryValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="2" column="0"><widget class="QLabel" name="labelResDiskSpaceTitle"><property name="text"><string>Available Disk Space:</string></property></widget></item>
+                                                    <item row="2" column="1"><widget class="QLabel" name="labelResDiskSpaceValue"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>
@@ -425,25 +361,15 @@
                                             <widget class="Line" name="line_7"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
                                         </item>
                                         <item>
-                                            <widget class="QGroupBox" name="groupBoxAuxServices">
-                                                <property name="title"><string>Auxiliary System Services/Dependencies</string></property>
-                                                <layout class="QGridLayout" name="gridLayoutAuxServices">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelAuxServiceExampleTitle"><property name="text"><string>Base Filtering Engine (BFE):</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelAuxServiceExampleValue"><property name="text"><string>Running</string></property></widget></item>
-                                                </layout>
-                                            </widget>
-                                        </item>
-                                        <item>
-                                            <widget class="Line" name="line_8"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget>
-                                        </item>
-                                        <item>
                                             <widget class="QGroupBox" name="groupBoxLoggingService">
-                                                <property name="title"><string>Event and Logging Service</string></property>
+                                                <property name="title"><string>Application Logging</string></property>
                                                 <layout class="QGridLayout" name="gridLayoutLoggingService">
-                                                    <item row="0" column="0"><widget class="QLabel" name="labelLogServiceStatusTitle"><property name="text"><string>Status:</string></property></widget></item>
-                                                    <item row="0" column="1"><widget class="QLabel" name="labelLogServiceStatusValue"><property name="text"><string>Active</string></property></widget></item>
-                                                    <item row="1" column="0"><widget class="QLabel" name="labelLogPendingEventsTitle"><property name="text"><string>Pending Event Count:</string></property></widget></item>
-                                                    <item row="1" column="1"><widget class="QLabel" name="labelLogPendingEventsValue"><property name="text"><string>0</string></property></widget></item>
+                                                    <item row="0" column="0"><widget class="QLabel" name="labelLogServiceStatusTitle"><property name="text"><string>Logging Status:</string></property></widget></item>
+                                                    <item row="0" column="1"><widget class="QLabel" name="labelLogServiceStatusValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="1" column="0"><widget class="QLabel" name="labelLogLevelTitle"><property name="text"><string>Current Log Level:</string></property></widget></item>
+                                                    <item row="1" column="1"><widget class="QLabel" name="labelLogLevelValue"><property name="text"><string>Unknown</string></property></widget></item>
+                                                    <item row="2" column="0"><widget class="QLabel" name="labelLogSizeTitle"><property name="text"><string>Log File Size:</string></property></widget></item>
+                                                    <item row="2" column="1"><widget class="QLabel" name="labelLogSizeValue"><property name="text"><string>Unknown</string></property></widget></item>
                                                 </layout>
                                             </widget>
                                         </item>

@@ -9,6 +9,7 @@
 #include "yara/YaraRuleManager.h"
 #include "../../storage/database/DbManager/DbManager.h"
 #include "../../storage/database/DatabaseService/DatabaseService.h"
+#include "../../core/session/SessionManager.h"
 #include <QFile>
 #include <QDebug>
 #include <QDir>
@@ -287,6 +288,9 @@ bool BasicScanner::scanFileComprehensive(const QString& filePath)
     
     m_isScanning = true;
     
+    // Increment scanned files counter
+    SessionManager::getInstance().incrementScannedFiles();
+    
     // Start scan timing
     auto scanStartTime = std::chrono::high_resolution_clock::now();
     
@@ -364,6 +368,7 @@ bool BasicScanner::scanFileComprehensive(const QString& filePath)
                 m_results += generateFinalResult(false, false, 0, scanStartTime, true);
             } else if (!yaraMatches.empty()) {
                 // YARA rules matched - file is potentially malicious
+                SessionManager::getInstance().incrementYaraMatches();
                 m_results += generateYaraMatchResult(yaraMatches, yaraDuration);
                 m_results += generateFinalResult(true, false, yaraMatches.size(), scanStartTime);
                 

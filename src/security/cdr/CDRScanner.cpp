@@ -6,6 +6,7 @@
 #include "../scanning/BasicScanner.h" // For ScannerErrorCode
 #include "CdrManager.h"
 #include "CdrTypes.h"
+#include "../../core/session/SessionManager.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -154,6 +155,9 @@ bool CDRScanner::scanFile(const QString& filePath) {
 
         // 4. First scan for active content and threats (CRITICAL: Detection before sanitization)
         std::vector<std::string> activeContentTypes = cdrManager->detectActiveContent(filePath.toStdString());
+        
+        // Increment CDR processed counter since we're actually performing CDR processing
+        SessionManager::getInstance().incrementCdrProcessed();
         
         bool hasActiveContent = !activeContentTypes.empty();
         bool requiresSanitization = false;

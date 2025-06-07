@@ -254,64 +254,12 @@ QPushButton:focus {
          <number>2</number>
         </property>
         <widget class="QWidget" name="dashboardPage">
-         <widget class="QLabel" name="dashboardLabel">
-          <property name="geometry">
-           <rect>
-            <x>190</x>
-            <y>40</y>
-            <width>58</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Dashboard Sayfa İçeriği</string>
-          </property>
-         </widget>
         </widget>
         <widget class="QWidget" name="serviceStatusPage">
-         <widget class="QLabel" name="seviceStatusLabel">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>60</y>
-            <width>58</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Service status bilgileri</string>
-          </property>
-         </widget>
         </widget>
         <widget class="QWidget" name="settingsPage">
-         <widget class="QLabel" name="settingsLabel">
-          <property name="geometry">
-           <rect>
-            <x>120</x>
-            <y>40</y>
-            <width>58</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Ayarlar İçeriği</string>
-          </property>
-         </widget>
         </widget>
         <widget class="QWidget" name="historyPage">
-         <widget class="QLabel" name="historyLabel">
-          <property name="geometry">
-           <rect>
-            <x>220</x>
-            <y>70</y>
-            <width>58</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>History içeriği</string>
-          </property>
-         </widget>
         </widget>
        </widget>
       </item>
