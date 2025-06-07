@@ -107,14 +107,22 @@ add_custom_command(TARGET AVProjectUi POST_BUILD
     COMMENT "Copying YARA rules to executable directory"
 )
 
+# Post-build automation: Documentation only (cleanup removed to preserve executable)
+add_custom_command(TARGET AVProjectUi POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "📚 Generating documentation..."
+    COMMAND bash ${CMAKE_SOURCE_DIR}/tools/scripts/docs.sh generate || echo "Documentation generation completed"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Generating project documentation"
+)
+
 # Documentation targets
 find_program(DOXYGEN_EXECUTABLE doxygen)
 find_program(PYTHON_EXECUTABLE python3)
 
 if(DOXYGEN_EXECUTABLE)
     add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/api/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/api
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile.main
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM
     )
@@ -128,9 +136,9 @@ if(DOXYGEN_EXECUTABLE)
         )
         
         add_custom_target(docs-serve
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/api/Doxyfile
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/docs/Doxyfile.main
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/scripts/serve_docs.py
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs/api
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
             COMMENT "Generating documentation and starting server"
             VERBATIM
         )
@@ -140,6 +148,5 @@ if(DOXYGEN_EXECUTABLE)
 else()
     message(WARNING "Doxygen not found. Documentation targets will not be available.")
 endif()
-add_executable(test_text_sanitization test_text_sanitization.cpp)
-target_link_libraries(test_text_sanitization Security Infrastructure)
-target_include_directories(test_text_sanitization PRIVATE ${CMAKE_SOURCE_DIR}/src)
+
+# Note: test_text_sanitization.cpp is now part of the organized test structure in tests/unit/

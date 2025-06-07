@@ -115,35 +115,35 @@ install-hooks:
 # Documentation targets
 .PHONY: docs docs-serve docs-clean docs-status docs-open
 
-# Generate documentation
+# Documentation targets
 docs:
 	@echo "📚 Generating documentation..."
-	@./scripts/docs.sh generate
+	@./tools/scripts/docs.sh generate
 
 # Generate and serve documentation  
 docs-serve:
 	@echo "📚 Generating and serving documentation..."
-	@./scripts/docs.sh build-serve
+	@./tools/scripts/docs.sh build-serve
 
 # Serve existing documentation
 serve-docs:
 	@echo "🚀 Serving documentation..."
-	@./scripts/docs.sh serve
+	@./tools/scripts/docs.sh serve
 
 # Open documentation in browser
 docs-open:
 	@echo "🔗 Opening documentation..."
-	@./scripts/docs.sh open
+	@./tools/scripts/docs.sh open
 
 # Clean documentation
 docs-clean:
 	@echo "🧹 Cleaning documentation..."
-	@./scripts/docs.sh clean
+	@./tools/scripts/docs.sh clean
 
 # Show documentation status
 docs-status:
 	@echo "📊 Documentation status..."
-	@./scripts/docs.sh status
+	@./tools/scripts/docs.sh status
 
 # Code analysis
 analyze:

@@ -4,9 +4,18 @@
         {
             "label": "📚 Generate Documentation",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["generate"],
-            "group": "build",
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "generate"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -21,8 +30,14 @@
         {
             "label": "🚀 Serve Documentation",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["serve"],
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "serve"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -42,8 +57,14 @@
         {
             "label": "📖 Generate and Serve Documentation",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["build-serve"],
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "build-serve"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -63,8 +84,14 @@
         {
             "label": "🔗 Open Documentation",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["open"],
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "open"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -80,8 +107,14 @@
         {
             "label": "📊 Documentation Status",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["status"],
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "status"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -95,10 +128,43 @@
             "detail": "Show documentation generation status and statistics"
         },
         {
+            "label": "🏗️ UML Viewer",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "uml"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Start HTTP server with UML diagram viewer focus",
+            "isBackground": true,
+            "runOptions": {
+                "instanceLimit": 1
+            }
+        },
+        {
             "label": "🧹 Clean Documentation",
             "type": "shell",
-            "command": "./scripts/docs.sh",
-            "args": ["clean"],
+            "command": "sh",
+            "args": [
+                "tools/scripts/docs.sh",
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -115,11 +181,10 @@
             "label": "🏗️ Build Project",
             "type": "shell",
             "command": "make",
-            "args": ["build"],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "args": [
+                "build"
+            ],
+            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -128,13 +193,17 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "label": "🧪 Run Tests",
             "type": "shell",
             "command": "make",
-            "args": ["test"],
+            "args": [
+                "test"
+            ],
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -150,7 +219,9 @@
             "label": "🏗️ Build and Test",
             "type": "shell",
             "command": "make",
-            "args": ["build-and-test"],
+            "args": [
+                "build-and-test"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -160,7 +231,9 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "problemMatcher": ["$gcc"],
+            "problemMatcher": [
+                "$gcc"
+            ],
             "dependsOrder": "sequence"
         }
     ]

@@ -60,6 +60,8 @@ private slots:
     void onBrowseDatabaseClicked();
     void onResetToDefaultsClicked();
     void onApplyClicked();
+    void onOpenDocumentationClicked();
+    void onGenerateDocumentationClicked();
 
 private:
     void setupUI();

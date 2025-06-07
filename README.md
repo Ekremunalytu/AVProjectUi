@@ -95,17 +95,18 @@ make docs-clean
 
 ### Using Documentation Script
 
-You can also use the documentation script directly:
+You can also use the unified documentation script directly:
 
 ```bash
-# All-in-one documentation management
-./scripts/docs.sh help
+# Unified documentation management
+./tools/scripts/docs.sh help
 
 # Quick commands
-./scripts/docs.sh generate        # Generate docs
-./scripts/docs.sh serve           # Serve docs
-./scripts/docs.sh bs              # Build and serve
-./scripts/docs.sh status          # Show status
+./tools/scripts/docs.sh generate     # Generate docs
+./tools/scripts/docs.sh serve        # Serve docs  
+./tools/scripts/docs.sh build-serve  # Generate and serve
+./tools/scripts/docs.sh status       # Show status
+./tools/scripts/docs.sh clean        # Clean docs
 ```
 
 ## 🧪 Testing

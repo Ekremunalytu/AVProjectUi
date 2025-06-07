@@ -20,6 +20,13 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QStandardPaths>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QProcess>
+#include <QDir>
+#include <QFileInfo>
+#include <QCoreApplication>
+#include <QStandardPaths>
 
 SettingsWidget::SettingsWidget(QWidget *parent)
     : QWidget(parent)
@@ -196,6 +203,30 @@ void SettingsWidget::setupAdvancedTab()
     dbLayout->addRow(tr("Veritabanı Yolu:"), dbPathLayout);
     
     layout->addWidget(dbGroup);
+    
+    // Documentation group
+    QGroupBox *docsGroup = new QGroupBox(tr("Dokümantasyon"));
+    QVBoxLayout *docsLayout = new QVBoxLayout(docsGroup);
+    
+    QLabel *docsInfo = new QLabel(tr("Proje dokümantasyonu ve API referansları:"));
+    docsInfo->setWordWrap(true);
+    docsLayout->addWidget(docsInfo);
+    
+    QHBoxLayout *docsButtonLayout = new QHBoxLayout();
+    
+    QPushButton *openDocsButton = new QPushButton(tr("📚 Dokümantasyonu Aç"));
+    openDocsButton->setToolTip(tr("Proje dokümantasyonunu browser'da aç"));
+    connect(openDocsButton, &QPushButton::clicked, this, &SettingsWidget::onOpenDocumentationClicked);
+    
+    QPushButton *generateDocsButton = new QPushButton(tr("🔄 Dokümantasyon Oluştur"));
+    generateDocsButton->setToolTip(tr("Güncel dokümantasyonu yeniden oluştur"));
+    connect(generateDocsButton, &QPushButton::clicked, this, &SettingsWidget::onGenerateDocumentationClicked);
+    
+    docsButtonLayout->addWidget(openDocsButton);
+    docsButtonLayout->addWidget(generateDocsButton);
+    docsLayout->addLayout(docsButtonLayout);
+    
+    layout->addWidget(docsGroup);
     layout->addStretch();
     
     m_tabWidget->addTab(advancedTab, tr("Gelişmiş"));
@@ -320,4 +351,131 @@ void SettingsWidget::resetToDefaults()
     SettingsManager& settings = SettingsManager::getInstance();
     settings.resetToDefaults();
     loadSettings();
+}
+
+void SettingsWidget::onOpenDocumentationClicked()
+{
+    // Find project root and check if documentation exists
+    QString projectRoot;
+    QString currentPath = QCoreApplication::applicationDirPath();
+    
+    // Check multiple possible locations for the project root
+    QStringList possiblePaths = {
+        currentPath,                                    // Application directory
+        QDir::currentPath(),                           // Current working directory  
+        currentPath + "/../..",                        // Two levels up from app dir
+        currentPath + "/../../..",                     // Three levels up from app dir
+        "/Volumes/Crucial/AVProjectUi"                 // Fallback to known path
+    };
+    
+    QFileInfo docFile;
+    for (const QString& path : possiblePaths) {
+        QDir dir(path);
+        QString docPath = dir.absolutePath() + "/docs/html/index.html";
+        QFileInfo testFile(docPath);
+        
+        if (testFile.exists()) {
+            docFile = testFile;
+            projectRoot = dir.absolutePath();
+            break;
+        }
+        
+        // Also check if this looks like the project root (has characteristic files)
+        if (dir.exists("tools/scripts/docs.sh") && dir.exists("CMakeLists.txt")) {
+            projectRoot = dir.absolutePath();
+        }
+    }
+    
+    if (!docFile.exists()) {
+        int ret = QMessageBox::question(this, tr("Dokümantasyon"), 
+                                       tr("Dokümantasyon dosyası bulunamadı. Şimdi oluşturmak ister misiniz?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes) {
+            onGenerateDocumentationClicked();
+        }
+        return;
+    }
+    
+    // Open documentation in default browser
+    QString url = "file://" + docFile.absoluteFilePath();
+    if (QDesktopServices::openUrl(QUrl(url))) {
+        QMessageBox::information(this, tr("Dokümantasyon"), 
+                               tr("Dokümantasyon browser'da açıldı."));
+    } else {
+        QMessageBox::warning(this, tr("Hata"), 
+                           tr("Dokümantasyon açılamadı. Lütfen manuel olarak şu yolu açın:\n") + 
+                           docFile.absoluteFilePath());
+    }
+}
+
+void SettingsWidget::onGenerateDocumentationClicked()
+{
+    QMessageBox::information(this, tr("Dokümantasyon"), 
+                           tr("Dokümantasyon oluşturuluyor... Bu işlem birkaç saniye sürebilir."));
+    
+    // Find project root by looking for characteristic files
+    QString projectRoot;
+    QString currentPath = QCoreApplication::applicationDirPath();
+    
+    // Check multiple possible locations for the project root
+    QStringList possiblePaths = {
+        currentPath,                                    // Application directory
+        QDir::currentPath(),                           // Current working directory  
+        currentPath + "/../..",                        // Two levels up from app dir
+        currentPath + "/../../..",                     // Three levels up from app dir
+        "/Volumes/Crucial/AVProjectUi"                 // Fallback to known path
+    };
+    
+    for (const QString& path : possiblePaths) {
+        QDir dir(path);
+        if (dir.exists("tools/scripts/docs.sh") && dir.exists("CMakeLists.txt")) {
+            projectRoot = dir.absolutePath();
+            break;
+        }
+    }
+    
+    if (projectRoot.isEmpty()) {
+        QMessageBox::warning(this, tr("Hata"), 
+                           tr("Proje kök dizini bulunamadı. Dokümantasyon scripti çalıştırılamıyor."));
+        return;
+    }
+    
+    // Run documentation generation script
+    QString scriptPath = projectRoot + "/tools/scripts/docs.sh";
+    QProcess process;
+    process.setWorkingDirectory(projectRoot);
+    
+    QStringList args;
+    args << "generate";
+    
+    process.start("bash", QStringList() << scriptPath << args);
+    process.waitForFinished(30000); // 30 second timeout
+    
+    QString stdOut = process.readAllStandardOutput();
+    QString stdErr = process.readAllStandardError();
+    
+    if (process.exitCode() == 0) {
+        QMessageBox::information(this, tr("Dokümantasyon"), 
+                               tr("Dokümantasyon başarıyla oluşturuldu!"));
+        
+        // Optionally open the generated documentation
+        int ret = QMessageBox::question(this, tr("Dokümantasyon"), 
+                                       tr("Oluşturulan dokümantasyonu şimdi açmak ister misiniz?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes) {
+            onOpenDocumentationClicked();
+        }
+    } else {
+        QString errorMsg = tr("Dokümantasyon oluşturulurken hata oluştu:\n\n");
+        if (!stdErr.isEmpty()) {
+            errorMsg += tr("Hata mesajı:\n") + stdErr + "\n\n";
+        }
+        if (!stdOut.isEmpty()) {
+            errorMsg += tr("Çıktı:\n") + stdOut;
+        }
+        errorMsg += tr("\n\nProje kökü: ") + projectRoot;
+        errorMsg += tr("\nScript yolu: ") + scriptPath;
+        
+        QMessageBox::warning(this, tr("Hata"), errorMsg);
+    }
 }
