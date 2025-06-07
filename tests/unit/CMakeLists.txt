@@ -16,9 +16,15 @@ file(GLOB SECURITY_TEST_FILES security/*.cpp)
 if(SECURITY_TEST_FILES)
     add_executable(SecurityTests ${SECURITY_TEST_FILES})
     target_link_libraries(SecurityTests 
-        PRIVATE Security Qt::Test Qt::Core
+        PRIVATE Security Qt::Test Qt::Core GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main
+    )
+    target_include_directories(SecurityTests
+        PRIVATE
+            ${CMAKE_SOURCE_DIR}/src
+            ${CMAKE_SOURCE_DIR}/tests
     )
     add_test(NAME SecurityTests COMMAND SecurityTests)
+    gtest_discover_tests(SecurityTests)
 endif()
 
 # Storage layer tests

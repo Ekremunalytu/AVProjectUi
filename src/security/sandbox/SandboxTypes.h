@@ -242,6 +242,7 @@ struct SandboxAnalysisResult {
     std::chrono::system_clock::time_point startTime;
     std::chrono::system_clock::time_point endTime;
     std::string errorMessage;
+    std::string executionLogs;        // Container execution logs for user visibility
     bool analysisCompleted;
     bool success;                     // Used in DashboardWidget
     int processExitCode;              // Used in DashboardWidget

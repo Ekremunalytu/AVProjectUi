@@ -51,7 +51,7 @@ std::string BaseManager::createContainer(const ContainerRunConfiguration& config
         } else {
             // Container exists but not running, remove it first
             try {
-                dockerManager_->removeContainer(it->second, true);
+                dockerManager_->removeContainerLegacy(it->second, true);
             } catch (const std::exception& e) {
                 std::cerr << "Warning: Failed to remove existing container: " << e.what() << std::endl;
             }
@@ -105,8 +105,8 @@ void BaseManager::cleanupContainer(const std::string& containerName) {
     
     try {
         if (dockerManager_) {
-            dockerManager_->stopContainer(it->second, 5);
-            dockerManager_->removeContainer(it->second, true, true);
+            dockerManager_->stopContainerLegacy(it->second, 5);
+            dockerManager_->removeContainerLegacy(it->second, true, true);
         }
     } catch (const std::exception& e) {
         std::cerr << "Error cleaning up container " << containerName << ": " << e.what() << std::endl;
@@ -179,8 +179,8 @@ void BaseManager::cleanupAllContainers() {
     for (const auto& container : activeContainers_) {
         try {
             if (dockerManager_) {
-                dockerManager_->stopContainer(container.second, 5);
-                dockerManager_->removeContainer(container.second, true, true);
+                dockerManager_->stopContainerLegacy(container.second, 5);
+                dockerManager_->removeContainerLegacy(container.second, true, true);
             }
         } catch (const std::exception& e) {
             std::cerr << "Error cleaning up container " << container.first << ": " << e.what() << std::endl;

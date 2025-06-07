@@ -19,10 +19,27 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include <filesystem>
 #include <thread>
 #include <chrono>
 #include <fstream>
+#include <sys/stat.h>
+#include <unistd.h>
+
+// Simple file utility functions to replace std::filesystem
+namespace FileUtils {
+    bool exists(const std::string& path) {
+        struct stat buffer;
+        return (stat(path.c_str(), &buffer) == 0);
+    }
+    
+    std::string getExtension(const std::string& path) {
+        size_t lastDot = path.find_last_of('.');
+        if (lastDot == std::string::npos) {
+            return "";
+        }
+        return path.substr(lastDot);
+    }
+}
 
 namespace Sandbox {
 
@@ -164,10 +181,48 @@ std::string SandboxManager::createSandbox(const SandboxConfiguration& config) {
         
         // Build container configuration
         Docker::ContainerRunConfiguration runConfig = buildSandboxRunConfiguration(config);
+        runConfig.imageName = "ubuntu:22.04";  // Use different image from CDR
+        runConfig.containerName = sandboxId;
+        runConfig.commandArgs = {"/bin/bash", "-c", "sleep infinity"};  // Keep container running
+        runConfig.workingDirectory = "/sandbox";
+        runConfig.interactive = true;
+        runConfig.detached = true;
         
-        // Create and start container (stub implementation)
-        std::cout << "[SandboxManager] Sandbox created with ID: " << sandboxId << std::endl;
-        return sandboxId;
+        // Create isolated network
+        runConfig.networkMode = "none";  // No network access for security
+        
+        // Mount temp directory for file analysis
+        Docker::VolumeMount volumeMount;
+        volumeMount.hostPath = "/tmp/sandbox_" + sandboxId;
+        volumeMount.containerPath = "/sandbox";
+        volumeMount.options = "";  // Read-write mount
+        runConfig.volumeMounts.push_back(volumeMount);
+        
+        // Create host directory using system call instead of filesystem
+        std::string mkdirCommand = "mkdir -p /tmp/sandbox_" + sandboxId;
+        system(mkdirCommand.c_str());
+        
+        // **FIX: Use runNewContainer for better container ID parsing like CDR does**
+        std::cout << "[SandboxManager] Creating container with runNewContainer..." << std::endl;
+        auto containerResult = dockerManager_->runNewContainer(runConfig);
+        
+        if (containerResult.status == "Error" || containerResult.containerId.empty()) {
+            std::cout << "[SandboxManager] Failed to create container. Status: " << containerResult.status 
+                      << ", Error: " << containerResult.errorMessage << std::endl;
+            return "";
+        }
+        
+        std::cout << "[SandboxManager] Sandbox created with ID: " << sandboxId 
+                  << " (Container: " << containerResult.containerId << ")" << std::endl;
+        
+        // **FIX: Display initial container logs if available**
+        if (!containerResult.logs.empty()) {
+            std::cout << "[SandboxManager] === INITIAL CONTAINER LOGS ===" << std::endl;
+            std::cout << containerResult.logs << std::endl;
+            std::cout << "[SandboxManager] === END OF INITIAL LOGS ===" << std::endl;
+        }
+        
+        return containerResult.containerId;  // Return proper container ID
         
     } catch (const std::exception& e) {
         std::cout << "[SandboxManager] Failed to create sandbox: " << e.what() << std::endl;
@@ -179,9 +234,89 @@ bool SandboxManager::executeFileInSandbox(const std::string& sandboxId, const st
     std::cout << "[SandboxManager] Executing file in sandbox " << sandboxId << ": " << filePath << std::endl;
     
     try {
-        // Stub implementation - in real implementation would copy file to container and execute
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Simulate execution time
-        std::cout << "[SandboxManager] File executed successfully in sandbox " << sandboxId << std::endl;
+        // Copy file to sandbox directory
+        std::string sourceFile = filePath;
+        std::ifstream src(sourceFile, std::ios::binary);
+        if (!src.is_open()) {
+            std::cout << "[SandboxManager] Source file does not exist: " << filePath << std::endl;
+            return false;
+        }
+        
+        // Extract container ID from sandbox path
+        std::string containerId = sandboxId;
+        std::string sandboxDir = "/tmp/sandbox_" + containerId;
+        
+        // Get filename from path
+        size_t pos = sourceFile.find_last_of("/\\");
+        std::string filename = (pos != std::string::npos) ? sourceFile.substr(pos + 1) : sourceFile;
+        std::string targetFile = sandboxDir + "/" + filename;
+        
+        // Copy file to sandbox directory
+        std::ofstream dst(targetFile, std::ios::binary);
+        if (!dst.is_open()) {
+            std::cout << "[SandboxManager] Failed to create target file: " << targetFile << std::endl;
+            return false;
+        }
+        
+        dst << src.rdbuf();
+        src.close();
+        dst.close();
+        
+        std::cout << "[SandboxManager] File copied to sandbox: " << targetFile << std::endl;
+        
+        // Execute file in container
+        std::vector<std::string> execCommand;
+        
+        // Determine execution method based on file extension
+        std::string extension = "";
+        size_t dotPos = filename.find_last_of('.');
+        if (dotPos != std::string::npos) {
+            extension = filename.substr(dotPos);
+            std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+        }
+        
+        if (extension == ".exe" || extension == ".bat" || extension == ".cmd") {
+            // For Windows executables, just analyze them (can't run on Linux containers)
+            execCommand = {"/bin/bash", "-c", "file /sandbox/" + filename + " && ls -la /sandbox/" + filename};
+        } else if (extension == ".sh") {
+            execCommand = {"/bin/bash", "/sandbox/" + filename};
+        } else if (extension == ".py") {
+            execCommand = {"python3", "/sandbox/" + filename};
+        } else {
+            // For other files, just analyze them
+            execCommand = {"/bin/bash", "-c", "file /sandbox/" + filename + " && head -10 /sandbox/" + filename};
+        }
+        
+        // Execute command in container
+        std::string executionLogs = dockerManager_->executeCommand(containerId, execCommand);
+        std::cout << "[SandboxManager] Command execution completed. Logs:\n" << executionLogs << std::endl;
+        
+        // **FIX: Get and display full container logs to user after execution**
+        try {
+            std::string fullContainerLogs = dockerManager_->getContainerLogs(containerId);
+            if (!fullContainerLogs.empty()) {
+                std::cout << "[SandboxManager] === FILE EXECUTION LOGS ===" << std::endl;
+                std::cout << fullContainerLogs << std::endl;
+                std::cout << "[SandboxManager] === END OF EXECUTION LOGS ===" << std::endl;
+            }
+        } catch (const std::exception& e) {
+            std::cout << "[SandboxManager] Warning: Could not retrieve container logs: " << e.what() << std::endl;
+        }
+        
+        // Store logs for later retrieval
+        std::string logFile = sandboxDir + "/execution.log";
+        std::ofstream logStream(logFile);
+        if (logStream.is_open()) {
+            logStream << "File: " << filePath << "\n";
+            logStream << "Execution time: " << std::chrono::system_clock::now().time_since_epoch().count() << "\n";
+            logStream << "Command: ";
+            for (const auto& arg : execCommand) {
+                logStream << arg << " ";
+            }
+            logStream << "\n\nOutput:\n" << executionLogs << std::endl;
+            logStream.close();
+        }
+        
         return true;
         
     } catch (const std::exception& e) {
@@ -199,6 +334,17 @@ SandboxAnalysisResult SandboxManager::collectAnalysisResults(const std::string& 
     result.success = true;
     
     try {
+        // **FIX: Get and display Docker logs to users**
+        std::string containerLogs = dockerManager_->getContainerLogs(sandboxId);
+        if (!containerLogs.empty()) {
+            std::cout << "[SandboxManager] === CONTAINER EXECUTION LOGS ===" << std::endl;
+            std::cout << containerLogs << std::endl;
+            std::cout << "[SandboxManager] === END OF LOGS ===" << std::endl;
+            
+            // Store logs in result for user access
+            result.executionLogs = containerLogs;
+        }
+        
         // Collect behavior analysis data
         result.behaviorData = collectBehaviorAnalysis(sandboxId);
         result.behaviorAnalysis = result.behaviorData;
@@ -223,8 +369,19 @@ bool SandboxManager::destroySandbox(const std::string& sandboxId) {
     std::cout << "[SandboxManager] Destroying sandbox: " << sandboxId << std::endl;
     
     try {
-        // Stub implementation - in real implementation would stop and remove container
-        std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Simulate cleanup time
+        // Stop and remove container
+        if (!dockerManager_->stopContainer(sandboxId)) {
+            std::cout << "[SandboxManager] Warning: Failed to stop container: " << sandboxId << std::endl;
+        }
+        
+        if (!dockerManager_->removeContainer(sandboxId)) {
+            std::cout << "[SandboxManager] Warning: Failed to remove container: " << sandboxId << std::endl;
+        }
+        
+        // Clean up temporary directory
+        std::string cleanupCommand = "rm -rf /tmp/sandbox_" + sandboxId;
+        system(cleanupCommand.c_str());
+        
         std::cout << "[SandboxManager] Sandbox destroyed: " << sandboxId << std::endl;
         return true;
         
@@ -262,8 +419,7 @@ bool SandboxManager::quarantineFile(const std::string& filePath) {
     
     try {
         // Stub implementation - in real implementation would move file to quarantine
-        std::filesystem::path sourcePath(filePath);
-        if (!std::filesystem::exists(sourcePath)) {
+        if (!FileUtils::exists(filePath)) {
             std::cout << "[SandboxManager] File does not exist: " << filePath << std::endl;
             return false;
         }
@@ -291,8 +447,7 @@ bool SandboxManager::deleteFile(const std::string& filePath) {
     
     try {
         // Stub implementation - in real implementation would securely delete file
-        std::filesystem::path path(filePath);
-        if (std::filesystem::exists(path)) {
+        if (FileUtils::exists(filePath)) {
             // For safety in stub, just log instead of actually deleting
             std::cout << "[SandboxManager] File would be deleted: " << filePath << std::endl;
             return true;
@@ -312,8 +467,7 @@ bool SandboxManager::allowFile(const std::string& filePath) {
     
     try {
         // Stub implementation - in real implementation would whitelist file
-        std::filesystem::path path(filePath);
-        if (std::filesystem::exists(path)) {
+        if (FileUtils::exists(filePath)) {
             // Create allowlist marker
             std::string allowPath = filePath + ".allowed";
             std::ofstream marker(allowPath);
@@ -420,8 +574,41 @@ Docker::ContainerRunConfiguration SandboxManager::buildSandboxRunConfiguration(c
     
     Docker::ContainerRunConfiguration runConfig;
     
-    // Stub implementation - in real implementation would build detailed configuration
-    std::cout << "[SandboxManager] Sandbox run configuration built" << std::endl;
+    // Set basic container properties
+    runConfig.imageName = "ubuntu:22.04";  // Use different image from CDR
+    runConfig.commandArgs = {"/bin/bash", "-c", "sleep infinity"};  // Keep container running
+    runConfig.workingDirectory = "/sandbox";
+    runConfig.interactive = true;
+    runConfig.detached = true;
+    
+    // Security settings
+    runConfig.networkMode = "none";  // No network access
+    runConfig.privileged = false;    // No privileged access
+    
+    // Resource limits based on monitoring level
+    switch (config.level) {
+        case MonitoringLevel::LOW:
+            runConfig.memoryLimitMB = 128;
+            runConfig.cpuQuota = 0.5;
+            break;
+        case MonitoringLevel::MEDIUM:
+        case MonitoringLevel::STANDARD:
+            runConfig.memoryLimitMB = 256;
+            runConfig.cpuQuota = 1.0;
+            break;
+        case MonitoringLevel::HIGH:
+        case MonitoringLevel::MAXIMUM:
+        case MonitoringLevel::DEEP:
+            runConfig.memoryLimitMB = 512;
+            runConfig.cpuQuota = 2.0;
+            break;
+    }
+    
+    // Set timeout
+    runConfig.timeoutSeconds = config.timeoutSeconds;
+    
+    std::cout << "[SandboxManager] Sandbox run configuration built with monitoring level: " 
+              << static_cast<int>(config.level) << std::endl;
     
     return runConfig;
 }
@@ -593,17 +780,34 @@ std::string SandboxManager::getSandboxExecutionLogs(const std::string& container
     std::cout << "[SandboxManager] Getting execution logs for container: " << containerId << std::endl;
     
     try {
-        // Stub implementation - in real implementation would retrieve container logs
-        std::string logs = "Container " + containerId + " execution logs:\n";
-        logs += "[INFO] Container started\n";
-        logs += "[INFO] File executed\n";
-        logs += "[INFO] Analysis completed\n";
+        // Get container logs from Docker
+        std::string containerLogs = dockerManager_->getContainerLogs(containerId);
         
-        return logs;
+        // Also try to read execution log file if it exists
+        std::string sandboxDir = "/tmp/sandbox_" + containerId;
+        std::string logFile = sandboxDir + "/execution.log";
+        
+        std::ifstream logStream(logFile);
+        std::string executionLogs;
+        if (logStream.is_open()) {
+            std::string line;
+            while (std::getline(logStream, line)) {
+                executionLogs += line + "\n";
+            }
+            logStream.close();
+        }
+        
+        // Combine both logs
+        std::string combinedLogs = "=== Container Logs ===\n" + containerLogs + 
+                                 "\n\n=== Execution Logs ===\n" + executionLogs;
+        
+        std::cout << "[SandboxManager] Retrieved logs for container: " << containerId << std::endl;
+        return combinedLogs;
         
     } catch (const std::exception& e) {
-        std::cout << "[SandboxManager] Failed to get execution logs: " << e.what() << std::endl;
-        return "Error retrieving logs: " + std::string(e.what());
+        std::string errorMsg = "Failed to get sandbox logs: " + std::string(e.what());
+        std::cout << "[SandboxManager] " << errorMsg << std::endl;
+        return errorMsg;
     }
 }
 

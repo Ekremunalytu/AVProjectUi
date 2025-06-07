@@ -51,58 +51,70 @@ std::string DockerManager::buildDockerRunCommand(const ContainerRunConfiguration
     cmd << "run ";
 
     // Add -d for detached mode
-    cmd << "-d ";
-
-    if (config.hostConfig.autoremove) {
-        cmd << "--rm ";
+    if (config.detached) {
+        cmd << "-d ";
     }
+
+    // Add -it for interactive mode
+    if (config.interactive) {
+        cmd << "-it ";
+    }
+
     if (!config.containerName.empty()) {
         cmd << "--name " << std::quoted(config.containerName) << " ";
     }
     if (!config.userName.empty()) {
         cmd << "--user " << std::quoted(config.userName) << " ";
     }
-
-    for (const auto& envVar : config.environmentVariables) {
-        cmd << "-e " << std::quoted(envVar) << " ";
-    }
-
-    for (const auto& mount : config.hostConfig.mounts) {
-        cmd << "-v " << std::quoted(mount.source + ":" + mount.destination + (mount.readOnly ? ":ro" : "")) << " ";
+    
+    // Add working directory
+    if (!config.workingDirectory.empty()) {
+        cmd << "-w " << std::quoted(config.workingDirectory) << " ";
     }
     
-    if (config.hostConfig.privileged){
+    // Add network mode
+    if (!config.networkMode.empty()) {
+        cmd << "--network " << std::quoted(config.networkMode) << " ";
+    }
+    
+    // Add privileged mode
+    if (config.privileged) {
         cmd << "--privileged ";
     }
-    if (config.hostConfig.readOnlyRootfs){
-        cmd << "--read-only ";
+    
+    // Add resource limits
+    if (config.memoryLimitMB > 0) {
+        cmd << "--memory " << config.memoryLimitMB << "m ";
     }
-    for(const auto& capDrop : config.hostConfig.capDrop){
-        cmd << "--cap-drop=" << std::quoted(capDrop) << " ";
+    if (config.cpuQuota > 0.0) {
+        cmd << "--cpus " << config.cpuQuota << " ";
     }
-    for(const auto& capAdd : config.hostConfig.capAdd){
-        cmd << "--cap-add=" << std::quoted(capAdd) << " ";
+
+    // Add environment variables
+    for (const auto& envVar : config.environmentVariables) {
+        cmd << "-e " << std::quoted(envVar.first + "=" + envVar.second) << " ";
     }
-    for(const auto& secOpt : config.hostConfig.securityOptions){
-        cmd << "--security-opt " << std::quoted(secOpt) << " ";
-    }
-    if(config.hostConfig.memoryLimit > 0){
-        cmd << "--memory=" << config.hostConfig.memoryLimit << " ";
-    }
-    if(config.hostConfig.cpuPeriod > 0){
-        cmd << "--cpu-period=" << config.hostConfig.cpuPeriod << " ";
-    }
-    if(config.hostConfig.cpuQuota > 0){
-        cmd << "--cpu-quota=" << config.hostConfig.cpuQuota << " ";
+
+    // Add volume mounts
+    for (const auto& mount : config.volumeMounts) {
+        cmd << "-v " << std::quoted(mount.hostPath + ":" + mount.containerPath);
+        if (!mount.options.empty()) {
+            cmd << ":" << mount.options;
+        }
+        cmd << " ";
     }
 
     cmd << std::quoted(config.imageName) << " ";
 
+    // Add command - use string command if available, otherwise use commandArgs
     if (!config.command.empty()) {
-        for (size_t i = 0; i < config.command.size(); ++i) {
-            cmd << std::quoted(config.command[i]) << (i == config.command.size() - 1 ? "" : " ");
+        cmd << config.command;
+    } else if (!config.commandArgs.empty()) {
+        for (size_t i = 0; i < config.commandArgs.size(); ++i) {
+            cmd << std::quoted(config.commandArgs[i]) << (i == config.commandArgs.size() - 1 ? "" : " ");
         }
     }
+    
     return cmd.str();
 }
 
@@ -487,7 +499,7 @@ ContainerInfo DockerManager::getContainerDetails(const std::string& containerIdO
     }
 }
 
-void DockerManager::startContainer(const std::string& containerIdOrName) {
+void DockerManager::startContainerLegacy(const std::string& containerIdOrName) {
     if (containerIdOrName.empty()) {
         throw OperationException("startContainer", "Container ID or name cannot be empty.");
     }
@@ -508,7 +520,7 @@ void DockerManager::startContainer(const std::string& containerIdOrName) {
     }
 }
 
-void DockerManager::stopContainer(const std::string& containerIdOrName, int timeoutSeconds) {
+void DockerManager::stopContainerLegacy(const std::string& containerIdOrName, int timeoutSeconds) {
      if (containerIdOrName.empty()) {
         throw OperationException("stopContainer", "Container ID or name cannot be empty.");
     }
@@ -531,7 +543,7 @@ void DockerManager::stopContainer(const std::string& containerIdOrName, int time
     }
 }
 
-void DockerManager::removeContainer(const std::string& containerIdOrName, bool force, bool removeVolumes) {
+void DockerManager::removeContainerLegacy(const std::string& containerIdOrName, bool force, bool removeVolumes) {
     if (containerIdOrName.empty()) {
         throw OperationException("removeContainer", "Container ID or name cannot be empty.");
     }
@@ -885,6 +897,201 @@ void DockerManager::copyFileFromContainer(const std::string& containerIdOrName, 
     } catch (const CommandFailureException& e) {
         throw OperationException("copyFileFromContainer", 
             "Command execution failed for copying file from container '" + containerIdOrName + "': " + e.what());
+    }
+}
+
+// --- New Container Management Functions for SandboxManager ---
+
+std::string DockerManager::createContainer(const ContainerRunConfiguration& config) {
+    if (config.imageName.empty()) {
+        throw OperationException("createContainer", "Image name cannot be empty.");
+    }
+    
+    std::stringstream cmd;
+    cmd << "create ";
+    
+    // Add container name if specified
+    if (!config.containerName.empty()) {
+        cmd << "--name " << std::quoted(config.containerName) << " ";
+    }
+    
+    // Add environment variables
+    for (const auto& env : config.environmentVariables) {
+        cmd << "-e " << std::quoted(env.first + "=" + env.second) << " ";
+    }
+    
+    // Add volume mounts
+    for (const auto& mount : config.volumeMounts) {
+        cmd << "-v " << std::quoted(mount.hostPath + ":" + mount.containerPath);
+        if (!mount.options.empty()) {
+            cmd << ":" << mount.options;
+        }
+        cmd << " ";
+    }
+    
+    // Add working directory
+    if (!config.workingDirectory.empty()) {
+        cmd << "-w " << std::quoted(config.workingDirectory) << " ";
+    }
+    
+    // Add network mode
+    if (!config.networkMode.empty()) {
+        cmd << "--network " << std::quoted(config.networkMode) << " ";
+    }
+    
+    // Add privileged mode
+    if (config.privileged) {
+        cmd << "--privileged ";
+    }
+    
+    // Add resource limits
+    if (config.memoryLimitMB > 0) {
+        cmd << "--memory " << config.memoryLimitMB << "m ";
+    }
+    if (config.cpuQuota > 0.0) {
+        cmd << "--cpus " << config.cpuQuota << " ";
+    }
+    
+    // Note: -d (detached) and -it (interactive) flags are not valid for 'docker create'
+    // These flags are used only with 'docker run'
+    // The container will be started separately using 'docker start'
+    
+    // Add image name
+    cmd << std::quoted(config.imageName);
+    
+    // Add command if specified
+    if (!config.command.empty()) {
+        cmd << " " << config.command;
+    }
+    
+    try {
+        auto resultPair = executeCliCommand(cmd.str(), false);
+        if (resultPair.second != 0) {
+            if (resultPair.first.find("Unable to find image") != std::string::npos) {
+                throw ImageNotFoundException(config.imageName);
+            }
+            throw OperationException("createContainer", 
+                "Failed to create container. Output: " + resultPair.first);
+        }
+        
+        // Parse container ID from output
+        return parseContainerIdFromRunOutput(resultPair.first);
+    } catch (const CommandFailureException& e) {
+        throw OperationException("createContainer", 
+            "Command execution failed: " + std::string(e.what()));
+    }
+}
+
+bool DockerManager::startContainer(const std::string& containerIdOrName) {
+    if (containerIdOrName.empty()) {
+        throw OperationException("startContainer", "Container ID cannot be empty.");
+    }
+    
+    std::stringstream cmd;
+    cmd << "start " << std::quoted(containerIdOrName);
+    
+    try {
+        auto resultPair = executeCliCommand(cmd.str(), false);
+        if (resultPair.second != 0) {
+            if (resultPair.first.find("No such container") != std::string::npos) {
+                throw ContainerNotFoundException(containerIdOrName);
+            }
+            throw ContainerOperationException("startContainer", containerIdOrName, 
+                "Failed to start container. Output: " + resultPair.first);
+        }
+        return true;
+    } catch (const CommandFailureException& e) {
+        throw ContainerOperationException("startContainer", containerIdOrName, 
+            "Command execution failed: " + std::string(e.what()));
+    }
+}
+
+bool DockerManager::stopContainer(const std::string& containerIdOrName) {
+    if (containerIdOrName.empty()) {
+        throw OperationException("stopContainer", "Container ID cannot be empty.");
+    }
+    
+    std::stringstream cmd;
+    cmd << "stop " << std::quoted(containerIdOrName);
+    
+    try {
+        auto resultPair = executeCliCommand(cmd.str(), false);
+        if (resultPair.second != 0) {
+            if (resultPair.first.find("No such container") != std::string::npos) {
+                throw ContainerNotFoundException(containerIdOrName);
+            }
+            // Container might already be stopped, which is fine
+            if (resultPair.first.find("is not running") != std::string::npos) {
+                return true;
+            }
+            throw ContainerOperationException("stopContainer", containerIdOrName, 
+                "Failed to stop container. Output: " + resultPair.first);
+        }
+        return true;
+    } catch (const CommandFailureException& e) {
+        throw ContainerOperationException("stopContainer", containerIdOrName, 
+            "Command execution failed: " + std::string(e.what()));
+    }
+}
+
+bool DockerManager::removeContainer(const std::string& containerIdOrName) {
+    if (containerIdOrName.empty()) {
+        throw OperationException("removeContainer", "Container ID cannot be empty.");
+    }
+    
+    std::stringstream cmd;
+    cmd << "rm -f " << std::quoted(containerIdOrName);
+    
+    try {
+        auto resultPair = executeCliCommand(cmd.str(), false);
+        if (resultPair.second != 0) {
+            if (resultPair.first.find("No such container") != std::string::npos) {
+                throw ContainerNotFoundException(containerIdOrName);
+            }
+            throw ContainerOperationException("removeContainer", containerIdOrName, 
+                "Failed to remove container. Output: " + resultPair.first);
+        }
+        return true;
+    } catch (const CommandFailureException& e) {
+        throw ContainerOperationException("removeContainer", containerIdOrName, 
+            "Command execution failed: " + std::string(e.what()));
+    }
+}
+
+std::string DockerManager::executeCommand(const std::string& containerIdOrName, 
+                                        const std::vector<std::string>& commandArgs) const {
+    if (containerIdOrName.empty()) {
+        throw OperationException("executeCommand", "Container ID cannot be empty.");
+    }
+    if (commandArgs.empty()) {
+        throw OperationException("executeCommand", "Command arguments cannot be empty.");
+    }
+    
+    std::stringstream cmd;
+    cmd << "exec " << std::quoted(containerIdOrName);
+    
+    // Add command arguments
+    for (const auto& arg : commandArgs) {
+        cmd << " " << std::quoted(arg);
+    }
+    
+    try {
+        auto resultPair = executeCliCommand(cmd.str(), false);
+        if (resultPair.second != 0) {
+            if (resultPair.first.find("No such container") != std::string::npos) {
+                throw ContainerNotFoundException(containerIdOrName);
+            }
+            if (resultPair.first.find("is not running") != std::string::npos) {
+                throw ContainerOperationException("executeCommand", containerIdOrName, 
+                    "Container is not running");
+            }
+            // Command might have failed, but that's not necessarily an error
+            // Return the output anyway so the caller can decide
+        }
+        return resultPair.first;
+    } catch (const CommandFailureException& e) {
+        throw ContainerOperationException("executeCommand", containerIdOrName, 
+            "Command execution failed: " + std::string(e.what()));
     }
 }
 

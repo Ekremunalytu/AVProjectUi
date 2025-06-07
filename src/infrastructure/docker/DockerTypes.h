@@ -72,6 +72,18 @@ namespace Docker {
     };
 
     /**
+     * @brief Volume mount configuration for Docker containers
+     * 
+     * @details Defines how host directories or named volumes are mounted
+     * into containers with optional read-only access control.
+     */
+    struct VolumeMount {
+        std::string hostPath;
+        std::string containerPath;
+        std::string options; ///< Mount options like "ro" for read-only
+    };
+
+    /**
      * @brief Complete configuration for creating and running a Docker container
      * 
      * @details Encapsulates all parameters needed to create and execute a container,
@@ -80,10 +92,22 @@ namespace Docker {
      */
     struct ContainerRunConfiguration {
         std::string imageName;          ///< Name or ID of the Docker image to use
-        std::vector<std::string> command; ///< Command and arguments to execute in container
-        std::vector<std::string> environmentVariables; ///< Environment variables in "KEY=VALUE" format
+        std::string command;            ///< Command to execute in container (as string)
+        std::vector<std::string> commandArgs; ///< Command and arguments to execute in container (as vector)
+        std::map<std::string, std::string> environmentVariables; ///< Environment variables as key-value pairs
         std::string containerName;      ///< Optional name for the container instance
         std::string userName;           ///< Optional username or UID to run as in container
+        std::string workingDirectory;   ///< Working directory inside container
+        bool interactive = false;       ///< Run in interactive mode
+        bool detached = false;          ///< Run in detached mode
+        std::string networkMode;        ///< Network mode ("none", "bridge", "host", etc.)
+        bool privileged = false;        ///< Run with privileged access
+        int memoryLimitMB = 0;          ///< Memory limit in megabytes
+        double cpuQuota = 0.0;          ///< CPU limit as decimal (e.g., 0.5, 2.0)
+        int timeoutSeconds = 0;         ///< Execution timeout in seconds
+        
+        // Volume mounts
+        std::vector<VolumeMount> volumeMounts;
 
         //bool attachStdOut = true;       ///< Attach to container's STDOUT stream
         //bool attachStdErr = true;       ///< Attach to container's STDERR stream

@@ -89,23 +89,10 @@ public:
     // Throws: Docker::ContainerNotFoundException, Docker::CommandFailureException, Docker::ParsingException on errors.
     ContainerInfo getContainerDetails(const std::string& containerIdOrName) const;
 
-    // Starts a previously created (and currently stopped) container.
-    // containerIdOrName: The ID or name of the container to start.
-    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
-    void startContainer(const std::string& containerIdOrName);
-
-    // Stops a running container.
-    // containerIdOrName: The ID or name of the container to stop.
-    // timeoutSeconds: Optional. Seconds to wait for the container to stop before killing it. Docker's default is used if <= 0.
-    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
-    void stopContainer(const std::string& containerIdOrName, int timeoutSeconds = 10);
-
-    // Removes a container from the system.
-    // containerIdOrName: The ID or name of the container to remove.
-    // force: If true, forcibly removes the container even if it is running.
-    // removeVolumes: If true, removes anonymous volumes associated with the container.
-    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
-    void removeContainer(const std::string& containerIdOrName, bool force = false, bool removeVolumes = false);
+    // Legacy methods with original signatures
+    void startContainerLegacy(const std::string& containerIdOrName);
+    void stopContainerLegacy(const std::string& containerIdOrName, int timeoutSeconds = 10);
+    void removeContainerLegacy(const std::string& containerIdOrName, bool force = false, bool removeVolumes = false);
 
     // --- Container Operations ---
 
@@ -167,6 +154,39 @@ public:
     // force: If true, forcibly removes the image even if it is in use by containers.
     // Throws: Docker::ImageNotFoundException, Docker::OperationException (if removal fails, e.g., image in use without force), Docker::CommandFailureException.
     void removeImage(const std::string& imageNameOrId, bool force = false);
+
+    // --- Container Creation and Management (New functions for SandboxManager) ---
+    
+    // Creates a new container without starting it
+    // config: Container configuration including image, command, volumes etc.
+    // Returns: Container ID string
+    // Throws: Docker::ImageNotFoundException, Docker::OperationException, Docker::CommandFailureException on errors.
+    std::string createContainer(const ContainerRunConfiguration& config);
+    
+    // Starts an existing container
+    // containerIdOrName: The ID or name of the container to start
+    // Returns: true if successful, false otherwise
+    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
+    bool startContainer(const std::string& containerIdOrName);
+    
+    // Stops a running container
+    // containerIdOrName: The ID or name of the container to stop
+    // Returns: true if successful, false otherwise
+    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
+    bool stopContainer(const std::string& containerIdOrName);
+    
+    // Removes a container
+    // containerIdOrName: The ID or name of the container to remove
+    // Returns: true if successful, false otherwise
+    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
+    bool removeContainer(const std::string& containerIdOrName);
+    
+    // Executes a command in a running container
+    // containerIdOrName: The ID or name of the container
+    // commandArgs: Command and arguments to execute
+    // Returns: Output from the command
+    // Throws: Docker::ContainerNotFoundException, Docker::ContainerOperationException, Docker::CommandFailureException on errors.
+    std::string executeCommand(const std::string& containerIdOrName, const std::vector<std::string>& commandArgs) const;
 
 private:
     // Helper to execute a Docker CLI command and return its output and exit code.

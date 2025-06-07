@@ -243,11 +243,11 @@ std::string CdrManager::prepareCdrContainer(const CdrConfiguration& config) {
         throw CDR::CdrConfigurationException("Invalid analysis type specified in CdrConfiguration");
     }
     
-    containerConfig.environmentVariables.push_back("CDR_ANALYSIS_TYPE=" + analysisTypeStr);
-    containerConfig.environmentVariables.push_back(std::string("CDR_AUTO_SANITIZE=") + (config.autoSanitize ? "true" : "false"));
-    containerConfig.environmentVariables.push_back("CDR_MAX_THREADS=" + std::to_string(std::min(config.maxThreads, 8))); // Limit max threads
-    containerConfig.environmentVariables.push_back("CDR_SECURITY_LEVEL=" + std::to_string(static_cast<int>(config.securityLevel)));
-    containerConfig.environmentVariables.push_back("CDR_TIMEOUT=" + std::to_string(config.timeoutSeconds));
+    containerConfig.environmentVariables["CDR_ANALYSIS_TYPE"] = analysisTypeStr;
+    containerConfig.environmentVariables["CDR_AUTO_SANITIZE"] = config.autoSanitize ? "true" : "false";
+    containerConfig.environmentVariables["CDR_MAX_THREADS"] = std::to_string(std::min(config.maxThreads, 8)); // Limit max threads
+    containerConfig.environmentVariables["CDR_SECURITY_LEVEL"] = std::to_string(static_cast<int>(config.securityLevel));
+    containerConfig.environmentVariables["CDR_TIMEOUT"] = std::to_string(config.timeoutSeconds);
     
     // Network isolation for security
     containerConfig.hostConfig.networkMode = "none";
@@ -310,7 +310,7 @@ std::string CdrManager::prepareSandboxContainer() {
     containerConfig.hostConfig.mounts.push_back(workMount);
     
     // Security-hardened container command with timeout
-    containerConfig.command = {"/bin/sh", "-c", "sleep 300"}; // 5 minute max lifetime
+    containerConfig.commandArgs = {"/bin/sh", "-c", "sleep 300"}; // 5 minute max lifetime
     
     // Add security labels (if using SELinux/AppArmor)
     containerConfig.hostConfig.securityOpt = {"no-new-privileges:true"};
@@ -336,7 +336,7 @@ std::string CdrManager::prepareSandboxContainer() {
                     // Force stop container with timeout
                     stopContainer(containerId);
                     // Remove container and its volumes
-                    removeContainer(containerId, true);
+                    removeContainerLegacy(containerId, true);
                     std::cout << "Sandbox container " << containerId << " cleaned up successfully" << std::endl;
                 }
             } catch (const Docker::DockerException& e) {
@@ -642,7 +642,7 @@ void CDR::CdrManager::stopAnalysis(const std::string& analysisId) {
                 std::string containerId = it->second.metadata["containerId"];
                 if (!containerId.empty()) {
                     stopContainer(containerId);
-                    removeContainer(containerId, true);
+                    removeContainerLegacy(containerId, true);
                 }
             }
 
@@ -754,7 +754,7 @@ bool CDR::CdrManager::executeFileInSandbox(const std::string& sandboxId,
 void CDR::CdrManager::destroySandboxEnvironment(const std::string& sandboxId) {
     try {
         stopContainer(sandboxId);        // Use inherited method
-        removeContainer(sandboxId, true); // Use inherited method
+        removeContainerLegacy(sandboxId, true); // Use inherited method
     } catch (const Docker::DockerException& e) {
         std::cerr << "Failed to destroy sandbox '" << sandboxId << "': " << e.what() << " (Type: DockerException)" << std::endl;
     } catch (const std::exception& e) {
@@ -1722,20 +1722,38 @@ bool CdrManager::detectSuspiciousContent(const std::string& filePath) {
                           std::istreambuf_iterator<char>());
         file.close();
         
-        // Check for suspicious patterns in any file type
+        // Daha az agresif - sadece gerçekten zararlı pattern'ler
         std::vector<std::string> suspiciousPatterns = {
-            "eval(",
-            "exec(",
+            "shell_exec(",
             "system(",
-            "shell_exec",
-            "base64_decode",
-            "String.fromCharCode",
-            "unescape",
-            "document.write",
-            "iframe",
+            "exec(",
             "exploit",
-            "payload",
-            "shellcode"
+            "payload", 
+            "shellcode",
+            "malware",
+            "trojan",
+            // PowerShell exploitation
+            "invoke-expression",
+            "iex ",
+            "encodedcommand",
+            "bypass",
+            "downloadstring",
+            // Network exploitation  
+            "reverse_tcp",
+            "bind_tcp",
+            "meterpreter",
+            // Process injection
+            "virtualalloc",
+            "writeprocessmemory",
+            "createremotethread",
+            // Persistence mechanisms
+            "schtasks",
+            "reg add hklm",
+            "startup folder",
+            // Evasion techniques
+            "base64 -d",
+            "certutil -decode",
+            "powershell -windowstyle hidden"
         };
         
         // Convert to lowercase for case-insensitive matching
@@ -1743,9 +1761,14 @@ bool CdrManager::detectSuspiciousContent(const std::string& filePath) {
         std::transform(lowerContent.begin(), lowerContent.end(), lowerContent.begin(),
                       [](unsigned char c){ return std::tolower(c); });
         
+        // En az 2 pattern bulunmalı (false positive azaltmak için)
+        int patternCount = 0;
         for (const auto& pattern : suspiciousPatterns) {
             if (lowerContent.find(pattern) != std::string::npos) {
-                return true;
+                patternCount++;
+                if (patternCount >= 2) {
+                    return true;
+                }
             }
         }
         

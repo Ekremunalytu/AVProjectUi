@@ -125,7 +125,7 @@ bool detectPdfJavaScript(const std::string& filePath) {
             // Check for JavaScript and other active content keywords in PDF
             // Skip sanitized patterns (those ending with _REMOVED, _DISABLED, or commented out)
             
-            // Check for active JavaScript patterns (but not sanitized ones)
+            // ONLY detect active JavaScript patterns - be very specific
             if (content.find("/JavaScript") != std::string::npos && 
                 content.find("/JavaScript_REMOVED") == std::string::npos) { 
                 std::cout << "[detectPdfJavaScript] Found: /JavaScript" << std::endl; return true; 
@@ -134,74 +134,46 @@ bool detectPdfJavaScript(const std::string& filePath) {
                 content.find("/JS_REMOVED") == std::string::npos) { 
                 std::cout << "[detectPdfJavaScript] Found: /JS" << std::endl; return true; 
             }
-            if (content.find("/OpenAction") != std::string::npos && 
-                content.find("/OpenAction_DISABLED") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: /OpenAction" << std::endl; return true; 
-            }
-            if (content.find("/AA") != std::string::npos && 
-                content.find("/AA_DISABLED") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: /AA" << std::endl; return true; 
-            }
-            if (content.find("/Launch") != std::string::npos && 
-                content.find("/Launch_DISABLED") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: /Launch" << std::endl; return true; 
-            }
-            if (content.find("/Action") != std::string::npos && 
-                content.find("/Action_DISABLED") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: /Action" << std::endl; return true; 
-            }
             
-            // Check for JavaScript function calls (but not commented out ones)
-            if (content.find("this.print") != std::string::npos && 
-                content.find("//this.print") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: this.print" << std::endl; return true; 
-            }
+            // Active execution patterns that require immediate JavaScript execution
             if (content.find("app.alert") != std::string::npos && 
                 content.find("//app.alert") == std::string::npos) { 
                 std::cout << "[detectPdfJavaScript] Found: app.alert" << std::endl; return true; 
-            }
-            if (content.find("app.launchURL") != std::string::npos && 
-                content.find("//app.launchURL") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: app.launchURL" << std::endl; return true; 
             }
             if (content.find("eval(") != std::string::npos && 
                 content.find("//eval(") == std::string::npos) { 
                 std::cout << "[detectPdfJavaScript] Found: eval(" << std::endl; return true; 
             }
-            if (content.find("String.fromCharCode") != std::string::npos && 
-                content.find("//String.fromCharCode") == std::string::npos) { 
-                std::cout << "[detectPdfJavaScript] Found: String.fromCharCode" << std::endl; return true; 
+            
+            // JavaScript obfuscation techniques - very specific to malware
+            if (content.find("unescape(") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: unescape(" << std::endl; return true; }
+            if (content.find("String.fromCharCode") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: String.fromCharCode" << std::endl; return true; }
+            if (content.find("\\x") != std::string::npos && content.find("\\u") != std::string::npos) { 
+                std::cout << "[detectPdfJavaScript] Found: hex+unicode encoding (obfuscation)" << std::endl; return true; 
             }
             
-            // Other patterns that don't get sanitized but should be detected
-            if (content.find("/Names") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /Names" << std::endl; return true; }
-            if (content.find("/AcroForm") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /AcroForm" << std::endl; return true; }
-            if (content.find("/XFA") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /XFA" << std::endl; return true; }
-            if (content.find("unescape(") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: unescape(" << std::endl; return true; }
-            if (content.find("String.fromCharCode") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: String.fromCharCode" << std::endl; return true; } // JS obfuscation technique
-            if (content.find("app.launchURL") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: app.launchURL" << std::endl; return true; }    // Launching URLs
-            if (content.find("this.getURL") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: this.getURL" << std::endl; return true; }      // Getting URLs
-            if (content.find("this.submitForm") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: this.submitForm" << std::endl; return true; }  // Submitting forms
-            if (content.find("this.mailDoc") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: this.mailDoc" << std::endl; return true; }     // Mailing documents
-            if (content.find("/EmbeddedFile") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /EmbeddedFile" << std::endl; return true; }    // Embedded files
-            if (content.find("/EF") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /EF" << std::endl; return true; }              // Embedded File stream dictionary
-            if (content.find("/F") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /F" << std::endl; return true; }               // File Specification dictionary (often with /EF)
-            if (content.find("/URI") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /URI" << std::endl; return true; }             // URI actions
-            if (content.find("/RichMedia") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /RichMedia" << std::endl; return true; }       // Rich media annotations (can embed Flash, etc.)
-            if (content.find("/FlashVars") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /FlashVars" << std::endl; return true; }       // Variables for Flash content
-            if (content.find("getAnnots") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: getAnnots" << std::endl; return true; }        // Accessing annotations (can be part of exploits)
-            if (content.find("Collab.getIcon") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: Collab.getIcon" << std::endl; return true; }   // Known past vulnerability pattern
-            if (content.find("util.printf") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: util.printf" << std::endl; return true; }      // Can be part of format string vulnerabilities
-            if (content.find("/GoToR") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /GoToR" << std::endl; return true; }           // Remote Go-To action (to external PDF)
-            if (content.find("/GoToE") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /GoToE" << std::endl; return true; }           // Embedded Go-To action (to embedded files)
-            if (content.find("/ObjStm") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /ObjStm" << std::endl; return true; }          // Object Stream (can hide objects)
-            if (content.find("/Annot") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /Annot" << std::endl; return true; }           // Annotations can have actions
-            if (content.find("/Widget") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /Widget" << std::endl; return true; }          // Form field widgets can have actions
-            if (content.find("/Filter") != std::string::npos &&          // Check for suspicious filter combinations
-                 (content.find("/ASCIIHexDecode") != std::string::npos ||
-                  content.find("/LZWDecode") != std::string::npos ||
-                  content.find("/JBIG2Decode") != std::string::npos) ) { std::cout << "[detectPdfJavaScript] Found: /Filter with suspicious decode" << std::endl; return true; } // JBIG2Decode has known exploits
-            if (content.find("/Encrypt") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /Encrypt" << std::endl; return true; }           // Encrypted objects might hide malicious content
+            // Known CVE exploitation patterns
+            if (content.find("Collab.getIcon") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: Collab.getIcon CVE" << std::endl; return true; }
+            if (content.find("util.printf") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: util.printf format string" << std::endl; return true; }
+            if (content.find("media.newPlayer") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: media.newPlayer exploit" << std::endl; return true; }
+            if (content.find("spell.customDictionaryOpen") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: spell exploit" << std::endl; return true; }
+            
+            // Rich media exploits (very rare in benign PDFs)
+            if (content.find("/RichMedia") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /RichMedia" << std::endl; return true; }
+            if (content.find("/FlashVars") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: /FlashVars" << std::endl; return true; }
+            
+            // Advanced exploitation APIs
+            if (content.find("getAnnots") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: getAnnots API" << std::endl; return true; }
+            if (content.find("exportDataObject") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: exportDataObject" << std::endl; return true; }
+            if (content.find("importAnFDF") != std::string::npos) { std::cout << "[detectPdfJavaScript] Found: importAnFDF" << std::endl; return true; }
+            
+            // Malicious encoding/compression combinations
+            if (content.find("/Filter") != std::string::npos && content.find("/JBIG2Decode") != std::string::npos) { 
+                std::cout << "[detectPdfJavaScript] Found: JBIG2Decode exploit vector" << std::endl; return true; 
+            }
+            if (content.find("/CCITTFaxDecode") != std::string::npos && content.find("/FlateDecode") != std::string::npos) {
+                std::cout << "[detectPdfJavaScript] Found: suspicious filter combination" << std::endl; return true;
+            }
             
             // Keep only last part to check across chunk boundaries
             if (content.length() > 1000) {
@@ -230,15 +202,25 @@ bool analyzeScriptContent(const std::string& filePath) {
             std::string lowerLine = line;
             std::transform(lowerLine.begin(), lowerLine.end(), lowerLine.begin(), ::tolower);
             
-            // Check for suspicious patterns
+            // Check for suspicious patterns - very specific malicious indicators
             if (lowerLine.find("eval(") != std::string::npos ||
                 lowerLine.find("exec(") != std::string::npos ||
                 lowerLine.find("system(") != std::string::npos ||
                 lowerLine.find("shell_exec") != std::string::npos ||
                 lowerLine.find("powershell") != std::string::npos ||
                 lowerLine.find("cmd.exe") != std::string::npos ||
-                lowerLine.find("download") != std::string::npos ||
-                lowerLine.find("invoke-expression") != std::string::npos) {
+                lowerLine.find("invoke-expression") != std::string::npos ||
+                // Network exploitation indicators
+                lowerLine.find("reverse_tcp") != std::string::npos ||
+                lowerLine.find("bind_tcp") != std::string::npos ||
+                lowerLine.find("meterpreter") != std::string::npos ||
+                // Process injection APIs
+                lowerLine.find("virtualalloc") != std::string::npos ||
+                lowerLine.find("writeprocessmemory") != std::string::npos ||
+                lowerLine.find("createremotethread") != std::string::npos ||
+                // Encoding/obfuscation in context
+                (lowerLine.find("base64") != std::string::npos && lowerLine.find("decode") != std::string::npos) ||
+                (lowerLine.find("certutil") != std::string::npos && lowerLine.find("-decode") != std::string::npos)) {
                 return true; // Suspicious content found
             }
         }
@@ -1092,10 +1074,24 @@ bool ScriptAnalyzer::analyzeJavaScript(const std::string& content, std::vector<s
         if (content.find("innerHTML") != std::string::npos) { threats.push_back("DOM_MANIPULATION"); hasThreats = true; std::cout << "Detected innerHTML in JavaScript." << std::endl; }
         if (content.find("outerHTML") != std::string::npos) { threats.push_back("DOM_MANIPULATION"); hasThreats = true; std::cout << "Detected outerHTML in JavaScript." << std::endl; }
 
-        // Check for network operations
-        if (content.find("XMLHttpRequest") != std::string::npos) { threats.push_back("NETWORK_OPERATIONS"); hasThreats = true; std::cout << "Detected XMLHttpRequest in JavaScript." << std::endl; }
-        if (content.find("fetch(") != std::string::npos) { threats.push_back("NETWORK_OPERATIONS"); hasThreats = true; std::cout << "Detected fetch() in JavaScript." << std::endl; }
+        // Check for network operations - but more specific combinations
+        if (content.find("XMLHttpRequest") != std::string::npos && content.find("POST") != std::string::npos) { 
+            threats.push_back("NETWORK_OPERATIONS"); hasThreats = true; std::cout << "Detected XMLHttpRequest POST in JavaScript." << std::endl; 
+        }
+        if (content.find("fetch(") != std::string::npos && content.find("method:") != std::string::npos) { 
+            threats.push_back("NETWORK_OPERATIONS"); hasThreats = true; std::cout << "Detected fetch() with method in JavaScript." << std::endl; 
+        }
         if (content.find("websocket") != std::string::npos) { threats.push_back("NETWORK_OPERATIONS"); hasThreats = true; std::cout << "Detected websocket in JavaScript." << std::endl; }
+        
+        // Crypto mining indicators
+        if (content.find("Worker(") != std::string::npos && content.find("crypto") != std::string::npos) {
+            threats.push_back("CRYPTO_MINING"); hasThreats = true; std::cout << "Detected crypto mining pattern." << std::endl;
+        }
+        
+        // Browser exploitation
+        if (content.find("navigator.userAgent") != std::string::npos && content.find("exploit") != std::string::npos) {
+            threats.push_back("BROWSER_EXPLOITATION"); hasThreats = true; std::cout << "Detected browser exploitation." << std::endl;
+        }
 
         // Check for obfuscation
         if (containsObfuscation(content)) { threats.push_back("OBFUSCATED_JS"); hasThreats = true; std::cout << "Detected obfuscated JavaScript." << std::endl; }
@@ -1143,6 +1139,35 @@ bool ScriptAnalyzer::analyzePowerShell(const std::string& content, std::vector<s
             content.find("Bypass") != std::string::npos ||
             content.find("Unrestricted") != std::string::npos) {
             threats.push_back("EXECUTION_POLICY_BYPASS");
+            hasThreats = true;
+        }
+        
+        // Advanced PowerShell exploitation patterns
+        if (content.find("Add-Type") != std::string::npos && content.find("CSharp") != std::string::npos) {
+            threats.push_back("CSHARP_INJECTION");
+            hasThreats = true;
+        }
+        
+        if (content.find("Reflection.Assembly") != std::string::npos || 
+            content.find("System.Reflection") != std::string::npos) {
+            threats.push_back("REFLECTION_ABUSE");
+            hasThreats = true;
+        }
+        
+        if (content.find("EncodedCommand") != std::string::npos || 
+            content.find("-enc ") != std::string::npos) {
+            threats.push_back("ENCODED_COMMAND");
+            hasThreats = true;
+        }
+        
+        if (content.find("WindowStyle") != std::string::npos && content.find("Hidden") != std::string::npos) {
+            threats.push_back("HIDDEN_EXECUTION");
+            hasThreats = true;
+        }
+        
+        // WMI exploitation
+        if (content.find("Get-WmiObject") != std::string::npos && content.find("Win32_Process") != std::string::npos) {
+            threats.push_back("WMI_PROCESS_MANIPULATION");
             hasThreats = true;
         }
         

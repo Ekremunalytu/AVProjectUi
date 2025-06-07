@@ -175,7 +175,7 @@ enum class FileType {
     EXECUTABLE_FILE,    ///< Executable and library files (.exe, .dll, .so)
     SCRIPT_FILE,        ///< Script files requiring analysis (.js, .vbs, .ps1)
     EMAIL_FILE,         ///< Email message files (.eml, .msg)
-    UNKNOWN_FILE        ///< Unknown or unsupported file type
+     UNKNOWN_FILE        ///< Unknown or unsupported file type
 };
 
 /**

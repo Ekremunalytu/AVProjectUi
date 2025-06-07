@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.19)
 # Find Qt Test module
 find_package(Qt6 REQUIRED COMPONENTS Test)
 
+# Find Google Test
+find_package(GTest REQUIRED)
+include(GoogleTest)
+
 # Unit tests for each layer
 add_subdirectory(unit)
 
