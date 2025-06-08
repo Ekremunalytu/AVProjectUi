@@ -1,5 +1,5 @@
 # Application Layer - Business logic and workflows
-add_library(Application STATIC
+qt_add_library(Application STATIC
     # This layer will contain business logic
     # For now, it's empty but ready for future expansion
     services/README.md

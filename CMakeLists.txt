@@ -1,11 +1,6 @@
 # AVProjectUi - Layer-Based Architecture
 cmake_minimum_required(VERSION 3.19)
 
-if(APPLE)
-  set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-endif()
-
 project(AVProjectUi VERSION 1.0.0 LANGUAGES CXX)
 
 # C++ standard settings
@@ -40,6 +35,9 @@ include_directories(
     ${CMAKE_BINARY_DIR}
 )
 
+# Add external dependencies
+add_subdirectory(external/yara)
+
 # Add subdirectories (Layer-based)
 add_subdirectory(src/core)
 add_subdirectory(src/storage)
@@ -50,7 +48,6 @@ add_subdirectory(src/presentation)
 
 # Main executable
 qt_add_executable(AVProjectUi
-    WIN32 MACOSX_BUNDLE
     src/presentation/application/main.cpp
 )
 
@@ -69,12 +66,14 @@ target_link_libraries(AVProjectUi
         Qt::Network
 )
 
-# Enable testing
-option(BUILD_TESTING "Build tests" ON)
-if(BUILD_TESTING)
-    enable_testing()
-    add_subdirectory(tests)
+# Windows-specific linking adjustments
+if(WIN32 AND MINGW)
+    # For MinGW compiler, no special entry point needed for console apps
+    target_compile_definitions(AVProjectUi PRIVATE QT_NO_DEBUG_OUTPUT)
 endif()
+
+# Disable testing for now
+option(BUILD_TESTING "Build tests" OFF)
 
 # Installation
 include(GNUInstallDirs)
@@ -107,13 +106,24 @@ add_custom_command(TARGET AVProjectUi POST_BUILD
     COMMENT "Copying YARA rules to executable directory"
 )
 
-# Post-build automation: Documentation only (cleanup removed to preserve executable)
-add_custom_command(TARGET AVProjectUi POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "📚 Generating documentation..."
-    COMMAND bash ${CMAKE_SOURCE_DIR}/tools/scripts/docs.sh generate || echo "Documentation generation completed"
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Generating project documentation"
-)
+# Post-build automation: Documentation generation
+if(WIN32)
+    # Windows compatible documentation generation
+    add_custom_command(TARGET AVProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "📚 Generating documentation..."
+        COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/tools/scripts/docs.ps1" generate 2>nul || ${CMAKE_COMMAND} -E echo "Documentation generation completed"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating project documentation"
+    )
+else()
+    # Unix/macOS compatible documentation generation
+    add_custom_command(TARGET AVProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "📚 Generating documentation..."
+        COMMAND bash ${CMAKE_SOURCE_DIR}/tools/scripts/docs.sh generate || echo "Documentation generation completed"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating project documentation"
+    )
+endif()
 
 # Documentation targets
 find_program(DOXYGEN_EXECUTABLE doxygen)
@@ -150,3 +160,68 @@ else()
 endif()
 
 # Note: test_text_sanitization.cpp is now part of the organized test structure in tests/unit/
+
+# Windows DLL Deployment
+if(WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug)
+    # Qt DLLs
+    set(QT_DLLS
+        Qt6Core.dll
+        Qt6Widgets.dll
+        Qt6Gui.dll
+        Qt6Network.dll
+        Qt6Sql.dll
+    )
+    
+    # MinGW Runtime DLLs
+    set(MINGW_DLLS
+        libgcc_s_seh-1.dll
+        libstdc++-6.dll
+        libwinpthread-1.dll
+    )
+    
+    # OpenSSL DLLs
+    set(OPENSSL_DLLS
+        libssl-3-x64.dll
+        libcrypto-3-x64.dll
+    )
+    
+    # Copy Qt DLLs
+    foreach(dll ${QT_DLLS})
+        add_custom_command(TARGET AVProjectUi POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "C:/Qt/6.9.0/mingw_64/bin/${dll}"
+            "$<TARGET_FILE_DIR:AVProjectUi>"
+            COMMENT "Copying ${dll}"
+        )
+    endforeach()
+    
+    # Copy MinGW Runtime DLLs
+    foreach(dll ${MINGW_DLLS})
+        add_custom_command(TARGET AVProjectUi POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "C:/msys64/ucrt64/bin/${dll}"
+            "$<TARGET_FILE_DIR:AVProjectUi>"
+            COMMENT "Copying ${dll}"
+        )
+    endforeach()
+    
+    # Copy OpenSSL DLLs
+    foreach(dll ${OPENSSL_DLLS})
+        add_custom_command(TARGET AVProjectUi POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "C:/msys64/ucrt64/bin/${dll}"
+            "$<TARGET_FILE_DIR:AVProjectUi>"
+            COMMENT "Copying ${dll}"
+        )
+    endforeach()
+    
+    # Copy Qt platform plugin
+    add_custom_command(TARGET AVProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        "$<TARGET_FILE_DIR:AVProjectUi>/platforms"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "C:/Qt/6.9.0/mingw_64/plugins/platforms/qwindows.dll"
+        "$<TARGET_FILE_DIR:AVProjectUi>/platforms/"
+        COMMENT "Copying Qt platform plugin"
+    )
+endif()

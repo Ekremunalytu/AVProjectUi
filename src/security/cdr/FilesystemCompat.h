@@ -17,14 +17,23 @@
     #include <filesystem>
     #define FS_NAMESPACE std::filesystem
 #else
-    // Fallback to POSIX/platform-specific implementations
-    #include <sys/stat.h>
-    #include <unistd.h>
-    #include <dirent.h>
-    #include <cstring>
-    #include <cerrno>
-    #ifdef __APPLE__
-        #include <copyfile.h>
+    // Platform-specific implementations
+    #ifdef _WIN32
+        #include <windows.h>
+        #include <shlwapi.h>
+        #include <direct.h>
+        #include <io.h>
+        #pragma comment(lib, "shlwapi.lib")
+    #else
+        // POSIX/Unix implementations
+        #include <sys/stat.h>
+        #include <unistd.h>
+        #include <dirent.h>
+        #include <cstring>
+        #include <cerrno>
+        #ifdef __APPLE__
+            #include <copyfile.h>
+        #endif
     #endif
 #endif
 
@@ -86,8 +95,15 @@ private:
     FS_NAMESPACE::directory_iterator iter_;
     FS_NAMESPACE::directory_iterator end_;
 #else
-    DIR* dir_;
-    struct dirent* entry_;
+    #ifdef _WIN32
+        HANDLE hFind_;
+        WIN32_FIND_DATAA findData_;
+        bool first_call_;
+        std::string search_pattern_;
+    #else
+        DIR* dir_;
+        struct dirent* entry_;
+    #endif
 #endif
 };
 

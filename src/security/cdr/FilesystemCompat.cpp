@@ -5,6 +5,20 @@
 #include <stack>
 
 #if !HAS_STD_FILESYSTEM
+#ifdef _WIN32
+#include <windows.h>
+#include <shlwapi.h>
+#include <direct.h>
+#include <io.h>
+#include <sys/stat.h>
+// Windows stat constants
+#ifndef _S_IFDIR
+    #define _S_IFDIR 0x4000
+#endif
+#ifndef _S_IFREG
+    #define _S_IFREG 0x8000
+#endif
+#else
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
@@ -12,6 +26,7 @@
 #include <cerrno>
 #ifdef __APPLE__
 #include <copyfile.h>
+#endif
 #endif
 #endif
 
@@ -163,11 +178,16 @@ bool remove(const Path& path) {
     return remove(path.string());
 }
 
-#else // Fallback POSIX implementation
+#else // Fallback implementation for platforms without std::filesystem
 
 bool exists(const std::string& path) {
+#ifdef _WIN32
+    DWORD dwAttrib = GetFileAttributesA(path.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES);
+#else
     struct stat st;
     return stat(path.c_str(), &st) == 0;
+#endif
 }
 
 bool exists(const Path& path) {
@@ -175,11 +195,16 @@ bool exists(const Path& path) {
 }
 
 bool is_directory(const std::string& path) {
+#ifdef _WIN32
+    DWORD dwAttrib = GetFileAttributesA(path.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+#else
     struct stat st;
     if (stat(path.c_str(), &st) != 0) {
         return false;
     }
     return S_ISDIR(st.st_mode);
+#endif
 }
 
 bool is_directory(const Path& path) {
@@ -187,11 +212,16 @@ bool is_directory(const Path& path) {
 }
 
 bool is_regular_file(const std::string& path) {
+#ifdef _WIN32
+    DWORD dwAttrib = GetFileAttributesA(path.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+#else
     struct stat st;
     if (stat(path.c_str(), &st) != 0) {
         return false;
     }
     return S_ISREG(st.st_mode);
+#endif
 }
 
 bool is_regular_file(const Path& path) {
@@ -199,11 +229,27 @@ bool is_regular_file(const Path& path) {
 }
 
 std::uintmax_t file_size(const std::string& path) {
+#ifdef _WIN32
+    HANDLE hFile = CreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        return static_cast<std::uintmax_t>(-1);
+    }
+    
+    LARGE_INTEGER fileSize;
+    if (!GetFileSizeEx(hFile, &fileSize)) {
+        CloseHandle(hFile);
+        return static_cast<std::uintmax_t>(-1);
+    }
+    
+    CloseHandle(hFile);
+    return static_cast<std::uintmax_t>(fileSize.QuadPart);
+#else
     struct stat st;
     if (stat(path.c_str(), &st) != 0) {
         return static_cast<std::uintmax_t>(-1);
     }
     return static_cast<std::uintmax_t>(st.st_size);
+#endif
 }
 
 std::uintmax_t file_size(const Path& path) {
@@ -259,8 +305,20 @@ static bool create_directories_recursive_impl(const std::string& path_s) {
             *slash = '\0'; // Temporarily terminate at this component
         }
 
-        struct stat st;
         // Check current cumulative path (tmp)
+#ifdef _WIN32
+        DWORD dwAttrib = GetFileAttributesA(tmp);
+        if (dwAttrib == INVALID_FILE_ATTRIBUTES) { // If path component does not exist
+            if (!CreateDirectoryA(tmp, NULL) && GetLastError() != ERROR_ALREADY_EXISTS) {
+                if (slash) *slash = '/'; // Restore slash before returning
+                return false; // Failed to create directory
+            }
+        } else if (!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY)) { // Exists but is not a directory
+            if (slash) *slash = '/'; // Restore slash
+            return false;
+        }
+#else
+        struct stat st;
         if (stat(tmp, &st) != 0) { // If path component does not exist
             #if defined(__MINGW32__) || defined(__MINGW64__)
             if (mkdir(tmp) != 0 && errno != EEXIST) {
@@ -274,6 +332,7 @@ static bool create_directories_recursive_impl(const std::string& path_s) {
             if (slash) *slash = '/'; // Restore slash
             return false;
         }
+#endif
 
         if (slash) {
             *slash = '/'; // Restore slash
@@ -438,29 +497,74 @@ bool RecursiveDirectoryIterator::has_next() const {
     return valid_ && iter_ != end_;
 }
 
-#else // Fallback POSIX implementation
+#else // Fallback implementation for non-std::filesystem
 
 DirectoryIterator::DirectoryIterator(const std::string& path) 
-    : base_path_(path), valid_(false), recursive_(false), dir_(nullptr), entry_(nullptr) {
+    : base_path_(path), valid_(false), recursive_(false) {
+#ifdef _WIN32
+    search_pattern_ = path + "\\*";
+    first_call_ = true;
+    hFind_ = FindFirstFileA(search_pattern_.c_str(), &findData_);
+    if (hFind_ != INVALID_HANDLE_VALUE) {
+        next(); // Move to first valid entry
+    }
+#else
     dir_ = opendir(path.c_str());
     if (dir_) {
         next(); // Move to first entry
     }
+#endif
 }
 
 DirectoryIterator::~DirectoryIterator() {
+#ifdef _WIN32
+    if (hFind_ != INVALID_HANDLE_VALUE) {
+        FindClose(hFind_);
+    }
+#else
     if (dir_) {
         closedir(dir_);
     }
+#endif
 }
 
 std::string DirectoryIterator::current() const {
+#ifdef _WIN32
+    if (!valid_) return "";
+    return base_path_ + "\\" + findData_.cFileName;
+#else
     if (!valid_ || !entry_) return "";
     return base_path_ + "/" + entry_->d_name;
+#endif
 }
 
 void DirectoryIterator::next() {
     valid_ = false;
+#ifdef _WIN32
+    if (hFind_ == INVALID_HANDLE_VALUE) return;
+    
+    do {
+        BOOL result;
+        if (first_call_) {
+            first_call_ = false;
+            result = TRUE; // First call already populated findData_
+        } else {
+            result = FindNextFileA(hFind_, &findData_);
+        }
+        
+        if (!result) {
+            break; // No more files
+        }
+        
+        // Skip . and ..
+        if (strcmp(findData_.cFileName, ".") == 0 || strcmp(findData_.cFileName, "..") == 0) {
+            continue;
+        }
+        
+        valid_ = true;
+        break;
+    } while (true);
+#else
     if (!dir_) return;
     
     while ((entry_ = readdir(dir_)) != nullptr) {
@@ -471,10 +575,15 @@ void DirectoryIterator::next() {
         valid_ = true;
         break;
     }
+#endif
 }
 
 bool DirectoryIterator::has_next() const {
+#ifdef _WIN32
+    return valid_;
+#else
     return valid_ && entry_ != nullptr;
+#endif
 }
 
 bool DirectoryIterator::is_valid() const {

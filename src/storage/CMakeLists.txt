@@ -1,5 +1,5 @@
 # Storage Layer - Database and filesystem operations
-add_library(Storage STATIC
+qt_add_library(Storage STATIC
     database/DbManager/DbManager.cpp
     database/DbManager/DbManager.h
     database/DatabaseService/DatabaseService.cpp

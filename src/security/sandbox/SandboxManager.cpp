@@ -22,14 +22,31 @@
 #include <thread>
 #include <chrono>
 #include <fstream>
-#include <sys/stat.h>
-#include <unistd.h>
+#ifdef _WIN32
+    #define WIN32_LEAN_AND_MEAN
+    #define NOMINMAX
+    #include <windows.h>
+    #include <direct.h>
+    #include <io.h>
+    // Undefine Windows macros that conflict with our enums
+    #ifdef DELETE
+        #undef DELETE
+    #endif
+#else
+    #include <sys/stat.h>
+    #include <unistd.h>
+#endif
 
 // Simple file utility functions to replace std::filesystem
 namespace FileUtils {
     bool exists(const std::string& path) {
+#ifdef _WIN32
+        DWORD dwAttrib = GetFileAttributesA(path.c_str());
+        return (dwAttrib != INVALID_FILE_ATTRIBUTES);
+#else
         struct stat buffer;
         return (stat(path.c_str(), &buffer) == 0);
+#endif
     }
     
     std::string getExtension(const std::string& path) {

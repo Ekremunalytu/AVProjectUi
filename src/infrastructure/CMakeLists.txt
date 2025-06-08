@@ -1,5 +1,5 @@
 # Infrastructure Layer - External services and infrastructure
-add_library(Infrastructure STATIC
+qt_add_library(Infrastructure STATIC
     # Docker operations
     docker/BaseManager.cpp
     docker/DockerManager.cpp

@@ -1,0 +1,5 @@
+libyara/la-stream.lo: libyara/stream.c \
+ /usr/lib/gcc/x86_64-pc-msys/13.3.0/include/stddef.h \
+ libyara/include/yara/stream.h
+/usr/lib/gcc/x86_64-pc-msys/13.3.0/include/stddef.h:
+libyara/include/yara/stream.h:
