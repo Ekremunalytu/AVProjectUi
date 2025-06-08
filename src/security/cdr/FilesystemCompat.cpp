@@ -531,6 +531,10 @@ bool RecursiveDirectoryIterator::has_next() const {
     return valid_ && !iterators_.empty();
 }
 
+bool RecursiveDirectoryIterator::is_valid() const {
+    return valid_;
+}
+
 void RecursiveDirectoryIterator::push_directory(const std::string& path) {
     auto* iter = new DirectoryIterator(path);
     if (iter->is_valid()) {

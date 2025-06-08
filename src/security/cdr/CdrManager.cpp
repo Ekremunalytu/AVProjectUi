@@ -985,6 +985,21 @@ FileTypeInfo CdrManager::getFileTypeInfo(FileType type) {
     return info;
 }
 
+std::vector<FileTypeInfo> CdrManager::getSupportedFileTypes() {
+    std::vector<FileTypeInfo> supportedTypes;
+    
+    // Get info for all supported file types
+    supportedTypes.push_back(getFileTypeInfo(FileType::OFFICE_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::PDF_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::HTML_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::XML_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::RTF_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::TEXT_DOCUMENT));
+    supportedTypes.push_back(getFileTypeInfo(FileType::EMAIL_FILE));
+    
+    return supportedTypes;
+}
+
 // --- Scanning Files in Containers ---
 
 SanitizedFileInfo CdrManager::scanFileInContainer(const std::string& filePath, 

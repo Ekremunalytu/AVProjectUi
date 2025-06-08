@@ -536,7 +536,8 @@ QString VirusTotalManager::getAnalysisReport(const QString& analysisId) {
  * @param analysisId The ID of the analysis to poll for.
  * 
  * Initiates a polling mechanism that periodically checks if the analysis is complete.
- * Will attempt up to 5 times with increasing delay between attempts.
+ * Will attempt up to 10 times with optimized delays for better user experience.
+ * Most VirusTotal analyses complete within 10-30 seconds.
  */
 void VirusTotalManager::startPollingForResults(const QString& analysisId) {
     // We assume that m_currentPollingAnalysisId and m_pollingAttempt are set for new analysis
@@ -554,24 +555,27 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
     
     this->m_pollingAttempt++;
     
-    // Calculate delay with reasonable wait times - prioritize user experience
+    // Calculate delay with aggressive polling for better user experience
+    // Most VirusTotal analyses complete within 10-30 seconds
     int delayMs;
     switch (this->m_pollingAttempt) {
-        case 1: delayMs = 5000; break;   // 5 seconds
-        case 2: delayMs = 10000; break;  // 10 seconds  
-        case 3: delayMs = 15000; break;  // 15 seconds
-        case 4: delayMs = 20000; break;  // 20 seconds
-        case 5: delayMs = 30000; break;  // 30 seconds
-        case 6: delayMs = 45000; break;  // 45 seconds
-        case 7: delayMs = 60000; break;  // 1 minute
-        case 8: delayMs = 90000; break;  // 1.5 minutes
-        default: delayMs = 120000; break; // 2 minutes for final attempts
+        case 1: delayMs = 1500; break;   // 1.5 seconds - very quick first check
+        case 2: delayMs = 3000; break;   // 3 seconds  
+        case 3: delayMs = 5000; break;   // 5 seconds
+        case 4: delayMs = 8000; break;   // 8 seconds
+        case 5: delayMs = 12000; break;  // 12 seconds
+        case 6: delayMs = 15000; break;  // 15 seconds
+        case 7: delayMs = 20000; break;  // 20 seconds
+        case 8: delayMs = 30000; break;  // 30 seconds
+        case 9: delayMs = 45000; break;  // 45 seconds
+        case 10: delayMs = 60000; break; // 1 minute
+        default: delayMs = 90000; break; // 1.5 minutes for final attempts
     }
     
-    // Maximum 8 polling attempts (total ~6-7 minutes)
-    if (this->m_pollingAttempt <= 8) {
+    // Maximum 10 polling attempts (total ~3-4 minutes with aggressive polling)
+    if (this->m_pollingAttempt <= 10) {
         qDebug() << "Polling for VirusTotal results: attempt" << this->m_pollingAttempt
-                 << "of 8 for analysis" << analysisId << "with delay" << (delayMs / 1000.0) << "seconds";
+                 << "of 10 for analysis" << analysisId << "with delay" << (delayMs / 1000.0) << "seconds";
         
         QTimer::singleShot(delayMs, this, [this, analysisId]() {
             // Weak pointer pattern is sufficient elsewhere
@@ -631,14 +635,14 @@ void VirusTotalManager::startPollingForResults(const QString& analysisId) {
             emit analysisResultsReady(m_lastResults);
             
             // Continue polling if not completed and maximum attempts not reached
-            if (!isCompleted && this->m_pollingAttempt < 8) {
+            if (!isCompleted && this->m_pollingAttempt < 10) {
                 // Recursive call to continue polling for the same analysisId
                 startPollingForResults(analysisId);
             } else {
                 // Reset scanning flag when completed or maximum attempts reached
                 m_isScanning = false;
                 if (!isCompleted) {
-                    qDebug() << "Polling timeout reached for analysis" << analysisId << "after ~6-7 minutes. Analysis may still be in progress.";
+                    qDebug() << "Polling timeout reached for analysis" << analysisId << "after ~3-4 minutes. Analysis may still be in progress.";
                     // Emit final results so UI can show timeout message with retry option
                     emit analysisResultsReady(m_lastResults);
                 }

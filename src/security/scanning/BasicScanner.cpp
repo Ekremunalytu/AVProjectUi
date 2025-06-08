@@ -60,6 +60,7 @@ BasicScanner::BasicScanner(QObject* parent, DbManager* dbManager)
       m_isScanning(false),
       m_dbManager(dbManager),
       m_lastError(ScannerErrorCode::NoError),
+      m_lastErrorMessage(),  // Explicitly initialize as empty
       m_yaraManager(std::make_unique<YaraRuleManager>()),
       m_yaraInitialized(false),
       m_maxFileSize(10 * 1024 * 1024) // Default max file size: 10 MB
@@ -633,6 +634,13 @@ ScannerErrorCode BasicScanner::getLastErrorCode() const
  */
 void BasicScanner::setFile(const QString& filePath)
 {
+    // If the filePath is empty, clear the selected file and reset error state
+    if (filePath.isEmpty()) {
+        m_selectedFile = QFileInfo();
+        setLastError(ScannerErrorCode::NoError);
+        return;
+    }
+    
     QFileInfo fileInfo(filePath);
     if (!fileInfo.exists() || !fileInfo.isFile()) {
         setLastError(ScannerErrorCode::FileNotFound,
@@ -687,7 +695,10 @@ void BasicScanner::setLastError(ScannerErrorCode code, const QString& message)
     m_lastError = code;
     m_lastErrorMessage = message;
     
-    if (code != ScannerErrorCode::NoError && message.isEmpty()) {
+    if (code == ScannerErrorCode::NoError) {
+        // Clear error message when no error
+        m_lastErrorMessage.clear();
+    } else if (message.isEmpty()) {
         m_lastErrorMessage = getDefaultErrorMessage(code);
     }
 }

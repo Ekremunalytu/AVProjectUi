@@ -12,6 +12,10 @@ add_library(Security STATIC
     cdr/FilesystemCompat.cpp
     cdr/FilesystemCompat.h
     
+    # Monitoring
+    monitoring/FileSystemWatcher.cpp
+    monitoring/FileSystemWatcher.h
+    
     # Scanning
     scanning/BasicScanner.cpp
     scanning/BasicScanner.h

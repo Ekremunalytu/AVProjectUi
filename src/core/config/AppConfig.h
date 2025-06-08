@@ -83,7 +83,19 @@ public:
      */
     void loadConfig() {
         // Load Database Path from m_settings (which points to config.ini)
-        m_databasePath = m_settings.value(QStringLiteral("Database/Path"), getDefaultDatabasePath()).toString();
+        QString rawDbPath = m_settings.value(QStringLiteral("Database/Path"), getDefaultDatabasePath()).toString();
+        
+        // Convert relative paths to absolute paths relative to config.ini's directory
+        if (QDir::isRelativePath(rawDbPath)) {
+            QDir configDir = QFileInfo(getActualConfigIniPath()).absoluteDir();
+            m_databasePath = QDir::cleanPath(configDir.absoluteFilePath(rawDbPath));
+        } else {
+            m_databasePath = rawDbPath;
+        }
+        
+        // Smart database path resolution: If the resolved path doesn't exist or is too small,
+        // try to find the actual production database
+        m_databasePath = findBestDatabasePath(m_databasePath);
         
         // Load VirusTotal API key from m_settings (which points to config.ini)
         m_virusTotalApiKey = m_settings.value(QStringLiteral("VirusTotal/ApiKey"), QString()).toString();
@@ -172,6 +184,72 @@ private: // m_settings is now private
     QString getDefaultDatabasePath() const {
         QDir configDir = QFileInfo(getActualConfigIniPath()).absoluteDir();
         return configDir.filePath(QStringLiteral("../MalwareHashes/identifier.sqlite"));
+    }
+
+    // Helper function to find the best available database path
+    QString findBestDatabasePath(const QString& configuredPath) const {
+        // Define potential database locations to search
+        QStringList candidatePaths = {
+            configuredPath, // First try the configured path
+            
+            // Production database locations (project root)
+            "/Volumes/Crucial/AVProjectUi/resources/data/identifier.sqlite",
+            
+            // Build directory locations
+            "/Volumes/Crucial/AVProjectUi/build/resources/data/identifier.sqlite",
+            "/Volumes/Crucial/AVProjectUi/cmake-build-debug/resources/data/identifier.sqlite",
+            "/Volumes/Crucial/AVProjectUi/cmake-build-release/resources/data/identifier.sqlite",
+            
+            // App bundle locations
+            "/Volumes/Crucial/AVProjectUi/build/AVProjectUi.app/Contents/MalwareHashes/identifier.sqlite",
+            "/Volumes/Crucial/AVProjectUi/cmake-build-debug/AVProjectUi.app/Contents/MalwareHashes/identifier.sqlite",
+            
+            // Alternative naming patterns
+            "/Volumes/Crucial/AVProjectUi/MalwareHashes/identifier.sqlite",
+            "/Volumes/Crucial/AVProjectUi/data/identifier.sqlite"
+        };
+        
+        QString bestPath;
+        qint64 bestSize = 0;
+        const qint64 MIN_PRODUCTION_DB_SIZE = 100 * 1024 * 1024; // 100MB minimum for production DB
+        
+        qDebug() << "AppConfig: Searching for best database among candidates...";
+        
+        for (const QString& candidatePath : candidatePaths) {
+            QFileInfo fileInfo(candidatePath);
+            
+            if (fileInfo.exists() && fileInfo.isFile()) {
+                qint64 size = fileInfo.size();
+                qDebug() << "AppConfig: Found database at" << candidatePath << "Size:" << size << "bytes";
+                
+                // If this database is significantly larger, prefer it
+                if (size > bestSize) {
+                    bestPath = candidatePath;
+                    bestSize = size;
+                }
+                
+                // If we found a database larger than minimum production size, and it's much larger than current best
+                if (size >= MIN_PRODUCTION_DB_SIZE && size > (bestSize * 1.5)) {
+                    bestPath = candidatePath;
+                    bestSize = size;
+                    qDebug() << "AppConfig: Selected large production database:" << candidatePath;
+                    break; // This is likely our production database
+                }
+            } else {
+                qDebug() << "AppConfig: Database not found at" << candidatePath;
+            }
+        }
+        
+        if (bestPath.isEmpty()) {
+            qWarning() << "AppConfig: No database found in any candidate location. Using configured path:" << configuredPath;
+            return configuredPath;
+        }
+        
+        if (bestPath != configuredPath) {
+            qDebug() << "AppConfig: Auto-selected database:" << bestPath << "instead of configured:" << configuredPath;
+        }
+        
+        return bestPath;
     }
 };
 
