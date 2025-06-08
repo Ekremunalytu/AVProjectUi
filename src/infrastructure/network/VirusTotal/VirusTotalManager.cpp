@@ -19,6 +19,7 @@
 #include <QPointer>
 #include <QString>
 #include <QRegularExpression>
+#include <QSslSocket>
 #include "../../../core/session/SessionManager.h"
 
 // Define error code namespace for better error handling
@@ -73,6 +74,17 @@ VirusTotalManager::VirusTotalManager(const QString& apiKey)
       m_lastSubmissionStatus(VTErrorCodes::NOT_SUBMITTED),
       m_lastError(),
       m_isScanning(false) {
+    
+    // Check SSL/TLS support
+    if (!QSslSocket::supportsSsl()) {
+        qCritical() << "SSL/TLS support is not available! VirusTotal requires HTTPS.";
+        qCritical() << "SSL library build version:" << QSslSocket::sslLibraryBuildVersionString();
+        qCritical() << "Available backends:" << QSslSocket::availableBackends();
+    } else {
+        qDebug() << "SSL/TLS support available.";
+        qDebug() << "SSL library version:" << QSslSocket::sslLibraryVersionString();
+        qDebug() << "Active backend:" << QSslSocket::activeBackend();
+    }
     
     // If no API key provided, load it from AppConfig
     if (m_apiKey.isEmpty()) {

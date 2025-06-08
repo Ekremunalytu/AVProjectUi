@@ -106,6 +106,17 @@ add_custom_command(TARGET AVProjectUi POST_BUILD
     COMMENT "Copying YARA rules to executable directory"
 )
 
+# Copy Qt TLS plugins for SSL/TLS support
+if(WIN32)
+    add_custom_command(TARGET AVProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:AVProjectUi>/tls
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_PREFIX_PATH}/plugins/tls/qopensslbackend.dll
+        $<TARGET_FILE_DIR:AVProjectUi>/tls/
+        COMMENT "Copying Qt TLS plugin for SSL/TLS support"
+    )
+endif()
+
 # Post-build automation: Documentation generation
 if(WIN32)
     # Windows compatible documentation generation
@@ -214,8 +225,7 @@ if(WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug)
             COMMENT "Copying ${dll}"
         )
     endforeach()
-    
-    # Copy Qt platform plugin
+      # Copy Qt platform plugin
     add_custom_command(TARGET AVProjectUi POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory
         "$<TARGET_FILE_DIR:AVProjectUi>/platforms"
@@ -223,5 +233,15 @@ if(WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug)
         "C:/Qt/6.9.0/mingw_64/plugins/platforms/qwindows.dll"
         "$<TARGET_FILE_DIR:AVProjectUi>/platforms/"
         COMMENT "Copying Qt platform plugin"
+    )
+    
+    # Copy Qt SQL drivers
+    add_custom_command(TARGET AVProjectUi POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+        "$<TARGET_FILE_DIR:AVProjectUi>/sqldrivers"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "C:/Qt/6.9.0/mingw_64/plugins/sqldrivers/qsqlite.dll"
+        "$<TARGET_FILE_DIR:AVProjectUi>/sqldrivers/"
+        COMMENT "Copying Qt SQLite driver"
     )
 endif()

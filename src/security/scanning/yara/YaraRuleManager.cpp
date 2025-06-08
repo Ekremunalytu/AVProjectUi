@@ -71,12 +71,28 @@ static int yara_callback(
     void* message_data,
     void* user_data)
 {
+    qDebug() << "YARA callback triggered with message type:" << message;
+    
     auto* manager = reinterpret_cast<YaraRuleManager*>(user_data);
+    
     // CALLBACK_MSG_RULE_MATCHING, YARA eşleşme mesajı
-    if (message == CALLBACK_MSG_RULE_MATCHING && manager && manager->getCallback()) {
-        YR_RULE* rule = static_cast<YR_RULE*>(message_data);
-        manager->getCallback()(rule->identifier);
+    if (message == CALLBACK_MSG_RULE_MATCHING) {
+        qDebug() << "YARA rule matching callback triggered";
+        if (manager && manager->getCallback()) {
+            YR_RULE* rule = static_cast<YR_RULE*>(message_data);
+            if (rule && rule->identifier) {
+                qDebug() << "Matched YARA rule:" << rule->identifier;
+                manager->getCallback()(rule->identifier);
+            } else {
+                qDebug() << "Rule or rule identifier is null";
+            }
+        } else {
+            qDebug() << "Manager or callback is null";
+        }
+    } else {
+        qDebug() << "Non-matching message type received:" << message;
     }
+    
     return CALLBACK_CONTINUE;
 }
 
@@ -434,15 +450,16 @@ std::error_code YaraRuleManager::scanFile(const std::string& filePath, std::vect
         qDebug() << "Cannot open file for reading:" << qFilePath << "Error:" << file.errorString();
         return make_error_code(YaraErrorCodes::FileNotFound);
     }
-    file.close();
-
-    matches.clear();
+    file.close();    matches.clear();
     setCallback([&matches](const std::string& name) { 
+        qDebug() << "Lambda callback triggered for rule:" << QString::fromStdString(name);
         matches.push_back(name); 
-        qDebug() << "Found YARA match:" << QString::fromStdString(name);
+        qDebug() << "Match added, total matches now:" << matches.size();
     });
 
     qDebug() << "Scanning file with YARA: " << qFilePath;
+    qDebug() << "Rules object address:" << (void*)rules;
+    qDebug() << "Callback function set:" << (getCallback() ? "YES" : "NO");
     
     // YARA tarama seçeneklerini ayarlayalım
     int scan_flags = 0;
@@ -469,8 +486,14 @@ std::error_code YaraRuleManager::scanFile(const std::string& filePath, std::vect
                 std::vector<uint8_t> buffer(fileSize);
                 size_t bytesRead = fread(buffer.data(), 1, fileSize, fp);
                 fclose(fp);
-                
-                if (bytesRead > 0) {
+                  if (bytesRead > 0) {
+                    qDebug() << "About to call yr_rules_scan_mem with:";
+                    qDebug() << "  Rules:" << (void*)rules;
+                    qDebug() << "  Buffer size:" << bytesRead;
+                    qDebug() << "  Scan flags:" << scan_flags;
+                    qDebug() << "  Callback function:" << (void*)yara_callback;
+                    qDebug() << "  User data (this):" << (void*)this;
+                    
                     // Bellek olarak tara
                     int sres = yr_rules_scan_mem(
                         rules,
@@ -481,6 +504,8 @@ std::error_code YaraRuleManager::scanFile(const std::string& filePath, std::vect
                         this,
                         10000  // 10 sn zaman aşımı
                     );
+                    
+                    qDebug() << "yr_rules_scan_mem returned:" << sres;
                     
                     if (sres != ERROR_SUCCESS) {
                         qDebug() << "YARA memory scan error with code:" << sres;
